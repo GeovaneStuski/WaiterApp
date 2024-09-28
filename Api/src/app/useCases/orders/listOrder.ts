@@ -4,10 +4,17 @@ import { Order } from '../../models/Order';
 
 export async function listOrder(req: Request, res: Response) {
   try {
-    const categories = await Order.find().sort({ createdAt: -1 }).populate('products.product');
+    const orders = await Order.find().populate({
+      path: 'products.product',
+      populate: {
+        path: 'category'
+      }
+    });
 
-    res.json(categories);
-  } catch {
+    res.json(orders);
+  } catch (err){
     res.status(500).json({error: 'Error to list orders'});
+
+    console.log(err);
   }
 }
