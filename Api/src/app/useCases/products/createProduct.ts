@@ -1,23 +1,16 @@
-import {Request, Response} from 'express';
-import { Product } from '../../models/Product';
+import ProductsRepository from '../../repositories/ProductsRepository';
 
-export async function createProduct(req: Request, res: Response) {
-  try {
-    const imagePath = req.file?.filename;
-    const {name, description, price, category, ingredients} = req.body;
+type ProductBody = {
+  name: string;
+  description: string;
+  imagePath: string;
+  price: number;
+  ingredients: string[];
+  category: string;
+}
 
-    const product = await Product.create({
-      name,
-      description,
-      price: Number(price),
-      category,
-      ingredients: JSON.parse(ingredients),
-      imagePath,
-    });
+export async function CreateProduct(body: ProductBody) {
+  const product = await ProductsRepository.create(body);
 
-    res.status(201).json(product);
-  } catch (err){
-    console.log(err);
-    res.status(500).json({error: 'Error to create product'});
-  }
+  return product;
 }

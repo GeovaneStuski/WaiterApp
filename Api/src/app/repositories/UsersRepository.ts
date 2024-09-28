@@ -4,16 +4,16 @@ import { UserType } from '../../types/UserType';
 import { User } from '../models/User';
 
 class UsersRepository implements RepositoriesInterface {
+  async listAll(): Promise<UserType[]> {
+    const users = await User.find();
+
+    return users;
+  }
+
   async findUserByEmail(email: string): Promise<UserType | null> {
     const user = await User.findOne({ email });
 
     return user;
-  }
-
-  async listAll(): Promise<UserType[]> {
-    const users = await User.find(); 
-
-    return users;
   }
 
   async create(body: object): Promise<UserType> {

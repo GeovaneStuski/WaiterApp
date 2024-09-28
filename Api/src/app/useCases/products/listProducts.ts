@@ -1,13 +1,7 @@
-import { Request, Response } from 'express';
+import ProductsRepository from '../../repositories/ProductsRepository';
 
-import { Product } from '../../models/Product';
+export async function ListProducts() {
+  const products = await ProductsRepository.listAll();
 
-export async function listProducts(req: Request, res: Response) {
-  try {
-    const products = await Product.find().populate('category');
-
-    res.json(products);
-  }catch {
-    res.status(500).json({error: 'Error to list products'});
-  }
+  return products;
 }

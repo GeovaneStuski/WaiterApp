@@ -22,18 +22,9 @@ export const Product = model('Product', new Schema({
   },
 
   ingredients: {
+    type: [Schema.Types.ObjectId],
     required: true,
-    type: [{
-      icon: {
-        type: String,
-        required: true,
-      },
-
-      name: {
-        type: String,
-        required: true,
-      },
-    }],
+    ref: 'Ingredient'
   },
 
   category: {
