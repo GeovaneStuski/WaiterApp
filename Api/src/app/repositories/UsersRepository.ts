@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { RepositoriesInterface } from '../../interfaces/RepositorysInterface';
 import { UpdateType } from '../../types/UpdateType';
 import { UserType } from '../../types/UserType';
@@ -28,7 +29,7 @@ class UsersRepository implements RepositoriesInterface {
     return user;
   }
 
-  async delete(itemId: string): Promise<UserType | null> {
+  async delete(itemId: Types.ObjectId): Promise<UserType | null> {
     const user = await User.findByIdAndDelete(itemId);
 
     return user;

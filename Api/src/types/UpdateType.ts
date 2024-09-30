@@ -1,4 +1,6 @@
+import { Types } from 'mongoose';
+
 export type UpdateType = {
-  id: string;
+  id: Types.ObjectId;
   body: object;
 }

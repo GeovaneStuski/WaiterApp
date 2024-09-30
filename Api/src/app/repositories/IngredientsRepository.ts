@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { RepositoriesInterface } from '../../interfaces/RepositorysInterface';
 import { IngredientType } from '../../types/IngredientType';
 import { UpdateType } from '../../types/UpdateType';
@@ -5,7 +6,7 @@ import { Ingredient } from '../models/Ingredient';
 
 class IngredientsRepository implements RepositoriesInterface {
   async listAll(): Promise<IngredientType[]> {
-    const ingredients = await Ingredient.find(); 
+    const ingredients = await Ingredient.find();
 
     return ingredients;
   }
@@ -22,7 +23,7 @@ class IngredientsRepository implements RepositoriesInterface {
     return ingredient;
   }
 
-  async delete(id: string): Promise<IngredientType | null> {
+  async delete(id: Types.ObjectId): Promise<IngredientType | null> {
     const ingredient = await Ingredient.findByIdAndDelete(id);
 
     return ingredient;

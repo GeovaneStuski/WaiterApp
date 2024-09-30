@@ -1,15 +1,8 @@
-import { Request, Response } from 'express';
+import { Types } from 'mongoose';
+import OrdersRepository from '../../repositories/OrdersRepository';
 
-import { Order } from '../../models/Order';
+export async function CancelOrder(id: Types.ObjectId) {
+  const order = await OrdersRepository.delete(id);
 
-export async function cancelOrder(req: Request, res: Response) {
-  try {
-    const { orderId } = req.params;
-
-    await Order.findByIdAndDelete(orderId);
-
-    res.sendStatus(204);
-  } catch {
-    res.status(500).json({error: 'Error to delete order'});
-  }
+  return order;
 }

@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { RepositoriesInterface } from '../../interfaces/RepositorysInterface';
 import { ProductType } from '../../types/ProductType';
 import { UpdateType } from '../../types/UpdateType';
@@ -10,8 +11,8 @@ class ProductsRepository implements RepositoriesInterface {
     return products;
   }
 
-  async listByCategory(categoryId: string): Promise<ProductType[]> {
-    const products = await Product.find({ category: categoryId })
+  async listByCategory(categoryId: Types.ObjectId): Promise<ProductType[]> {
+    const products = await Product.find({ category: categoryId });
 
     return products;
   }
@@ -28,7 +29,7 @@ class ProductsRepository implements RepositoriesInterface {
     return ingredient;
   }
 
-  async delete(id: string): Promise<ProductType | null> {
+  async delete(id: Types.ObjectId): Promise<ProductType | null> {
     const ingredient = await Product.findByIdAndDelete(id);
 
     return ingredient;

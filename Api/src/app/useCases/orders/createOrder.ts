@@ -1,15 +1,11 @@
-import { Request, Response } from 'express';
+import OrdersRepository from '../../repositories/OrdersRepository';
+import { OrderType } from '../../../types/OrderType';
 
-import { Order } from '../../models/Order';
+type CreateOrderType = Pick<OrderType, 'table' | 'products'>
 
-export async function createOrder(req: Request, res: Response) {
-  try {
-    const { table, products } = req.body;
 
-    const response = await Order.create({ table, products });
+export async function CreateOrder(body: CreateOrderType) {
+  const order = await OrdersRepository.create(body);
 
-    res.json(response);
-  } catch {
-    res.status(500).json({error: 'Error to create order'});
-  }
+  return order;
 }

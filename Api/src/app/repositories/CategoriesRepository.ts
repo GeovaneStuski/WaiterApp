@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { RepositoriesInterface } from '../../interfaces/RepositorysInterface';
 import { CategoryType } from '../../types/CategoryType';
 import { UpdateType } from '../../types/UpdateType';
@@ -5,7 +6,7 @@ import { Category } from '../models/Category';
 
 class CategoriesRepository implements RepositoriesInterface {
   async listAll(): Promise<CategoryType[]> {
-    const categories = await Category.find(); 
+    const categories = await Category.find();
 
     return categories;
   }
@@ -22,10 +23,8 @@ class CategoriesRepository implements RepositoriesInterface {
     return category;
   }
 
-  async delete(id: string): Promise<CategoryType | null> {
+  async delete(id: Types.ObjectId): Promise<CategoryType | null> {
     const category = await Category.findByIdAndDelete(id);
-
-    console.log(category);
 
     return category;
   }

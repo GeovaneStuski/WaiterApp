@@ -7,6 +7,7 @@ import UsersController from './app/controllers/UsersController';
 import CategoriesController from './app/controllers/CategoriesController';
 import IngredientsController from './app/controllers/IngredientsController';
 import ProductsController from './app/controllers/ProductsController';
+import OrdersController from './app/controllers/OrdersController';
 
 export const router = Router();
 
@@ -21,7 +22,7 @@ const upload = multer({
   })
 });
 
-router.post('/login', UsersController.authenticate);
+router.post('/authentication', UsersController.authenticate);
 
 router.use(AuthMiddleware);
 
@@ -46,11 +47,10 @@ router.put('/products/:id', upload.single('image'), ProductsController.update);
 router.delete('/products/:id', ProductsController.delete);
 router.get('/categories/:categoryId/products', ProductsController.show);
 
-
-// router.get('/orders', listOrder);
-// router.post('/orders', createOrder);
-// router.patch('/orders/:orderId', changeOrderStatus);
-// router.delete('/orders/:orderId', cancelOrder);
+router.get('/orders', OrdersController.index);
+router.post('/orders', OrdersController.store);
+router.patch('/orders/:id', OrdersController.update);
+router.delete('/orders/:id', OrdersController.delete);
 
 
 

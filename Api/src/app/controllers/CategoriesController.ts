@@ -6,6 +6,7 @@ import { CategorySchema } from '../../zodSchemas/CategorySchema';
 import { IDSchema } from '../../zodSchemas/IDSchema';
 import { UpdateCategory } from '../useCases/categories/UpdateCategory';
 import { DeleteCategory } from '../useCases/categories/DeleteCategory';
+import { ZodError } from 'zod';
 
 class CategoriesController implements ControllersInterface {
   async index(req: Request, res: Response) {
@@ -19,22 +20,27 @@ class CategoriesController implements ControllersInterface {
   }
 
   async store(req: Request, res: Response) {
-    const body = CategorySchema.parse(req.body);
-
     try {
+      const body = CategorySchema.parse(req.body);
+
       const categories = await CreateCategory(body);
 
       res.status(201).json(categories);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.sendStatus(500);
     }
   }
 
   async update(req: Request, res: Response) {
-    const id = IDSchema.parse(req.params.id);
-    const body = CategorySchema.parse(req.body);
-
     try {
+      const body = CategorySchema.parse(req.body);
+
+      const id = IDSchema.parse(req.params.id);
+
       const category = await UpdateCategory({ id, body });
 
       if(!category) {
@@ -42,15 +48,19 @@ class CategoriesController implements ControllersInterface {
       }
 
       res.status(200).json(category);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.status(500);
     }
   }
 
   async delete(req: Request, res: Response) {
-    const id = IDSchema.parse(req.params.id);
-
     try {
+      const id = IDSchema.parse(req.params.id);
+
       const category = await DeleteCategory(id);
 
       if(!category) {
@@ -58,7 +68,11 @@ class CategoriesController implements ControllersInterface {
       }
 
       res.sendStatus(204);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.sendStatus(500);
     }
   }

@@ -9,6 +9,7 @@ import { UserAlreadyExist } from '../useCases/users/UserAlreadyExist';
 import { DeleteUser } from '../useCases/users/DeleteUser';
 import { LoginUser } from '../useCases/users/LoginUser';
 import { AuthenticateBodySchema } from '../../zodSchemas/AuthenticateBodySchema';
+import { ZodError } from 'zod';
 
 class UsersController implements ControllersInterface {
   async index(req: Request, res: Response) {
@@ -16,15 +17,19 @@ class UsersController implements ControllersInterface {
       const users = await ListUsers();
 
       res.status(200).json(users);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.sendStatus(500);
     }
   }
 
   async authenticate(req: Request, res: Response) {
-    const body = AuthenticateBodySchema.parse(req.body);
-
     try {
+      const body = AuthenticateBodySchema.parse(req.body);
+
       const userInformations = await LoginUser(body);
 
       if(!userInformations) {
@@ -32,15 +37,19 @@ class UsersController implements ControllersInterface {
       }
 
       res.status(200).json(userInformations);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.sendStatus(500);
     }
   }
 
   async store(req: Request, res: Response) {
-    const body = UserSchema.parse(req.body);
-
     try {
+      const body = UserSchema.parse(req.body);
+
       const userExists = await UserAlreadyExist(body.email);
 
       if(userExists) {
@@ -52,16 +61,21 @@ class UsersController implements ControllersInterface {
       const user = await CreateUser(body);
 
       res.status(201).json(user);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.sendStatus(500);
     }
   }
 
   async update(req: Request, res: Response) {
-    const id = IDSchema.parse(req.params.id);
     const body = UserSchema.parse(req.body);
 
     try {
+      const id = IDSchema.parse(req.params.id);
+
       const userExists = await UserAlreadyExist(body.email);
 
       if(userExists && userExists.email !== body.email) {
@@ -77,15 +91,19 @@ class UsersController implements ControllersInterface {
       }
 
       res.status(200).json(user);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.sendStatus(500);
     }
   }
 
   async delete(req: Request, res: Response) {
-    const id = IDSchema.parse(req.params.id);
-
     try {
+      const id = IDSchema.parse(req.params.id);
+
       const user = await DeleteUser(id);
 
       if(!user) {
@@ -93,7 +111,11 @@ class UsersController implements ControllersInterface {
       }
 
       res.sendStatus(204);
-    } catch {
+    } catch(error) {
+      if(error instanceof ZodError) {
+        return res.status(400).json(error.errors.map((err) => err.message));
+      }
+
       res.sendStatus(500);
     }
   }
