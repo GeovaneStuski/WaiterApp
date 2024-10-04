@@ -2,8 +2,9 @@ import path from 'node:path';
 import express from 'express';
 import mongoose from 'mongoose';
 import { router } from './router';
-import { CorsMiddleware } from './app/middlewares/CorsMiddleware';
+import CorsMiddleware from './app/middlewares/CorsMiddleware';
 import { env } from './env';
+import { User } from './app/models/User';
 
 const {
   DB_HOST: host,
@@ -29,5 +30,18 @@ mongoose.connect(mongoConnectionUrl)
     app.use(router);
 
     app.listen(PORT, () => console.log(`🔥 Server running on http://localhost:${PORT}`));
+
+    (async function createAdminUser() {
+      const response = await User.find();
+
+      if(response.length < 1) {
+        User.create({
+          email: 'admin@admin.com',
+          name: 'admin',
+          password: 'admin',
+          position: 'admin',
+        });
+      }
+    })();
   })
   .catch(() => console.log('Error to make connection with Database'));

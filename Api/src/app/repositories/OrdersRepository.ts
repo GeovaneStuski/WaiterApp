@@ -11,7 +11,13 @@ type updateStatus = {
 
 class OrdersRepository implements RepositoriesInterface {
   async listAll(): Promise<OrderType[]> {
-    const orders = await Order.find();
+    const orders = await Order.find().populate({
+      path: 'products.product',
+      populate: [
+        { path: 'category' },
+        { path: 'ingredients' },
+      ],
+    });
 
     return orders;
   }

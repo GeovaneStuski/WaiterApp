@@ -8,6 +8,7 @@ import CategoriesController from './app/controllers/CategoriesController';
 import IngredientsController from './app/controllers/IngredientsController';
 import ProductsController from './app/controllers/ProductsController';
 import OrdersController from './app/controllers/OrdersController';
+import RegistersController from './app/controllers/RegistersController';
 
 export const router = Router();
 
@@ -51,6 +52,10 @@ router.get('/orders', OrdersController.index);
 router.post('/orders', OrdersController.store);
 router.patch('/orders/:id', OrdersController.update);
 router.delete('/orders/:id', OrdersController.delete);
+
+router.get('/registers', RegistersController.index);
+router.post('/registers', RegistersController.store);
+router.delete('/registers/:id', RegistersController.delete);
 
 
 

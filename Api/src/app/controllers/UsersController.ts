@@ -19,7 +19,7 @@ class UsersController implements ControllersInterface {
       res.status(200).json(users);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json({error: error.errors.map((err) => err.message)});
       }
 
       res.sendStatus(500);
@@ -39,7 +39,7 @@ class UsersController implements ControllersInterface {
       res.status(200).json(userInformations);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json({error: error.errors.map((err) => err.message)});
       }
 
       res.sendStatus(500);
@@ -63,7 +63,7 @@ class UsersController implements ControllersInterface {
       res.status(201).json(user);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json({error: error.errors.map((err) => err.message)});
       }
 
       res.sendStatus(500);
@@ -93,7 +93,7 @@ class UsersController implements ControllersInterface {
       res.status(200).json(user);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json({error: error.errors.map((err) => err.message)});
       }
 
       res.sendStatus(500);
@@ -113,7 +113,7 @@ class UsersController implements ControllersInterface {
       res.sendStatus(204);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json({error: error.errors.map((err) => err.message)});
       }
 
       res.sendStatus(500);

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { ControllersInterface } from '../../interfaces/ControllersInterface';
 import { IDSchema } from '../../zodSchemas/IDSchema';
-import { DeleteIngredient } from '../useCases/ingredients/DeleteIndredient';
 import { ZodError } from 'zod';
 import { ListOrders } from '../useCases/orders/ListOrders';
 import { CreateOrder } from '../useCases/orders/CreateOrder';
 import { OrderSchema } from '../../zodSchemas/OrderSchema';
 import { UpdateOrderStatus } from '../useCases/orders/UpdateOrderStatus';
 import zod from 'zod';
+import { CancelOrder } from '../useCases/orders/CancelOrder';
 
 const OrderStatusSchema = zod.object({
   status: zod.enum(['WAITING', 'IN_PRODUCTION', 'DONE'], { message: 'invalid status' })
@@ -19,7 +19,8 @@ class OrdersController implements ControllersInterface {
       const orders = await ListOrders();
 
       res.status(200).json(orders);
-    } catch {
+    } catch(err) {
+      console.log(err);
       res.sendStatus(500);
     }
   }
@@ -44,6 +45,8 @@ class OrdersController implements ControllersInterface {
     try {
       const { status } = OrderStatusSchema.parse(req.body);
 
+      console.log(status);
+
       const id = IDSchema.parse(req.params.id);
 
       const order = await UpdateOrderStatus({id, status});
@@ -64,16 +67,17 @@ class OrdersController implements ControllersInterface {
 
   async delete(req: Request, res: Response) {
     try {
-      const id = IDSchema.parse(req.params.orderId);
+      const id = IDSchema.parse(req.params.id);
 
-      const ingredient = await DeleteIngredient(id);
+      const order = await CancelOrder(id);
 
-      if(!ingredient) {
-        return res.status(404).json('Ingredient not found');
+      if(!order) {
+        return res.status(404).json('Order not found');
       }
 
       res.sendStatus(204);
     } catch(error) {
+      console.log(error);
       if(error instanceof ZodError) {
         return res.status(400).json(error.errors.map((err) => err.message));
       }
