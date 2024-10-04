@@ -2,14 +2,8 @@ import { Icon } from '../../types/Icon';
 
 export function MenuIcon({ className }: Icon) {
   return (
-    <svg className={className} viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M13 12.5H8M12 15.5H9M4 1.5V19.5M3 19.5H15C16.1046 19.5 17 18.6046 17 17.5V3.5C17 2.39543 16.1046 1.5 15 1.5H3C1.89543 1.5 1 2.39543 1 3.5V17.5C1 18.6046 1.89543 19.5 3 19.5ZM12.5 7.5C12.5 8.60457 11.6046 9.5 10.5 9.5C9.39543 9.5 8.5 8.60457 8.5 7.5C8.5 6.39543 9.39543 5.5 10.5 5.5C11.6046 5.5 12.5 6.39543 12.5 7.5Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 14H11M15 17H12M7 3V21M6 21H18C19.1046 21 20 20.1046 20 19V5C20 3.89543 19.1046 3 18 3H6C4.89543 3 4 3.89543 4 5V19C4 20.1046 4.89543 21 6 21ZM15.5 9C15.5 10.1046 14.6046 11 13.5 11C12.3954 11 11.5 10.1046 11.5 9C11.5 7.89543 12.3954 7 13.5 7C14.6046 7 15.5 7.89543 15.5 9Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }

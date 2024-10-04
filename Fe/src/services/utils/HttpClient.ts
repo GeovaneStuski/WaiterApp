@@ -14,7 +14,7 @@ type Headers = {
 };
 
 type RequestOptions<T> = {
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   body?: T | FormData;
   headers?: Headers;
 };
@@ -48,6 +48,16 @@ export class HttpClient {
   put<T>(path: string, options: MethodsOptions<T>) {
     const response = this.makeRequest<T>(path, {
       method: 'PUT',
+      body: options.body,
+      headers: options.headers,
+    });
+
+    return response;
+  }
+
+  patch<T>(path: string, options: MethodsOptions<T>) {
+    const response = this.makeRequest<T>(path, {
+      method: 'PATCH',
       body: options.body,
       headers: options.headers,
     });
@@ -104,11 +114,15 @@ export class HttpClient {
 
     let body;
 
+    if(response.status === 204) {
+      return;
+    }
+
     if (response.body) {
       body = await response.json();
     }
 
-    if (response.status >= 200 && response.status < 300) {
+    if (response.status === 200 || response.status === 201) {
       return body;
     }
 

@@ -13,7 +13,8 @@ type LoginBody = {
 }
 
 type AuthContextProps = {
-  handleLogin: (param: LoginBody) => void;
+  handleLogin: (param: LoginBody) => Promise<void>;
+  handleLogout: () => void;
   authenticated: boolean;
 }
 
@@ -33,7 +34,10 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
       const { token } = await UsersList.authenticate({ email, password });
 
       localStorage.setItem('token', token);
+
       setAuthenticated(true);
+
+      return;
     } catch(error) {
       if(error instanceof WrongDataError) {
         toast.error('Credenciais erradas!');
@@ -41,8 +45,13 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
     }
   }
 
+  async function handleLogout() {
+    localStorage.removeItem('token');
+    setAuthenticated(false);
+  }
+
   return (
-    <AuthenticationContext.Provider value={{handleLogin, authenticated}}>
+    <AuthenticationContext.Provider value={{handleLogin, authenticated, handleLogout}}>
       {children}
     </AuthenticationContext.Provider>
   );

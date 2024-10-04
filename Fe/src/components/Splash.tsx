@@ -12,15 +12,17 @@ export function Splash({ isVisible }: SplashProps) {
   return (
     <>
       {shouldBeRender && (
-        <div ref={itemRef} className={cn('h-screen w-screen fixed bg-red-main flex justify-center items-center flex-col text-white', {
+        <div ref={itemRef} className={cn('h-screen w-screen top-0 left-0 fixed bg-red-main flex justify-center items-center flex-col text-white z-10', {
           'animate-fade-out': !isVisible,
-          'animate-fade-in': isVisible,
         })}>
           <img src={Logo} alt="Logo" />
+
           <h1 className='text-4xl font-bold mt-6'>
-          WAITER
+            WAITER
+
             <span className='ml-1 font-light'>APP</span>
           </h1>
+
           <span className='mt-2 font-semibold text-lg'>O App do Garçom</span>
         </div>
       )}

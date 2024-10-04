@@ -21,7 +21,7 @@ class OrdersList implements ServicesInterface {
   }
 
   update(id: string, body: object) {
-    const order = this.HttpClient.put(`/orders/${id}`, { body });
+    const order = this.HttpClient.patch(`/orders/${id}`, { body });
 
     return order;
   }

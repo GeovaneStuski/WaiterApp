@@ -2,39 +2,11 @@ import { Icon } from '../../types/Icon';
 
 export function UserIcon({ className }: Icon) {
   return (
-    <svg className={className} viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle
-        cx="6.99835"
-        cy="5.00854"
-        r="3.49145"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle
-        cx="16.0021"
-        cy="5.99897"
-        r="2.50104"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M0.99585 16.5033V15.4859C0.99585 13.285 2.77959 11.5012 4.98051 11.5012H9.01619C11.2171 11.5012 13.0008 13.285 13.0008 15.4859V16.5033"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M16.0021 11.5012H17.1045C19.3055 11.5012 21.0892 13.285 21.0892 15.4859V16.5033"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="7.99878" cy="8.50854" r="3.49145" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="17.0025" cy="9.49897" r="2.50104" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M1.99609 20.0033V18.9859C1.99609 16.785 3.77984 15.0012 5.98075 15.0012H10.0164C12.2174 15.0012 14.0011 16.785 14.0011 18.9859V20.0033" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M17.0024 15.0012H18.1049C20.3058 15.0012 22.0896 16.785 22.0896 18.9859V20.0033" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }

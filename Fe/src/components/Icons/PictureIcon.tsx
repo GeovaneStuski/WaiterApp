@@ -2,30 +2,10 @@ import { Icon } from '../../types/Icon';
 
 export function PictureIcon({ className }: Icon) {
   return (
-    <svg className={className} viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M18.5 21H6.5C4.843 21 3.5 19.657 3.5 18V6C3.5 4.343 4.843 3 6.5 3H18.5C20.157 3 21.5 4.343 21.5 6V18C21.5 19.657 20.157 21 18.5 21Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M3.5 17.4859L8.112 12.8739C8.503 12.4829 9.136 12.4829 9.526 12.8739L10.932 14.2799L15.509 9.70389C15.9 9.31289 16.533 9.31289 16.923 9.70389L21.5 14.2809"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9.01517 7.40671C9.16161 7.55316 9.16161 7.79059 9.01517 7.93704C8.86872 8.08349 8.63128 8.08349 8.48483 7.93704C8.33839 7.79059 8.33839 7.55316 8.48483 7.40671C8.63128 7.26026 8.86872 7.26026 9.01517 7.40671"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fillRule="evenodd" clipRule="evenodd" d="M18 21H6C4.343 21 3 19.657 3 18V6C3 4.343 4.343 3 6 3H18C19.657 3 21 4.343 21 6V18C21 19.657 19.657 21 18 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3 17.486L7.612 12.874C8.003 12.483 8.636 12.483 9.026 12.874L10.432 14.28L15.009 9.70402C15.4 9.31302 16.033 9.31302 16.423 9.70402L21 14.281" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8.51517 7.40683C8.66161 7.55328 8.66161 7.79072 8.51517 7.93716C8.36872 8.08361 8.13128 8.08361 7.98483 7.93716C7.83839 7.79072 7.83839 7.55328 7.98483 7.40683C8.13128 7.26039 8.36872 7.26039 8.51517 7.40683" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }

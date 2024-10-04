@@ -13,10 +13,11 @@ export function Login() {
     handleSubmit,
     getErrorMessageByFieldName,
     isFormValid,
+    loading,
   } = useLogin();
   return (
     <div className='flex justify-center items-center w-screen h-screen'>
-      <div className='w-96'>
+      <form className='w-96' onSubmit={handleSubmit}>
         <div className='flex flex-col items-center'>
           <span className='text-md font-semibold'>Bem-vindo(a) ao</span>
           <h1 className='font-bold text-3xl'>
@@ -50,8 +51,8 @@ export function Login() {
           </FormGroup>
         </div>
 
-        <Button disabled={!isFormValid} onClick={handleSubmit} size='full'>Fazer Login</Button>
-      </div>
+        <Button isLoading={loading} disabled={!isFormValid} type='submit' style='full'>Fazer Login</Button>
+      </form>
     </div>
   );
 }

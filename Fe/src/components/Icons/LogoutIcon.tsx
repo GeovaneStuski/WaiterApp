@@ -2,14 +2,8 @@ import { Icon } from '../../types/Icon';
 
 export function LogoutIcon({ className }: Icon) {
   return (
-    <svg className={className} viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M14.657 3.34302C17.781 6.46702 17.781 11.533 14.657 14.657C11.533 17.781 6.467 17.781 3.343 14.657C0.219 11.533 0.219 6.46702 3.343 3.34302M9 1V9"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.657 6.34302C20.781 9.46702 20.781 14.533 17.657 17.657C14.533 20.781 9.467 20.781 6.343 17.657C3.219 14.533 3.219 9.46702 6.343 6.34302M12 4V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }

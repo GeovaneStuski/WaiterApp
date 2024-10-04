@@ -5,6 +5,7 @@ import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { useNavigate } from 'react-router-dom';
 
 export function useLogin() {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -38,8 +39,13 @@ export function useLogin() {
     setPassword(event.target.value);
   }
 
-  async function handleSubmit() {
-    handleLogin( { email, password } );
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setLoading(true);
+
+    await handleLogin({ email, password });
+
+    setLoading(false);
   }
 
   return {
@@ -50,6 +56,7 @@ export function useLogin() {
     handleChangePassword,
     handleSubmit,
     getErrorMessageByFieldName,
-    isFormValid
+    isFormValid,
+    loading,
   };
 }
