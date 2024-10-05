@@ -7,18 +7,20 @@ import { AuthenticationContext } from '../contexts/AuthenticationContext';
 import { Home } from '../pages/home';
 import { AppLayout } from './AppLayout';
 import { History } from '../pages/history';
+import { Menu } from '../pages/menu';
+import { Products } from '../pages/menu/Products';
 
 export function AnimateRoutes() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { authenticated } = useContext(AuthenticationContext);
+  const { authenticated, loading } = useContext(AuthenticationContext);
 
   useEffect(() => {
-    if(!authenticated) {
+    if(!authenticated && !loading) {
       navigate('/login');
     }
-  }, [authenticated]);
+  }, [loading, authenticated]);
 
   return (
     <AnimatePresence mode="wait">
@@ -26,6 +28,11 @@ export function AnimateRoutes() {
         <Route element={<AppLayout/>}>
           <Route path='/' element={<Home/>}/>
           <Route path='/history' element={<History/>}/>
+          <Route element={<Menu/>}>
+            <Route path='/menu/products' element={<Products/>}/>
+            <Route path='/menu/categories' element={<h1>Categories</h1>}/>
+            <Route path='/menu/ingredients' element={<h1>Ingredients</h1>}/>
+          </Route>
         </Route>
         <Route path="/login" element={<Login />}/>
       </Routes>

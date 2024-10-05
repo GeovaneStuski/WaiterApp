@@ -12,7 +12,7 @@ export function SideBar() {
     <div className="w-28 bg-white h-screen shadow-side-bar flex flex-col items-center py-10 text-gray-main justify-between">
       <SideBarLogo className='w-12'/>
 
-      <div className='space-y-6'>
+      <div className='space-y-10'>
         <ItemContainer
           title='Home'
           icon={HomeIcon}
@@ -38,7 +38,7 @@ export function SideBar() {
         />
       </div>
 
-      <div className='space-y-6'>
+      <div className='space-y-10'>
         <ItemContainer
           title='Perfil'
           icon={ProfileIcon}

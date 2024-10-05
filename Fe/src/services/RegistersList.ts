@@ -13,7 +13,7 @@ class RegistersList {
     return registers;
   }
 
-  create(body: string[]) {
+  create(body: object[]) {
     const register = this.HttpClient.post('/registers', { body });
 
     return register;

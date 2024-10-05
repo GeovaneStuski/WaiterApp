@@ -16,16 +16,21 @@ type AuthContextProps = {
   handleLogin: (param: LoginBody) => Promise<void>;
   handleLogout: () => void;
   authenticated: boolean;
+  loading: boolean;
 }
 
 export const AuthenticationContext = createContext({} as AuthContextProps);
 
 export function AuthenticationProvider({children}: AuthenticationProviderProps) {
   const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if(localStorage.getItem('token')) {
       setAuthenticated(true);
+      setLoading(false);
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -51,7 +56,7 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
   }
 
   return (
-    <AuthenticationContext.Provider value={{handleLogin, authenticated, handleLogout}}>
+    <AuthenticationContext.Provider value={{handleLogin, authenticated, handleLogout, loading}}>
       {children}
     </AuthenticationContext.Provider>
   );

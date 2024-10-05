@@ -9,6 +9,7 @@ export function useHome() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isRefreshModalVisible, setIsRefreshModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isRequestInProgress, setIsRequestInProgress] = useState(false);
 
   const { handleLogout } = useContext(AuthenticationContext);
 
@@ -18,6 +19,7 @@ export function useHome() {
   }, []);
 
   async function loadOrders() {
+    setIsRequestInProgress(true);
     try {
       const orders = await OrdersList.index();
 
@@ -26,6 +28,8 @@ export function useHome() {
       if(error instanceof NotAuthorizedError) {
         handleLogout();
       }
+    } finally {
+      setIsRequestInProgress(false);
     }
   }
 
@@ -40,11 +44,18 @@ export function useHome() {
   async function handleOrdersToHistory() {
     setLoading(true);
 
-    await RegistersList.create(orders.map((order) => order._id));
+    try {
+      await RegistersList.create(orders.map(({_id, table, products, createdAt}) => ({
+        _id, table, products: products.map(({product, quantity}) => ({ product: product._id, quantity })), createdAt })));
 
-    setLoading(false);
-    setIsRefreshModalVisible(false);
-    loadOrders();
+      setLoading(false);
+      setIsRefreshModalVisible(false);
+      loadOrders();
+    } catch(error) {
+      if(error instanceof NotAuthorizedError) {
+        handleLogout();
+      }
+    }
   }
 
   return {
@@ -55,5 +66,6 @@ export function useHome() {
     loadOrders,
     handleOrdersToHistory,
     loading,
+    isRequestInProgress,
   };
 }

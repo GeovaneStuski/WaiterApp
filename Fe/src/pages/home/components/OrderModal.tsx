@@ -4,6 +4,7 @@ import OrdersList from '../../../services/OrdersList';
 import { Order } from '../../../types/Order';
 import { getImageByPath } from '../../../utils/getImageByPath';
 import { priceFormater } from '../../../utils/priceFormater';
+import { CancelOrderModal } from './CancelOrderModal';
 
 type OrderModalProps = {
   order: Order | null;
@@ -15,20 +16,21 @@ type OrderModalProps = {
 
 export function OrderModal({ order, isVisible, status, onClose, onReload }: OrderModalProps) {
   if(!order) return;
-
+  const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const totalPrice = order?.products.reduce((acc, product) => acc + product.product.price * product.quantity,0);
 
   const StatusVariables = {
     WAITING: {
-      cancel: handleCancelOrder,
+      cancel: handleOpenCancelModal,
       confirm: handleChangeOrderStatus,
       cancelLabel: 'Cancelar Pedido',
       confirmLabel: 'Preparar Pedido',
     },
     IN_PRODUCTION: {
-      cancel: handleCancelOrder,
+      cancel: handleOpenCancelModal,
       confirm: handleChangeOrderStatus,
       cancelLabel: 'Cancelar Pedido',
       confirmLabel: 'Concluir Pedido',
@@ -58,13 +60,24 @@ export function OrderModal({ order, isVisible, status, onClose, onReload }: Orde
     setLoading(false);
   }
 
+  function handleOpenCancelModal() {
+    setIsCancelModalVisible(true);
+  }
+
+  function handleCloseCancelModal() {
+    setIsCancelModalVisible(false);
+  }
+
   async function handleCancelOrder() {
     if(!order) return;
+    setDeleteLoading(true);
 
     await OrdersList.delete(order?._id);
 
+    setIsCancelModalVisible(false);
     onReload();
     onClose();
+    setDeleteLoading(false);
   }
 
   return (
@@ -78,6 +91,13 @@ export function OrderModal({ order, isVisible, status, onClose, onReload }: Orde
       onCancel={StatusVariables[statusKey].cancel}
       isLoading={loading}
     >
+      <CancelOrderModal
+        onClose={handleCloseCancelModal}
+        isVisible={isCancelModalVisible}
+        onConfirm={handleCancelOrder}
+        isLoading={deleteLoading}
+      />
+
       <div className='w-full'>
         <div className='flex flex-col'>
           <span className='font-semibold text-sm text-gray-main'>Status do Pedido</span>
@@ -90,8 +110,8 @@ export function OrderModal({ order, isVisible, status, onClose, onReload }: Orde
 
           <div className='space-y-4 my-4'>
             {order.products.map(({_id, product, quantity}) => (
-              <div key={_id} className='flex gap-3'>
-                <img className='w-20 rounded-lg' src={getImageByPath(product.imagePath)}/>
+              <div key={_id} className='flex gap-3 items-center'>
+                <img className='w-14 h-9 rounded-lg' src={getImageByPath(product.imagePath)}/>
 
                 <div className='flex gap-3'>
                   <span className='text-sm text-gray-light'>{quantity}x</span>

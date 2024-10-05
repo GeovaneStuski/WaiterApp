@@ -44,7 +44,6 @@ export default {
         'fade-in': 'fade-in .3s ease-out forwards',
         'scale-in': 'scale-in .2s ease-in-out forwards',
         'scale-out': 'scale-out .2s ease-in-out forwards',
-        loader: 'rotation 1s linear infinite',
       },
       boxShadow: {
         'side-bar': '10px 0px 32px 0px #CCCCCC1A',

@@ -6,6 +6,7 @@ import { Board } from './components/Board';
 import { useHome } from './useHome';
 import { RefreshModal } from './components/RefreshModal';
 import { motion } from 'framer-motion';
+import { Loader } from '../../components/Loader';
 
 export function Home() {
   const {
@@ -16,15 +17,18 @@ export function Home() {
     loadOrders,
     handleOrdersToHistory,
     loading,
+    isRequestInProgress,
   } = useHome();
   return (
     <motion.div
-      className='w-full px-20'
+      className='w-full px-20 mt-10'
       initial={{opacity: 0}}
       animate={{opacity: 1}}
       exit={{opacity: 0}}
     >
-      <header className='flex justify-between items-center mt-10'>
+      <Loader isVisible={isRequestInProgress}/>
+
+      <header className='flex justify-between items-center'>
         <RefreshModal
           isVisible={isRefreshModalVisible}
           onClose={handleCloseRefreshModal}

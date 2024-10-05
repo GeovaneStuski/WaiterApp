@@ -12,7 +12,7 @@ export function ItemContainer({title, icon: Icon, path}: ItemContainerProps) {
 
   return (
     <Link to={path} className={cn('flex flex-col gap-2 items-center font-semibold', {
-      'text-red-main': location.pathname === path,
+      'text-red-main hover-side': location.pathname === path,
     })}>
       <Icon className='w-7'/>
       <span>{title}</span>

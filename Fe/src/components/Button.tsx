@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { cn } from '../utils/cn';
-import { SpinnerIcon } from './Icons/SpinnerIcon';
+import { Spinner } from './Spinner';
 
 type ButtonProps = {
   children: ReactNode;
@@ -26,8 +26,8 @@ export function Button({ children, disabled = false, style = 'full', onClick, ty
       {!isLoading && children}
 
       {isLoading && (
-        <div className='mt-1'>
-          {<SpinnerIcon size={20}/>}
+        <div className='flex justify-center items-center'>
+          {<Spinner size={20}/>}
         </div>
       )}
     </button>

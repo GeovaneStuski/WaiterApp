@@ -131,6 +131,7 @@ export class HttpClient {
     }
 
     if (response.status === 401) {
+
       throw new NotAuthorizedError(response, body);
     }
 
