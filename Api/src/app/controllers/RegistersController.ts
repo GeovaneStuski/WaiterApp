@@ -19,11 +19,12 @@ class RegistersController {
   }
 
   async store(req: Request, res: Response) {
+    console.log(req.body);
     try {
       const registers = RegistersSchema.parse(req.body);
 
-      await Promise.all(registers.map(async (registerId) => {
-        await Promise.all([CreateRegister(registerId), CancelOrder(registerId)]);
+      await Promise.all(registers.map(async ({_id, products, table, createdAt}) => {
+        await Promise.all([CreateRegister({ table, products, createdAt: new Date(createdAt) }), CancelOrder(_id)]);
       }));
 
       res.status(200).json('All orders registred in the history!');

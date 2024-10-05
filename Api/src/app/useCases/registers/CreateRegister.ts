@@ -1,8 +1,10 @@
-import { Types } from 'mongoose';
 import RegistersRepository from '../../repositories/RegistersRepository';
+import { RegisterType } from '../../../types/RegisterType';
 
-export async function CreateRegister(id: Types.ObjectId) {
-  const register = await RegistersRepository.create(id);
+type RegisterBody = Omit<RegisterType, '_id'>
+
+export async function CreateRegister(body: RegisterBody) {
+  const register = await RegistersRepository.create(body);
 
   return register;
 }

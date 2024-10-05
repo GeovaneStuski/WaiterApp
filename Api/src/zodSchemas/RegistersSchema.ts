@@ -1,4 +1,11 @@
 import zod from 'zod';
-import { IDSchema } from './IDSchema';
 
-export const RegistersSchema = zod.array(IDSchema);
+export const RegistersSchema = zod.array(zod.object({
+  _id: zod.string(),
+  table: zod.string(),
+  createdAt: zod.string(),
+  products: zod.array(zod.object({
+    product: zod.string(),
+    quantity: zod.number(),
+  }))
+}));

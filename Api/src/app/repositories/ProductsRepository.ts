@@ -6,7 +6,10 @@ import { Product } from '../models/Product';
 
 class ProductsRepository implements RepositoriesInterface {
   async listAll(): Promise<ProductType[]> {
-    const products = await Product.find();
+    const products = await Product.find().populate([
+      'category',
+      'ingredients'
+    ]);
 
     return products;
   }

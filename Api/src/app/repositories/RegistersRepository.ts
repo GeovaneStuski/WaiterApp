@@ -3,13 +3,19 @@ import { Registers } from '../models/Registers';
 
 class RegistersRepository {
   async listAll() {
-    const orders = await Registers.find();
+    const orders = await Registers.find().populate({
+      path: 'products.product',
+      populate: [
+        { path: 'category' },
+        { path: 'ingredients' },
+      ],
+    });
 
     return orders;
   }
 
-  async create(id: Types.ObjectId) {
-    const order = await Registers.create({order: id});
+  async create(body: object) {
+    const order = await Registers.create(body);
 
     return order;
   }
