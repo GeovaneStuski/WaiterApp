@@ -15,13 +15,13 @@ class IngredientsList implements ServicesInterface {
   }
 
   create(body: object) {
-    const ingredient = this.HttpClient.get('/ingredients', { body });
+    const ingredient = this.HttpClient.post('/ingredients', { body });
 
     return ingredient;
   }
 
   update(id: string, body: object) {
-    const ingredient = this.HttpClient.get(`/ingredients/${id}`, { body });
+    const ingredient = this.HttpClient.put(`/ingredients/${id}`, { body });
 
     return ingredient;
   }

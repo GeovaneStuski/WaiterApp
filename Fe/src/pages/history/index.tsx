@@ -21,12 +21,12 @@ export function History() {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [registerIsBeingDeleted, setRegisterIsBeingDeleted] = useState<null | string>(null);
   const [register, setRegister] = useState<null | Register>(null);
-  const [makingRequest, setMakingRequest] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { handleLogout } = useContext(AuthenticationContext);
 
   async function loadRegisters() {
-    setMakingRequest(true);
+    setLoading(true);
     try {
       const registers = await RegistersList.index();
 
@@ -36,7 +36,7 @@ export function History() {
         handleLogout();
       }
     } finally {
-      setMakingRequest(false);
+      setLoading(false);
     }
   }
 
@@ -64,7 +64,7 @@ export function History() {
 
   async function handleDeleteRegister() {
     if(!registerIsBeingDeleted) return;
-    setMakingRequest(true);
+    setLoading(true);
 
     try {
       await RegistersList.delete(registerIsBeingDeleted);
@@ -78,7 +78,7 @@ export function History() {
         handleLogout();
       }
     } finally {
-      setMakingRequest(false);
+      setLoading(false);
     }
   }
 
@@ -89,7 +89,7 @@ export function History() {
       animate={{opacity: 1}}
       exit={{opacity: 0}}
     >
-      <Loader isVisible={makingRequest}/>
+      <Loader isVisible={loading}/>
 
       <RegisterModal
         isVisible={isRegisterModalVisible}

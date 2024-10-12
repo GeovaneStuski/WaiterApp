@@ -16,6 +16,8 @@ type ModalProps = {
   onCancel?: () => void;
   onConfirm?: () => void;
   onClose?: () => void;
+  isFormValid?: boolean;
+  buttonStyle: 'fit' | 'full'
 }
 
 export function Modal({
@@ -29,6 +31,8 @@ export function Modal({
   onConfirm,
   onClose,
   isLoading,
+  isFormValid = true,
+  buttonStyle = 'full'
 }: ModalProps) {
   const { itemRef, shouldBeRender } = useUnmount(isVisible);
 
@@ -56,7 +60,7 @@ export function Modal({
           {children}
 
           {(onCancel || onConfirm) && (
-            <footer className={cn('flex', {
+            <footer className={cn('flex items-center', {
               'justify-between': onCancel && onConfirm,
               'justify-end': !onCancel && onConfirm,
             })}>
@@ -72,7 +76,10 @@ export function Modal({
                   type='button'
                   isLoading={isLoading}
                   onClick={onConfirm}
-                  style='fit'>{confirmLabel}
+                  style={buttonStyle}
+                  disabled={!isFormValid}
+                >
+                  {confirmLabel}
                 </Button>
               )}
             </footer>

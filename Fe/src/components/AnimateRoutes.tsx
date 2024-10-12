@@ -9,6 +9,9 @@ import { AppLayout } from './AppLayout';
 import { History } from '../pages/history';
 import { Menu } from '../pages/menu';
 import { Products } from '../pages/menu/Products';
+import { Categories } from '../pages/menu/Categories';
+import { Ingredients } from '../pages/menu/Ingredients';
+import { Users } from '../pages/users';
 
 export function AnimateRoutes() {
   const location = useLocation();
@@ -30,9 +33,10 @@ export function AnimateRoutes() {
           <Route path='/history' element={<History/>}/>
           <Route element={<Menu/>}>
             <Route path='/menu/products' element={<Products/>}/>
-            <Route path='/menu/categories' element={<h1>Categories</h1>}/>
-            <Route path='/menu/ingredients' element={<h1>Ingredients</h1>}/>
+            <Route path='/menu/categories' element={<Categories/>}/>
+            <Route path='/menu/ingredients' element={<Ingredients/>}/>
           </Route>
+          <Route path='/users' element={<Users/>}/>
         </Route>
         <Route path="/login" element={<Login />}/>
       </Routes>

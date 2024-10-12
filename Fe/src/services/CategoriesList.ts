@@ -15,13 +15,13 @@ class CategoriesList implements ServicesInterface {
   }
 
   create(body: object) {
-    const category = this.HttpClient.get('/categories', { body });
+    const category = this.HttpClient.post('/categories', { body });
 
     return category;
   }
 
   update(id: string, body: object) {
-    const category = this.HttpClient.get(`/categories/${id}`, { body });
+    const category = this.HttpClient.put(`/categories/${id}`, { body });
 
     return category;
   }

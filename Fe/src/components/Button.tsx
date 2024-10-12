@@ -19,9 +19,9 @@ export function Button({ children, disabled = false, style = 'full', onClick, ty
       type={type}
       className={cn('bg-red-main text-white h-12 rounded-full font-bold text-md hover:bg-red-dark active:bg-red-light transition-colors disabled:bg-gray-lighter duration-300', {
         'w-full': style === 'full',
-        'px-10': style === 'fit',
+        'px-6': style === 'fit',
         'min-w-32': isLoading,
-        'text-red-main bg-transparent w-fit flex gap-1 items-center hover:bg-transparent active:bg-transparent hover:text-red-dark active:text-red-light disabled:hover:text-gray-light disabled:bg-transparent disabled:text-gray-light disabled:hover:bg-transparent': style === 'cancel'
+        'text-red-main bg-transparent h-fit w-fit flex gap-1 items-center hover:bg-transparent active:bg-transparent hover:text-red-dark active:text-red-light disabled:hover:text-gray-light disabled:bg-transparent disabled:text-gray-light disabled:hover:bg-transparent': style === 'cancel'
       })}>
       {!isLoading && children}
 

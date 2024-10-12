@@ -5,10 +5,10 @@ import { cn } from '../utils/cn';
 
 type InputProps = {
   label: string;
-  value: string;
+  value: string | number;
   onChange: (param: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (param: React.FocusEvent<HTMLInputElement>) => void;
-  type?: 'text' | 'email' | 'password';
+  type?: 'text' | 'email' | 'password' | 'number';
   placeholder?: string;
   error?: boolean;
   disabled?: boolean;
@@ -42,14 +42,14 @@ export function Input({
           disabled={disabled}
           placeholder={placeholder}
           className={cn('text-sm w-full border outline-none h-[52px] rounded-lg p-4 caret-red-main duration-500', {
-            'border-gray-lighter focus-within:border-gray-main': !error,
+            'border-gray-light/70 focus-within:border-gray-main': !error,
             'border-red-main text-red-main': error
           })}/>
       )}
 
       {type === 'password' && (
         <div className={cn('w-full border bg-white h-[52px] rounded-lg flex justify-between overflow-hidden px-4 duration-500', {
-          'border-gray-lighter focus-within:border-gray-main': !error,
+          'border-gray-light/70 focus-within:border-gray-main': !error,
           'border-red-main text-red-main': error
         })}>
           <input
@@ -61,7 +61,7 @@ export function Input({
             className='w-full outline-none text-sm caret-red-main'
           />
 
-          {value.length > 0 && (
+          {value.toString().length > 0 && (
             <button type='button' className={cn('w-6', { 'w-5 mr-0.5': isVisiblePassword })} onClick={handlePasswordVisible}>
               {isVisiblePassword ? <EyeIcon/> : <HiddenEyeIcon/>}
             </button>
