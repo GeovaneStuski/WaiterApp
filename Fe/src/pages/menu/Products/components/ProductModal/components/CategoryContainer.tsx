@@ -21,7 +21,7 @@ export function CategoryContainer({ categories, category, onChange }:CategoryCon
           {categories.map((category) => (
             <button
               onClick={() => onChange(category)}
-              className='border border-gray-lighter rounded-full py-3'
+              className='border border-gray-lighter rounded-full h-10'
               key={category._id}
             >
               {`${category.icon} ${category.name}`}
@@ -31,7 +31,7 @@ export function CategoryContainer({ categories, category, onChange }:CategoryCon
       )}
 
       {category && (
-        <div className='border border-gray-lighter rounded-full py-3.5 h-fit flex justify-center items-center gap-2 px-2'>
+        <div className='border border-gray-lighter rounded-full h-10 flex justify-center items-center gap-2 px-2'>
           {`${category.icon} ${category.name}`} <Button onClick={() => onChange(null)} style='cancel'>Alterar</Button>
         </div>
       )}

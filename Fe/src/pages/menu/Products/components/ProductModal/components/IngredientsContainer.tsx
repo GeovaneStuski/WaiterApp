@@ -32,9 +32,13 @@ export function IngredientsContainer({ ingredientsList, onChange, ingredients }:
         {filtredIngredients.map(({ _id, icon, name }) => (
           <div
             key={_id}
-            className={'border border-gray-lighter py-3.5 flex justify-between px-4 rounded-md'}
+            className={'w-full border border-gray-lighter h-12 flex justify-between items-center px-4 rounded-md'}
           >
-            <span>{`${icon} ${name}`}</span>
+            <div className='flex gap-2'>
+              <span>{icon}</span>
+
+              <span>{name}</span>
+            </div>
 
             <input
               id={_id}

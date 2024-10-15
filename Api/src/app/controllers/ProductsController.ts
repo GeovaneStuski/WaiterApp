@@ -40,14 +40,12 @@ class ProductsController implements ControllersInterface {
     try {
       const imagePath = req.file?.filename;
 
-      const { image, name, description, price, ingredients, category } = ProductSchema.parse(req.body);
+      const { name, description, price, ingredients, category } = ProductSchema.parse(req.body);
 
-      if(!imagePath && !image) {
-        return res.status(400).json('Image is required');
-      }
+      if(!imagePath) return res.status(400).json("Image is required")
 
       const product = await CreateProduct({
-        imagePath: (imagePath || image) as string,
+        imagePath: imagePath as string,
         name,
         description,
         price: Number(price),
@@ -60,6 +58,8 @@ class ProductsController implements ControllersInterface {
       if(error instanceof ZodError) {
         return res.status(400).json(error.errors.map((err) => err.message));
       }
+
+      console.error(error)
 
       res.sendStatus(500);
     }

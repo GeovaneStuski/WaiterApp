@@ -17,7 +17,7 @@ type ModalProps = {
   onConfirm?: () => void;
   onClose?: () => void;
   isFormValid?: boolean;
-  buttonStyle: 'fit' | 'full'
+  buttonStyle?: 'fit' | 'full'
 }
 
 export function Modal({
@@ -32,7 +32,7 @@ export function Modal({
   onClose,
   isLoading,
   isFormValid = true,
-  buttonStyle = 'full'
+  buttonStyle = 'fit'
 }: ModalProps) {
   const { itemRef, shouldBeRender } = useUnmount(isVisible);
 

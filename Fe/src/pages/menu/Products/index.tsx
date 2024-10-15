@@ -59,7 +59,6 @@ export function Products() {
     setIsDeleteProductModalVisible(true);
   }
   function handleCloseDeleteProductModal() {
-    setProductToBeDeleted(null);
     setIsDeleteProductModalVisible(false);
   }
 

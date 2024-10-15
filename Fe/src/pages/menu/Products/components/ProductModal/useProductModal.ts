@@ -123,9 +123,9 @@ export function useProductModal({ onClose, onReload, product }: useProductModalP
 
     try {
       if(product) {
-        ProductsList.update(product._id, body);
+        await ProductsList.update(product._id, body);
       } else {
-        ProductsList.create(body);
+        await ProductsList.create(body);
       }
     } catch(error) {
       if(error instanceof NotAuthorizedError) {
@@ -133,8 +133,8 @@ export function useProductModal({ onClose, onReload, product }: useProductModalP
       }
     } finally {
       setLoading(false);
-      onClose();
       onReload();
+      onClose();
     }
   }
 

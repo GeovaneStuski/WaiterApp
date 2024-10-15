@@ -2,7 +2,7 @@ import { Button } from '../../../../../components/Button';
 import { Modal } from '../../../../../components/Modal';
 import { Input } from '../../../../../components/Input';
 import { CreateCategoryOrIngredientModal as IngredientsModal } from '../../../components/CreateCategoryOrIngredientModalProps';
-import { useProductModal } from './useProductModa';
+import { useProductModal } from './useProductModal';
 import { ImageContainer } from './components/ImageContainer';
 import { CategoryContainer } from './components/CategoryContainer';
 import { IngredientsContainer } from './components/IngredientsContainer';
