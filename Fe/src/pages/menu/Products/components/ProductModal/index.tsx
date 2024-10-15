@@ -88,7 +88,7 @@ export function ProductModal({ onClose, isVisible, onReload, product }: ProductM
           />
         </div>
 
-        <div className='w-full flex flex-col justify-between gap-6' >
+        <div className='w-full flex flex-col gap-6' >
           <header className='flex items-center justify-between' >
             <h1 className='font-bold text-lg text-gray-main'>Ingredinets</h1>
 

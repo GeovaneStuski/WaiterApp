@@ -28,7 +28,7 @@ export function SideBar() {
         <ItemContainer
           title='Cardapio'
           icon={MenuIcon}
-          path='/menu/products'
+          path='/menu'
         />
 
         <ItemContainer

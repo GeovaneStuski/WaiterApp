@@ -8,11 +8,11 @@ type ItemContainerProps = {
 }
 
 export function ItemContainer({title, icon: Icon, path}: ItemContainerProps) {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   return (
     <Link to={path} className={cn('flex flex-col gap-2 items-center font-semibold', {
-      'text-red-main hover-side': location.pathname === path,
+      'text-red-main hover-side': pathname === path,
     })}>
       <Icon className='w-7'/>
       <span>{title}</span>

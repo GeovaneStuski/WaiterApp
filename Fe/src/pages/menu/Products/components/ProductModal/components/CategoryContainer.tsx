@@ -21,7 +21,7 @@ export function CategoryContainer({ categories, category, onChange }:CategoryCon
           {categories.map((category) => (
             <button
               onClick={() => onChange(category)}
-              className='border border-gray-lighter rounded-full h-10'
+              className='border border-gray-lighter rounded-full h-11'
               key={category._id}
             >
               {`${category.icon} ${category.name}`}
