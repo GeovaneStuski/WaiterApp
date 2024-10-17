@@ -9,7 +9,7 @@ type FormGroupProps = {
 
 export function FormGroup({children, error}: FormGroupProps) {
   return (
-    <div className='flex flex-col gap-1'>
+    <div className='flex-col gap-1 flex'>
       {children}
       {error && (
         <motion.span

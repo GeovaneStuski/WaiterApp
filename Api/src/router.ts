@@ -9,6 +9,7 @@ import IngredientsController from './app/controllers/IngredientsController';
 import ProductsController from './app/controllers/ProductsController';
 import OrdersController from './app/controllers/OrdersController';
 import RegistersController from './app/controllers/RegistersController';
+import { AuthRequest } from './@types/AuthRequest';
 
 export const router = Router();
 
@@ -26,6 +27,10 @@ const upload = multer({
 router.post('/authentication', UsersController.authenticate);
 
 router.use(AuthMiddleware);
+
+router.get('/me', AuthMiddleware, (req: AuthRequest, res) => {
+  res.status(200).json(req.user);
+});
 
 router.get('/users', UsersController.index);
 router.post('/users', UsersController.store);

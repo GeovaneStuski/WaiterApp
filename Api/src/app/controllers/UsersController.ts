@@ -10,9 +10,13 @@ import { DeleteUser } from '../useCases/users/DeleteUser';
 import { LoginUser } from '../useCases/users/LoginUser';
 import { AuthenticateBodySchema } from '../../zodSchemas/AuthenticateBodySchema';
 import { ZodError } from 'zod';
+import { AuthRequest } from '../../@types/AuthRequest';
 
 class UsersController implements ControllersInterface {
-  async index(req: Request, res: Response) {
+  async index(req: AuthRequest, res: Response) {
+    if(req.user.position !== 'admin') {
+      return res.status(403).json('You dont have permission to access this action');
+    }
     try {
       const users = await ListUsers();
 
@@ -46,7 +50,10 @@ class UsersController implements ControllersInterface {
     }
   }
 
-  async store(req: Request, res: Response) {
+  async store(req: AuthRequest, res: Response) {
+    if(req.user?.position !== 'admin') {
+      return res.status(403).json('You dont have permission to access this action');
+    }
     try {
       const body = UserSchema.parse(req.body);
 
@@ -70,7 +77,11 @@ class UsersController implements ControllersInterface {
     }
   }
 
-  async update(req: Request, res: Response) {
+  async update(req: AuthRequest, res: Response) {
+    if(req.user?.position !== 'admin') {
+      return res.status(403).json('You dont have permission to access this action');
+    }
+
     const body = UserSchema.parse(req.body);
 
     try {
@@ -100,7 +111,11 @@ class UsersController implements ControllersInterface {
     }
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: AuthRequest, res: Response) {
+    if(req.user?.position !== 'admin') {
+      return res.status(403).json('You dont have permission to access this action');
+    }
+
     try {
       const id = IDSchema.parse(req.params.id);
 

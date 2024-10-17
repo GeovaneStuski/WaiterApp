@@ -3,7 +3,7 @@ import { cn } from '../utils/cn';
 import { useUnmount } from '../hooks/useUnmount';
 
 type SplashProps = {
-  isVisible: boolean
+  isVisible: boolean;
 };
 
 export function Splash({ isVisible }: SplashProps) {
@@ -12,20 +12,26 @@ export function Splash({ isVisible }: SplashProps) {
   return (
     <>
       {shouldBeRender && (
-        <div ref={itemRef} className={cn('h-screen w-screen top-0 left-0 fixed bg-red-main flex justify-center items-center flex-col text-white z-10', {
-          'animate-fade-out': !isVisible,
-        })}>
+        <div
+          ref={itemRef}
+          className={cn(
+            'fixed left-0 top-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-red-main text-white',
+            {
+              'animate-fade-out': !isVisible,
+            },
+          )}
+        >
           <img src={Logo} alt="Logo" />
 
-          <h1 className='text-4xl font-bold mt-6'>
+          <h1 className="mt-6 text-4xl font-bold">
             WAITER
-
-            <span className='ml-1 font-light'>APP</span>
+            <span className="ml-1 font-light">APP</span>
           </h1>
 
-          <span className='mt-2 font-semibold text-lg'>O App do Garçom</span>
+          <span className="mt-2 text-lg font-semibold">O App do Garçom</span>
         </div>
       )}
     </>
   );
 }
+

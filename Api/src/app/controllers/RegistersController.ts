@@ -6,6 +6,7 @@ import { RegistersSchema } from '../../zodSchemas/RegistersSchema';
 import { CreateRegister } from '../useCases/registers/CreateRegister';
 import { ListRegisters } from '../useCases/registers/ListRegisters';
 import { CancelOrder } from '../useCases/orders/CancelOrder';
+import { Types } from 'mongoose';
 
 class RegistersController {
   async index(req: Request, res: Response) {
@@ -19,12 +20,11 @@ class RegistersController {
   }
 
   async store(req: Request, res: Response) {
-    console.log(req.body);
     try {
       const registers = RegistersSchema.parse(req.body);
 
       await Promise.all(registers.map(async ({_id, products, table, createdAt}) => {
-        await Promise.all([CreateRegister({ table, products, createdAt: new Date(createdAt) }), CancelOrder(_id)]);
+        await Promise.all([CreateRegister({ table, products, createdAt: new Date(createdAt) }), CancelOrder(new Types.ObjectId(_id))]);
       }));
 
       res.status(200).json('All orders registred in the history!');

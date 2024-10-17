@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import isEmailValid from '../../utils/isEmailValid';
 import { useErrors } from '../../hooks/useErrors';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
-import { useNavigate } from 'react-router-dom';
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
@@ -15,11 +14,9 @@ export function useLogin() {
 
   const { getErrorMessageByFieldName, setError, removeError } = useErrors();
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     if(authenticated) {
-      navigate('/');
+      history.back();
     }
   }, [authenticated]);
 

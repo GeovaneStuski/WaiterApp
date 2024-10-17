@@ -10,9 +10,13 @@ type ItemContainerProps = {
 export function ItemContainer({title, icon: Icon, path}: ItemContainerProps) {
   const { pathname } = useLocation();
 
+  if(pathname.includes('menu') && path === '/menu/products') {
+    path = pathname;
+  }
+
   return (
     <Link to={path} className={cn('flex flex-col gap-2 items-center font-semibold', {
-      'text-red-main hover-side': pathname === path,
+      'text-red-main hover-side': path === pathname
     })}>
       <Icon className='w-7'/>
       <span>{title}</span>

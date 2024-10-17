@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../@types/AuthRequest';
 
 export interface ControllersInterface {
-  index: (req: Request, res: Response) => void;
-  store: (req: Request, res: Response) => void;
-  update: (req: Request, res: Response) => void;
-  delete: (req: Request, res: Response) => void;
+  index: (req: AuthRequest, res: Response) => void;
+  store: (req: AuthRequest, res: Response) => void;
+  update: (req: AuthRequest, res: Response) => void;
+  delete: (req: AuthRequest, res: Response) => void;
 }

@@ -13,7 +13,7 @@ export async function LoginUser({email, password}: LoginBodySchema) {
   const user = await UsersRepository.findUserByEmail(email);
 
   if(user && user.password === password) {
-    const token = jwt.sign({ user }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ user }, secretKey, { expiresIn: '7d' });
 
     return { user, token };
   }

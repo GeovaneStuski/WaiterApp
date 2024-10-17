@@ -19,6 +19,12 @@ class UsersList implements ServicesInterface {
     return users;
   }
 
+  getUser() {
+    const user = this.HttpClient.get('/me');
+
+    return user;
+  }
+
   authenticate(body: AuthenticateBody) {
     const user = this.HttpClient.post('/authentication', { body });
 

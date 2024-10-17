@@ -42,7 +42,7 @@ class ProductsController implements ControllersInterface {
 
       const { name, description, price, ingredients, category } = ProductSchema.parse(req.body);
 
-      if(!imagePath) return res.status(400).json("Image is required")
+      if(!imagePath) return res.status(400).json('Image is required');
 
       const product = await CreateProduct({
         imagePath: imagePath as string,
@@ -59,7 +59,7 @@ class ProductsController implements ControllersInterface {
         return res.status(400).json(error.errors.map((err) => err.message));
       }
 
-      console.error(error)
+      console.error(error);
 
       res.sendStatus(500);
     }
