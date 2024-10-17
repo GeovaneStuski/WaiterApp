@@ -12,6 +12,7 @@ import { Products } from '../pages/menu/Products';
 import { Categories } from '../pages/menu/Categories';
 import { Ingredients } from '../pages/menu/Ingredients';
 import { Users } from '../pages/users';
+import { Profile } from '../pages/profile';
 
 export function AnimateRoutes() {
   const location = useLocation();
@@ -37,6 +38,7 @@ export function AnimateRoutes() {
             <Route path="/menu/ingredients" element={<Ingredients />} />
           </Route>
           <Route path="/users" element={<Users />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>

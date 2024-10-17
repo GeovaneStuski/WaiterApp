@@ -62,7 +62,7 @@ export function Input({
           />
 
           {value.toString().length > 0 && (
-            <button type='button' className={cn('w-6', { 'w-5 mr-0.5': isVisiblePassword })} onClick={handlePasswordVisible}>
+            <button type='button' className='w-6 text-gray-main' onClick={handlePasswordVisible}>
               {isVisiblePassword ? <EyeIcon/> : <HiddenEyeIcon/>}
             </button>
           )}

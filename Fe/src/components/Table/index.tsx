@@ -8,6 +8,7 @@ type TableProps<T> = {
     style: string;
   }[];
   body: {
+    actionsShouldBeRender?: boolean;
     id: string;
     item: T;
     items: {
@@ -41,7 +42,7 @@ export function Table<T>({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-light/40">
-          {body.map(({ id, items, item }) => (
+          {body.map(({ id, items, item, actionsShouldBeRender = true }) => (
             <motion.tr
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -57,15 +58,17 @@ export function Table<T>({
                 </td>
               ))}
 
-              <td className="flex gap-4 px-4 py-3 text-start">
-                <button className="w-6 text-gray-main" onClick={() => onAction(item)}>
-                  {ActionIcon ? <ActionIcon /> : <EditIcon />}
-                </button>
+              {actionsShouldBeRender && (
+                <td className="flex gap-4 px-4 py-3 text-start">
+                  <button className="w-6 text-gray-main" onClick={() => onAction(item)}>
+                    {ActionIcon ? <ActionIcon /> : <EditIcon />}
+                  </button>
 
-                <button className="w-6 text-red-main" onClick={() => onDelete(item)}>
-                  <TrashIcon />
-                </button>
-              </td>
+                  <button className="w-6 text-red-main" onClick={() => onDelete(item)}>
+                    <TrashIcon />
+                  </button>
+                </td>
+              )}
             </motion.tr>
           ))}
         </tbody>

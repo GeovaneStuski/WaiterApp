@@ -19,7 +19,7 @@ export function Users() {
   const [userToBeUpdate, setUserToBeUpdate] = useState<null | User>(null);
   const [loading, setLoading] = useState(false);
 
-  const { handleLogout, loading: authLoading, user } = useContext(AuthenticationContext);
+  const { handleLogout, loading: authLoading, user: userData } = useContext(AuthenticationContext);
 
   async function loadUsers() {
     setLoading(true);
@@ -40,7 +40,7 @@ export function Users() {
     if(!authLoading) {
       loadUsers();
     }
-  }, [authLoading, user]);
+  }, [authLoading, userData]);
 
   function handleOpenCreateUserModal() {
     setUserToBeUpdate(null);
@@ -110,6 +110,7 @@ export function Users() {
           { name: 'Cargo', style: 'text-start' },
         ]}
         body={users.map((user) => ({
+          actionsShouldBeRender: user._id !== userData?._id,
           id: user._id,
           item: user,
           items: [{ item: user.name }, { item: user.email }, { item: user.position.toUpperCase() }],

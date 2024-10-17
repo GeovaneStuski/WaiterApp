@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { HistoryIcon } from '../Icons/HistoryIcon';
 import { HomeIcon } from '../Icons/HomeIcon';
 import { LogoutIcon } from '../Icons/LogoutIcon';
@@ -8,12 +8,28 @@ import { SideBarLogo } from '../Icons/SideBarLogo';
 import { UserIcon } from '../Icons/UserIcon';
 import { ItemContainer } from './components/ItemContainer';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
+import { LogoutModal } from './components/LogoutModal';
+import { cn } from '../../utils/cn';
 
 export function SideBar() {
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
+
   const { user } = useContext(AuthenticationContext);
+
+  function handleOpenLogoutModal() {
+    setIsLogoutModalVisible(true);
+  }
+
+  function handleCloseLogoutModal() {
+    setIsLogoutModalVisible(false);
+  }
   
   return (
     <div className="flex h-screen w-28 flex-col items-center justify-between bg-white py-10 text-gray-main shadow-side-bar">
+      <LogoutModal
+        isVisible={isLogoutModalVisible}
+        onClose={handleCloseLogoutModal}
+      />
       <SideBarLogo className="w-12" />
 
       <div className="space-y-10">
@@ -26,13 +42,19 @@ export function SideBar() {
         {user?.position === 'admin' && <ItemContainer title="Usuarios" icon={UserIcon} path="/users" />}
       </div>
 
-      <div className="space-y-10">
+      <div className="space-y-10 flex flex-col items-center">
         <ItemContainer title="Perfil" icon={ProfileIcon} path="/profile" />
 
-        <div className="flex flex-col items-center gap-2 font-semibold">
+        <button
+          onClick={handleOpenLogoutModal}
+          className={cn('flex flex-col items-center gap-2 font-semibold', {
+            'text-red-main': isLogoutModalVisible
+          })}
+        >
           <LogoutIcon className="w-7" />
-          <span>Sair</span>
-        </div>
+
+          Sair
+        </button>
       </div>
     </div>
   );

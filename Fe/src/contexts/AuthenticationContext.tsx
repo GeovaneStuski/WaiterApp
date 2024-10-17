@@ -28,6 +28,8 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  user && console.log(user?.name);
+
   useEffect(() => {
     async function getUser() {
       const user = await UsersList.getUser();
@@ -43,7 +45,7 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
     }
 
     setLoading(false);
-  }, []);
+  }, [authenticated]);
 
   async function handleLogin({ email, password }: LoginBody) {
     try {
