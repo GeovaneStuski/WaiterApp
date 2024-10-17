@@ -3,5 +3,5 @@ import { UserType } from '../types/UserType';
 
 
 export interface AuthRequest extends Request {
-  user: UserType;
+  user?: UserType;
 }

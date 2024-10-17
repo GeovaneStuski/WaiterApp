@@ -7,8 +7,9 @@ import { CreateRegister } from '../useCases/registers/CreateRegister';
 import { ListRegisters } from '../useCases/registers/ListRegisters';
 import { CancelOrder } from '../useCases/orders/CancelOrder';
 import { Types } from 'mongoose';
+import { ControllersInterface } from '../../interfaces/ControllersInterface';
 
-class RegistersController {
+class RegistersController implements ControllersInterface{
   async index(req: Request, res: Response) {
     try {
       const registers = await ListRegisters();

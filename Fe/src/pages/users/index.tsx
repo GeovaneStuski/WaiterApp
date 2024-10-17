@@ -10,23 +10,27 @@ import UsersList from '../../services/UsersList';
 import { UserIcon } from '../../components/Icons/UserIcon';
 import { Button } from '../../components/Button';
 import { UserModal } from './components/UserModal';
+import { DeleteUserModal } from './components/DeleteUserModal';
+import { useNavigate } from 'react-router-dom';
 
 export function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
-  // const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  // const [userToBeDeleted, setUserToBeDeleted] = useState<null | User>(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [userToBeDeleted, setUserToBeDeleted] = useState<null | User>(null);
   const [userToBeUpdate, setUserToBeUpdate] = useState<null | User>(null);
   const [loading, setLoading] = useState(false);
 
   const { handleLogout, loading: authLoading, user: userData } = useContext(AuthenticationContext);
+
+  const navigate = useNavigate();
 
   async function loadUsers() {
     setLoading(true);
     try {
       const users = await UsersList.index();
 
-      setUsers(users);
+      setUsers(users || []);
     } catch (error) {
       if (error instanceof NotAuthorizedError) {
         handleLogout();
@@ -37,8 +41,10 @@ export function Users() {
   }
 
   useEffect(() => {
-    if(!authLoading) {
+    if(!authLoading && userData && userData?.position === 'admin') {
       loadUsers();
+    } else {
+      navigate('/');
     }
   }, [authLoading, userData]);
 
@@ -56,14 +62,14 @@ export function Users() {
     setIsUserModalVisible(false);
   }
 
-  // function handleOpenDeleteModal(user: User) {
-  //   setUserToBeDeleted(user);
-  //   setIsDeleteModalVisible(true);
-  // }
+  function handleOpenDeleteModal(user: User) {
+    setUserToBeDeleted(user);
+    setIsDeleteModalVisible(true);
+  }
 
-  // function handleCloseDeleteModal() {
-  //   setIsDeleteModalVisible(false);
-  // }
+  function handleCloseDeleteModal() {
+    setIsDeleteModalVisible(false);
+  }
 
   return (
     <motion.div
@@ -79,6 +85,13 @@ export function Users() {
         isVisible={isUserModalVisible}
         onReload={loadUsers}
         user={userToBeUpdate}
+      />
+
+      <DeleteUserModal
+        isVisible={isDeleteModalVisible}
+        onClose={handleCloseDeleteModal}
+        user={userToBeDeleted}
+        onReload={loadUsers}
       />
 
       <PagesHeader
@@ -103,7 +116,7 @@ export function Users() {
 
       <Table
         onAction={handleOpenUpdateUserModal}
-        onDelete={() => {}}
+        onDelete={handleOpenDeleteModal}
         head={[
           { name: 'Nome', style: 'text-start' },
           { name: 'E-mail', style: 'text-start' },

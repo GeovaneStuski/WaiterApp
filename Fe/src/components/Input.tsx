@@ -6,7 +6,7 @@ import { cn } from '../utils/cn';
 type InputProps = {
   label: string;
   value: string | number;
-  onChange: (param: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (param: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (param: React.FocusEvent<HTMLInputElement>) => void;
   type?: 'text' | 'email' | 'password' | 'number';
   placeholder?: string;
@@ -30,7 +30,9 @@ export function Input({
     setIsVisiblePassword(prevState => !prevState);
   }
   return(
-    <div className="flex flex-col gap-2">
+    <div className={cn('flex flex-col gap-2', {
+      'opacity-60 select-none': disabled
+    })}>
       <label className={cn('text-sm', { 'text-red-main': error})} htmlFor={label}>{label}</label>
       {type !== 'password' && (
         <input

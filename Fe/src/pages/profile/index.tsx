@@ -5,22 +5,21 @@ import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { Input } from '../../components/Input';
 import { EditIcon } from '../../components/Icons/EditIcon';
 import { Button } from '../../components/Button';
-import { RadioCheckedIcon } from '../../components/Icons/RadioCheckedIcon';
-import { cn } from '../../utils/cn';
-import { RadioIcon } from '../../components/Icons/RadioIcon';
 import { Loader } from '../../components/Loader';
 import { motion } from 'framer-motion';
+import UsersList from '../../services/UsersList';
+import NotAuthorizedError from '../../Errors/NotAuthorizedError';
 
 export function Profile() {
   const [loading, setLoading] = useState(true);
+  const [updateRequestLoading, setUpdateRequestLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [position, setPosition] = useState('');
 
-  const isFormValid = (name && email && password);
+  const { user, handleLogout, reloadUser } = useContext(AuthenticationContext);
 
-  const { user } = useContext(AuthenticationContext);
+  const isFormValid = user && (user.name !== name || user.email !== email || user.password !== password);
 
   useEffect(() => {
     if(user) {
@@ -36,7 +35,6 @@ export function Profile() {
     setName(user.name);
     setEmail(user.email);
     setPassword(user.password);
-    setPosition(user.position);
   }
 
   function handleChangeName(event: React.ChangeEvent<HTMLInputElement>) {
@@ -51,8 +49,25 @@ export function Profile() {
     setPassword(event.target.value);
   }
 
-  function handleChangePosition(event: React.ChangeEvent<HTMLInputElement>) {
-    setPosition(event.target.id);
+  async function handleSubmit() {
+    if(!user) return;
+
+    setUpdateRequestLoading(true);
+
+    const body = { name, email, password, position: user.position};
+
+    try {
+      await UsersList.update(user._id, body);
+    } catch(error) {
+      if(error instanceof NotAuthorizedError) {
+        handleLogout;
+      }
+      console.log(error);
+    } finally {
+      setUpdateRequestLoading(false);
+      reloadUser();
+      setLoading(true);
+    }
   }
   return (
     <motion.div
@@ -107,64 +122,9 @@ export function Profile() {
               label='Senha'
               type='password'
             />
-
-            {user?.position === 'admin' && (
-              <div className="flex items-center gap-2 text-sm text-gray-main">
-                <div>
-                  <input
-                    onChange={handleChangePosition}
-                    checked={position === 'admin'}
-                    id="admin"
-                    name="position"
-                    type="radio"
-                    className="sr-only"
-                  />
-
-                  <label
-                    htmlFor="admin"
-                    className={cn('flex items-center gap-1', {
-                      'text-red-main': position === 'admin',
-                    })}
-                  >
-                    {position === 'admin' ? (
-                      <RadioCheckedIcon className="w-5 cursor-pointer" />
-                    ) : (
-                      <RadioIcon className="w-5 cursor-pointer" />
-                    )}
-            Admin
-                  </label>
-                </div>
-
-                <div>
-                  <input
-                    onChange={handleChangePosition}
-                    checked={position === 'waiter'}
-                    id="waiter"
-                    name="position"
-                    type="radio"
-                    className="sr-only"
-                  />
-
-                  <label
-                    htmlFor="waiter"
-                    className={cn('flex items-center gap-1', {
-                      'text-red-main': position === 'waiter',
-                    })}
-                  >
-                    {position === 'waiter' ? (
-                      <RadioCheckedIcon className="w-5 cursor-pointer" />
-                    ) : (
-                      <RadioIcon className="w-5 cursor-pointer" />
-                    )}
-                  Garçom
-                  </label>
-                </div>
-              </div>
-            )}
-          
           </div>
 
-          <Button disabled={!isFormValid} >Salvar Alterações</Button>
+          <Button isLoading={updateRequestLoading} onClick={handleSubmit} disabled={!isFormValid} >Salvar Alterações</Button>
         </div>
       </div>
     </motion.div>

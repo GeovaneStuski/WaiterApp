@@ -11,6 +11,13 @@ class UsersRepository implements RepositoriesInterface {
     return users;
   }
 
+  async findUserById(id: Types.ObjectId): Promise<UserType | null> {
+    const user = await User.findOne({ _id: id });
+
+    return user;
+  }
+
+
   async findUserByEmail(email: string): Promise<UserType | null> {
     const user = await User.findOne({ email });
 

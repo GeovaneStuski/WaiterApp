@@ -11,9 +11,12 @@ import { LoginUser } from '../useCases/users/LoginUser';
 import { AuthenticateBodySchema } from '../../zodSchemas/AuthenticateBodySchema';
 import { ZodError } from 'zod';
 import { AuthRequest } from '../../@types/AuthRequest';
+import { FindUserById } from '../useCases/users/FindUserById';
 
 class UsersController implements ControllersInterface {
   async index(req: AuthRequest, res: Response) {
+    if(!req.user) return;
+
     if(req.user.position !== 'admin') {
       return res.status(403).json('You dont have permission to access this action');
     }
@@ -26,6 +29,22 @@ class UsersController implements ControllersInterface {
         return res.status(400).json({error: error.errors.map((err) => err.message)});
       }
 
+      res.sendStatus(500);
+    }
+  }
+
+  async getUserById(req: AuthRequest, res: Response) {
+    if(!req.user) return;
+
+    try {
+      const user = await FindUserById(req.user._id);
+
+      if(!user) {
+        return res.status(404).json({error: 'User not found'});
+      }
+
+      res.status(200).json(user);
+    } catch {
       res.sendStatus(500);
     }
   }
@@ -51,7 +70,9 @@ class UsersController implements ControllersInterface {
   }
 
   async store(req: AuthRequest, res: Response) {
-    if(req.user?.position !== 'admin') {
+    if(!req.user) return;
+
+    if(req.user.position !== 'admin') {
       return res.status(403).json('You dont have permission to access this action');
     }
     try {
@@ -78,14 +99,16 @@ class UsersController implements ControllersInterface {
   }
 
   async update(req: AuthRequest, res: Response) {
-    if(req.user?.position !== 'admin') {
-      return res.status(403).json('You dont have permission to access this action');
-    }
-
-    const body = UserSchema.parse(req.body);
+    if(!req.user) return;
 
     try {
       const id = IDSchema.parse(req.params.id);
+
+      if(req.user.position !== 'admin' && req.user._id !== id) {
+        return res.status(403).json({error: 'You no have permission to access this method'});
+      }
+
+      const body = UserSchema.parse(req.body);
 
       const userExists = await UserAlreadyExist(body.email);
 
@@ -112,7 +135,9 @@ class UsersController implements ControllersInterface {
   }
 
   async delete(req: AuthRequest, res: Response) {
-    if(req.user?.position !== 'admin') {
+    if(!req.user) return;
+
+    if(req.user.position !== 'admin') {
       return res.status(403).json('You dont have permission to access this action');
     }
 

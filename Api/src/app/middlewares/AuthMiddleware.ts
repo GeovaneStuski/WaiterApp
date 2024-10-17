@@ -30,6 +30,7 @@ export function AuthMiddleware(
 
     req.user = payload.user;
 
+
     next();
   });
 }
