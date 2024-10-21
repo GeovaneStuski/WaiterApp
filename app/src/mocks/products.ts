@@ -1,39 +1,206 @@
-const products = [
+export const products = [
   {
-    _id: '6372e040f52e37ef85fe2c5e',
-    name: 'Pizza quatro queijos',
-    description: 'Deliciosa pizza quatro queijos com borda simples',
-    imagePath: '1668472896991-quatro-queijos.png',
-    price: 40,
-    ingredients: [
+    '_id': '670ea008ee39b9d0d89eeba0a',
+    'name': 'Quatro Queijos',
+    'description': 'Pizza Quatro Queijos com borda recheada com cheadar',
+    'imagePath': '1729033419849-quatro-queijos.png',
+    'price': 90,
+    'ingredients': [
       {
-        name: 'Mussarela',
-        icon: '🧀',
-        _id: '6372e040f52e37ef85fe2c5f'
+        '_id': '670dcdd5df4ffcd118696aa5',
+        'icon': '🧀',
+        'name': 'Prato',
       },
       {
-        name: 'Parmesão',
-        icon: '🧀',
-        _id: '6372e040f52e37ef85fe2c60'
+        '_id': '670dcde0df4ffcd118696aa8',
+        'icon': '🧀',
+        'name': 'Cheadar',
       },
       {
-        name: 'Gouda',
-        icon: '🧀',
-        _id: '6372e040f52e37ef85fe2c61'
+        '_id': '670dcdefdf4ffcd118696aab',
+        'icon': '🧀',
+        'name': 'Gorgonzola',
       },
       {
-        name: 'Brie',
-        icon: '🧀',
-        _id: '6372e040f52e37ef85fe2c62'
+        '_id': '670dcdcfdf4ffcd118696aa2',
+        'icon': '🧀',
+        'name': 'Mussarela',
       }
     ],
+    'category': {
+      '_id': '670dcdaedf4ffcd118696a9d',
+      'name': 'Pizzas',
+      'icon': '🍕',
+    }
   },
   {
-    _id: '6372e276a381106c0f854cb3',
-    name: 'Coca cola',
-    description: 'Coca cola lata geladinha topzera',
-    imagePath: '1668473462705-coca-cola.png',
-    price: 7,
-    ingredients: [],
+    '_id': '670ea008ee39b9d0db89eea0a',
+    'name': 'Quatro Queijos',
+    'description': 'Pizza Quatro Queijos com borda recheada com cheadar',
+    'imagePath': '1729033419849-quatro-queijos.png',
+    'price': 90,
+    'ingredients': [
+      {
+        '_id': '670dcdd5df4ffcd118696aa5',
+        'icon': '🧀',
+        'name': 'Prato',
+      },
+      {
+        '_id': '670dcde0df4ffcd118696aa8',
+        'icon': '🧀',
+        'name': 'Cheadar',
+      },
+      {
+        '_id': '670dcdefdf4ffcd118696aab',
+        'icon': '🧀',
+        'name': 'Gorgonzola',
+      },
+      {
+        '_id': '670dcdcfdf4ffcd118696aa2',
+        'icon': '🧀',
+        'name': 'Mussarela',
+      }
+    ],
+    'category': {
+      '_id': '670dcdaedf4ffcd118696a9d',
+      'name': 'Pizzas',
+      'icon': '🍕',
+    }
+  },
+  {
+    '_id': '670ea008ee39b9d0d89eeaa0a',
+    'name': 'Quatro Queijos',
+    'description': 'Pizza Quatro Queijos com borda recheada com cheadar',
+    'imagePath': '1729033419849-quatro-queijos.png',
+    'price': 90,
+    'ingredients': [
+      {
+        '_id': '670dcdd5df4ffcd118696aa5',
+        'icon': '🧀',
+        'name': 'Prato',
+      },
+      {
+        '_id': '670dcde0df4ffcd118696aa8',
+        'icon': '🧀',
+        'name': 'Cheadar',
+      },
+      {
+        '_id': '670dcdefdf4ffcd118696aab',
+        'icon': '🧀',
+        'name': 'Gorgonzola',
+      },
+      {
+        '_id': '670dcdcfdf4ffcd118696aa2',
+        'icon': '🧀',
+        'name': 'Mussarela',
+      }
+    ],
+    'category': {
+      '_id': '670dcdaedf4ffcd118696a9d',
+      'name': 'Pizzas',
+      'icon': '🍕',
+    }
+  },
+  {
+    '_id': '670aea008ee39b9d0d89eea0a',
+    'name': 'Quatro Queijos',
+    'description': 'Pizza Quatro Queijos com borda recheada com cheadar',
+    'imagePath': '1729033419849-quatro-queijos.png',
+    'price': 90,
+    'ingredients': [
+      {
+        '_id': '670dcdd5df4ffcd118696aa5',
+        'icon': '🧀',
+        'name': 'Prato',
+      },
+      {
+        '_id': '670dcde0df4ffcd118696aa8',
+        'icon': '🧀',
+        'name': 'Cheadar',
+      },
+      {
+        '_id': '670dcdefdf4ffcd118696aab',
+        'icon': '🧀',
+        'name': 'Gorgonzola',
+      },
+      {
+        '_id': '670dcdcfdf4ffcd118696aa2',
+        'icon': '🧀',
+        'name': 'Mussarela',
+      }
+    ],
+    'category': {
+      '_id': '670dcdaedf4ffcd118696a9d',
+      'name': 'Pizzas',
+      'icon': '🍕',
+    }
+  },
+  {
+    '_id': '670ea008ee39b9d0da89eea0a',
+    'name': 'Quatro Queijos',
+    'description': 'Pizza Quatro Queijos com borda recheada com cheadar',
+    'imagePath': '1729033419849-quatro-queijos.png',
+    'price': 90,
+    'ingredients': [
+      {
+        '_id': '670dcdd5df4ffcd118696aa5',
+        'icon': '🧀',
+        'name': 'Prato',
+      },
+      {
+        '_id': '670dcde0df4ffcd118696aa8',
+        'icon': '🧀',
+        'name': 'Cheadar',
+      },
+      {
+        '_id': '670dcdefdf4ffcd118696aab',
+        'icon': '🧀',
+        'name': 'Gorgonzola',
+      },
+      {
+        '_id': '670dcdcfdf4ffcd118696aa2',
+        'icon': '🧀',
+        'name': 'Mussarela',
+      }
+    ],
+    'category': {
+      '_id': '670dcdaedf4ffcd118696a9d',
+      'name': 'Pizzas',
+      'icon': '🍕',
+    }
+  },
+  {
+    '_id': '670ea008eea39b9d0d89eea0a',
+    'name': 'Quatro Queijos',
+    'description': 'Pizza Quatro Queijos com borda recheada com cheadar',
+    'imagePath': '1729033419849-quatro-queijos.png',
+    'price': 90,
+    'ingredients': [
+      {
+        '_id': '670dcdd5df4ffcd118696aa5',
+        'icon': '🧀',
+        'name': 'Prato',
+      },
+      {
+        '_id': '670dcde0df4ffcd118696aa8',
+        'icon': '🧀',
+        'name': 'Cheadar',
+      },
+      {
+        '_id': '670dcdefdf4ffcd118696aab',
+        'icon': '🧀',
+        'name': 'Gorgonzola',
+      },
+      {
+        '_id': '670dcdcfdf4ffcd118696aa2',
+        'icon': '🧀',
+        'name': 'Mussarela',
+      }
+    ],
+    'category': {
+      '_id': '670dcdaedf4ffcd118696a9d',
+      'name': 'Pizzas',
+      'icon': '🍕',
+    }
   },
 ];
