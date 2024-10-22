@@ -6,14 +6,17 @@ import { useState } from 'react';
 type TableModalProps = {
   isVisible: boolean;
   onClose: () => void;
+  onSave: (table: string) => void;
 }
 
-export function TableModal({ isVisible, onClose }: TableModalProps) {
+export function TableModal({ isVisible, onClose, onSave }: TableModalProps) {
   const [table, setTable] = useState('');
 
-  function handleChangeTable(table: string) {
-    setTable(table);
-  } 
+  function handleSave() {
+    onSave(table);
+    onClose();
+  }
+
   return (
     <Modal animationType='fade' visible={isVisible} transparent >
       <View className='bg-black/60 w-screen h-screen items-center justify-center px-6'>
@@ -30,10 +33,10 @@ export function TableModal({ isVisible, onClose }: TableModalProps) {
             <TextInput 
               className='h-14 rounded-lg bg-white border border-gray-light mb-6 px-4'
               placeholder='Número da mesa'
-              onChangeText={handleChangeTable}
+              onChangeText={setTable}
             />
 
-            <Button onPress={() => alert(table)}>Salvar</Button>
+            <Button onPress={handleSave}>Salvar</Button>
           </View>
         </View>
       </View>

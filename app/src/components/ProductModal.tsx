@@ -8,17 +8,16 @@ import { Button } from './Button';
 type ProductModalProps = {
   isVisible: boolean;
   onClose: () => void;
-  product: Product;
+  product: Product | null;
 }
 
 export function ProductModal({ isVisible, onClose, product }: ProductModalProps) {
   if(!product) return;
 
-  console.log(product);
   return (
     <Modal transparent visible={isVisible} animationType='slide'>
-      <View className='bg-black/60 w-screen h-screen pt-40'>
-        <View className='w-full bg-white h-fit rounded-lg overflow-hidden'>
+      <View className='bg-black/60 flex-1 justify-end'>
+        <View className='w-full pb-24 bg-gray-50 max-h-[720px] rounded-lg overflow-hidden'>
           <View className='h-48'>
             <Image className='h-full' source={{uri: getImageByPath(product.imagePath)}}/>
 
@@ -37,7 +36,8 @@ export function ProductModal({ isVisible, onClose, product }: ProductModalProps)
 
               <FlatList
                 data={product.ingredients}
-                style={{marginTop: 16}}
+                style={{marginTop: 16, maxHeight: 240}}
+                showsVerticalScrollIndicator={false}
                 keyExtractor={ingredient => ingredient._id}
                 ItemSeparatorComponent={() => <View className='h-1'/>}
                 renderItem={({item: ingredient}) => (
@@ -50,7 +50,7 @@ export function ProductModal({ isVisible, onClose, product }: ProductModalProps)
             </View>
           </View>
 
-          <View className='flex-row justify-between px-6 items-center bg-red-500'>
+          <View className='flex-row justify-between px-6 py-4 items-center bg-white absolute bottom-0 w-full'>
             <View>
               <Text className='font-semibold text-base text-gray-main'>Preço</Text>
 

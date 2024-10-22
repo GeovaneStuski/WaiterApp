@@ -9,7 +9,7 @@ export function BottomBar() {
   const [selected, setSelected] = useState('Home');
 
   return (
-    <View className="w-full flex-row justify-between items-center">
+    <View className="w-full px-6 pt-2 pb-4 flex-row justify-between items-center">
       <PageContainer selected={selected} onChange={(page) => setSelected(page)} icon={HomeIcon} page='Home'/>
 
       <PageContainer selected={selected} onChange={(page) => setSelected(page)} icon={OrderIcon} page='Pedidos'/>
