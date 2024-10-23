@@ -80,6 +80,36 @@ export const products = [
         'icon': '🍅',
         'name': 'Tomate',
         '__v': 0
+      },{
+        '_id': '670ebbab11b65af3acc30d2c1d',
+        'icon': '🍅',
+        'name': 'Tomate',
+        '__v': 0
+      },{
+        '_id': '670ebbab11ab65af3cc30d2c1d',
+        'icon': '🍅',
+        'name': 'Tomate',
+        '__v': 0
+      },{
+        '_id': '670ebabab11b65af3cc30d2c1d',
+        'icon': '🍅',
+        'name': 'Tomate',
+        '__v': 0
+      },{
+        '_id': '670ebbab11b65af3jcc30d2c1d',
+        'icon': '🍅',
+        'name': 'Tomate',
+        '__v': 0
+      },{
+        '_id': '670ebbab11b6534af3cc30d2c1d',
+        'icon': '🍅',
+        'name': 'Tomate',
+        '__v': 0
+      },{
+        '_id': '670ebbab311b65af3cc30d2c1d',
+        'icon': '🍅',
+        'name': 'Tomate',
+        '__v': 0
       },
     ],
     'category': {

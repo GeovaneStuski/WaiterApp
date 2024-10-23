@@ -34,9 +34,10 @@ export function TableModal({ isVisible, onClose, onSave }: TableModalProps) {
               className='h-14 rounded-lg bg-white border border-gray-light mb-6 px-4'
               placeholder='Número da mesa'
               onChangeText={setTable}
+              keyboardType='number-pad'
             />
 
-            <Button onPress={handleSave}>Salvar</Button>
+            <Button disabled={!table} onPress={handleSave}>Salvar</Button>
           </View>
         </View>
       </View>

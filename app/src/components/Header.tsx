@@ -9,14 +9,14 @@ type HeaderProps = {
 
 export function Header({ table, onCancel, onChange }: HeaderProps) {
   return (
-    <>
+    <View className='mt-6 px-6'>
       {!table && (
-        <View className="px-6 pt-6 flex-row items-center justify-between">
+        <View className='flex-row items-center justify-between'>
           <View>
             <Text className="text-sm text-black-main">Bem-vindo(a) ao</Text>
   
             <Text className="text-2xl font-bold text-black-main">
-            WAITER
+              WAITER
   
               <Text className="font-normal">APP</Text>
             </Text>
@@ -29,7 +29,7 @@ export function Header({ table, onCancel, onChange }: HeaderProps) {
       )}
 
       {table && (
-        <View className='mt-6 px-6'>
+        <>
           <View className='justify-between items-center flex-row'>
             <Text className='text-2xl font-bold'>Pedidos</Text>
 
@@ -41,8 +41,8 @@ export function Header({ table, onCancel, onChange }: HeaderProps) {
           <TouchableOpacity onPress={onChange} className='w-full p-4 bg-white border border-gray-light/30 mt-4 rounded-lg'>
             <Text>Mesa {table}</Text>
           </TouchableOpacity>
-        </View>
+        </>
       )} 
-    </>
+    </View>
   );
 }

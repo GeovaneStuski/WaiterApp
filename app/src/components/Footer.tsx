@@ -5,16 +5,17 @@ import { formatCurrency } from '../utils/formatCurrency';
 import { getImageByPath } from '../utils/getImageByPath';
 import { AddIcon } from './icons/AddIcon';
 import { LessIcon } from './icons/LessIcon';
-import { Order } from '../types/Order';
+import { CartItem } from '../types/CartItem';
+import { Product } from '../types/Product';
 
 type FooterProps = {
   table: string | null;
-  order: Order[];
-  onDecreaseQuantity: (productId: string) => void;
-  onIncreaseQuantity: (productId: string) => void;
+  cart: CartItem[];
+  onRemoveFromCart: (product: Product) => void;
+  onAddToCart: (product: Product) => void;
 }
 
-export function Footer({table, order, onDecreaseQuantity, onIncreaseQuantity }: FooterProps) {
+export function Footer({table, cart, onRemoveFromCart, onAddToCart }: FooterProps) {
   return (
     <>
       {!table && <BottomBar/>}
@@ -22,7 +23,7 @@ export function Footer({table, order, onDecreaseQuantity, onIncreaseQuantity }: 
       {table && (
         <View className='absolute bottom-0'>
           <FlatList
-            data={order}
+            data={cart}
             keyExtractor={({product}) => product._id}
             renderItem={({item}) => {
               const product = item.product;
@@ -45,11 +46,11 @@ export function Footer({table, order, onDecreaseQuantity, onIncreaseQuantity }: 
                   </View>
   
                   <View className='flex-row items-center justify-between w-16'>
-                    <TouchableOpacity onPress={() => onIncreaseQuantity(product._id)}>
+                    <TouchableOpacity onPress={() => onAddToCart(product)}>
                       <AddIcon color='#D73035' size={24}/>
                     </TouchableOpacity>
   
-                    <TouchableOpacity onPress={() => onDecreaseQuantity(product._id)}>
+                    <TouchableOpacity onPress={() => onRemoveFromCart(product)}>
                       <LessIcon color='#D73035' size={24}/>
                     </TouchableOpacity>
                   </View>
@@ -58,19 +59,19 @@ export function Footer({table, order, onDecreaseQuantity, onIncreaseQuantity }: 
             }}
           />
           <View className='flex-row justify-between px-6 py-4 items-center bg-white w-full'>
-            {order.length > 0 
+            {cart.length > 0 
               ? (
                 <View>
                   <Text className='font-semibold text-base text-gray-main'>Preço</Text>
 
-                  <Text className='text-lg font-bold'>{formatCurrency(order.reduce((acc, { product, quantity }) => acc + product.price * quantity, 0))}</Text>
+                  <Text className='text-lg font-bold'>{formatCurrency(cart.reduce((acc, { product, quantity }) => acc + product.price * quantity, 0))}</Text>
                 </View>
               ) : (
                 <Text className='text-base font-semibold text-gray-main w-32 text-center'>Seu carrinho está vazio</Text>
               )}
             
 
-            <Button disabled={order.length < 1} onPress={() => {}}>Confirmar Pedido</Button>
+            <Button disabled={cart.length < 1} onPress={() => {}}>Confirmar Pedido</Button>
           </View>
         </View>
       )}
