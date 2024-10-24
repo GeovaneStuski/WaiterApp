@@ -49,7 +49,7 @@ export function Home() {
         </Button>
       </header>
 
-      <div className='flex justify-between'>
+      <div className='flex justify-evenly'>
         <Board
           icon="🕑"
           title='Fila de espera'

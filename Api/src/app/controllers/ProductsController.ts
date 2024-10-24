@@ -49,7 +49,7 @@ class ProductsController implements ControllersInterface {
         name,
         description,
         price: Number(price),
-        ingredients: JSON.parse(ingredients),
+        ingredients: ingredients ? JSON.parse(ingredients) : undefined,
         category: category,
       });
 
@@ -83,7 +83,7 @@ class ProductsController implements ControllersInterface {
           name,
           description,
           price: Number(price),
-          ingredients: JSON.parse(ingredients),
+          ingredients: ingredients ? JSON.parse(ingredients) : undefined,
           category: category,
         }});
 

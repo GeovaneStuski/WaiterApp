@@ -1,6 +1,5 @@
 import { FlatList, View, Image, Text, TouchableOpacity } from 'react-native';
 
-import { products } from '../mocks/products';
 import { getImageByPath } from '../utils/getImageByPath';
 import { AddIcon } from './icons/AddIcon';
 import { formatCurrency } from '../utils/formatCurrency';
@@ -9,7 +8,11 @@ import { ProductModal } from './ProductModal';
 import { useContext, useState } from 'react';
 import { OrderContext } from '../contexts/OrderContext';
 
-export function Menu() {
+type MenuProps = {
+  products: Product[];
+}
+
+export function Menu({ products }: MenuProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 

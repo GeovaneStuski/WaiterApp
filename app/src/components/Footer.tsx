@@ -7,11 +7,21 @@ import { AddIcon } from './icons/AddIcon';
 import { LessIcon } from './icons/LessIcon';
 import { useContext } from 'react';
 import { OrderContext } from '../contexts/OrderContext';
+import { ConfirmOrderModal } from './ConfirmOrderModal';
 
 export function Footer() {
-  const { table, cartItems, onAddProductToCart, onDecrementProductFromCart } = useContext(OrderContext);
+  const {
+    table,
+    cartItems,
+    onAddProductToCart,
+    onDecrementProductFromCart,
+    onCreateOrder,
+    isConfirmModalVisible,
+  } = useContext(OrderContext);
   return (
     <>
+      <ConfirmOrderModal isVisible={isConfirmModalVisible}/>
+
       {!table && <BottomBar/>}
 
       {table && (
@@ -65,7 +75,7 @@ export function Footer() {
               )}
             
 
-            <Button isLoading disabled={cartItems.length < 1} onPress={() => {}}>Confirmar Pedido</Button>
+            <Button disabled={cartItems.length < 1} onPress={onCreateOrder}>Confirmar Pedido</Button>
           </View>
         </View>
       )}

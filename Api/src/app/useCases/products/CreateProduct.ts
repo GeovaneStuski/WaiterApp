@@ -5,7 +5,7 @@ type ProductBody = {
   description: string;
   imagePath: string;
   price: number;
-  ingredients: string[];
+  ingredients?: string[];
   category: string;
 }
 

@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useState } from 'react';
 import { CartItem } from '../types/CartItem';
 import { Product } from '../types/Product';
+import { api } from '../utils/api';
 
 type CartProviderProps = {
   children: ReactNode;
@@ -15,7 +16,9 @@ type OrderProps = {
   onOpenTableModal: () => void;
   onChangeTable: (table: string) => void;
   onCloseTableModal: () => void;
+  onCreateOrder: () => void;
   onCancelOrder: () => void;
+  isConfirmModalVisible: boolean;
 }
 
 export const OrderContext = createContext({} as OrderProps);
@@ -23,7 +26,14 @@ export const OrderContext = createContext({} as OrderProps);
 export function OrderProvider({children}: CartProviderProps) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isTableModalVisible, setIsTableModalVisible] = useState(false); 
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
   const [table, setTable] = useState<string | null>(null);
+  
+  function handleOpenConfirmModal() {
+    setIsConfirmModalVisible(true);
+
+    setTimeout(() => setIsConfirmModalVisible(false), 2500);
+  }
 
   function handleOpenTableModal() {
     setIsTableModalVisible(true);
@@ -86,6 +96,19 @@ export function OrderProvider({children}: CartProviderProps) {
     });
   }
 
+  async function handleCreateOrder() {
+    try {
+      await api.post('/orders', {
+        table,
+        products: cartItems.map(({product, quantity}) => ({product: product._id, quantity})),
+      });
+
+      handleOpenConfirmModal();
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
   function handleCancelOrder() {
     setTable(null);
     setCartItems([]);
@@ -101,7 +124,9 @@ export function OrderProvider({children}: CartProviderProps) {
       onOpenTableModal: handleOpenTableModal,
       onChangeTable: handleChangeTable,
       onCloseTableModal: handleCloseTableModal,
-      onCancelOrder: handleCancelOrder
+      onCreateOrder: handleCreateOrder,
+      onCancelOrder: handleCancelOrder,
+      isConfirmModalVisible,
     }}>
       {children}
     </OrderContext.Provider>

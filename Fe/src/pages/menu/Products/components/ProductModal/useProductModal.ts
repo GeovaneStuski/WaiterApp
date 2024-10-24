@@ -26,7 +26,7 @@ export function useProductModal({ onClose, onReload, product }: useProductModalP
   const [isIngredientModalVisible, setIsIngredientModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const isFormValid = !!(image && name && description && category && ingredientsList.length > 0 && price);
+  const isFormValid = !!(image && name && description && category && price);
 
   const { handleLogout } = useContext(AuthenticationContext);
 

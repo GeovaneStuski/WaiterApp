@@ -5,6 +5,6 @@ export const ProductSchema = zod.object({
   name: zod.string({message: 'Name is required'}),
   description: zod.string({message: 'Description is required'}),
   price: zod.string({message: 'Price is required'}),
-  ingredients: zod.string({message: 'Ingredients is required'}),
+  ingredients: zod.string().optional(),
   category: zod.string({message: 'Category is required'}),
 });

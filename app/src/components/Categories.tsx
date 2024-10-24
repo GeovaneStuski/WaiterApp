@@ -1,10 +1,14 @@
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
-import { categories } from '../mocks/categories';
 import { useState } from 'react';
 import { cn } from '../utils/cn';
+import { Category } from '../types/Category';
 
-export function Categories() {
+type CategoriesProps = {
+  categories: Category[];
+}
+
+export function Categories({ categories }: CategoriesProps) {
   const [selectedCategory, setSelectCategory] = useState<string | null>(null);
 
   function handleChangeSelectedCategory(categoryId: string) {
