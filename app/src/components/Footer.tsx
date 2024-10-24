@@ -1,21 +1,15 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { BottomBar } from './ButtomBar';
+import { BottomBar } from './BottomBar';
 import { Button } from './Button';
 import { formatCurrency } from '../utils/formatCurrency';
 import { getImageByPath } from '../utils/getImageByPath';
 import { AddIcon } from './icons/AddIcon';
 import { LessIcon } from './icons/LessIcon';
-import { CartItem } from '../types/CartItem';
-import { Product } from '../types/Product';
+import { useContext } from 'react';
+import { OrderContext } from '../contexts/OrderContext';
 
-type FooterProps = {
-  table: string | null;
-  cart: CartItem[];
-  onRemoveFromCart: (product: Product) => void;
-  onAddToCart: (product: Product) => void;
-}
-
-export function Footer({table, cart, onRemoveFromCart, onAddToCart }: FooterProps) {
+export function Footer() {
+  const { table, cartItems, onAddProductToCart, onDecrementProductFromCart } = useContext(OrderContext);
   return (
     <>
       {!table && <BottomBar/>}
@@ -23,7 +17,7 @@ export function Footer({table, cart, onRemoveFromCart, onAddToCart }: FooterProp
       {table && (
         <View className='absolute bottom-0'>
           <FlatList
-            data={cart}
+            data={cartItems}
             keyExtractor={({product}) => product._id}
             renderItem={({item}) => {
               const product = item.product;
@@ -46,11 +40,11 @@ export function Footer({table, cart, onRemoveFromCart, onAddToCart }: FooterProp
                   </View>
   
                   <View className='flex-row items-center justify-between w-16'>
-                    <TouchableOpacity onPress={() => onAddToCart(product)}>
+                    <TouchableOpacity onPress={() => onAddProductToCart(product)}>
                       <AddIcon color='#D73035' size={24}/>
                     </TouchableOpacity>
   
-                    <TouchableOpacity onPress={() => onRemoveFromCart(product)}>
+                    <TouchableOpacity onPress={() => onDecrementProductFromCart(product)}>
                       <LessIcon color='#D73035' size={24}/>
                     </TouchableOpacity>
                   </View>
@@ -59,19 +53,19 @@ export function Footer({table, cart, onRemoveFromCart, onAddToCart }: FooterProp
             }}
           />
           <View className='flex-row justify-between px-6 py-4 items-center bg-white w-full'>
-            {cart.length > 0 
+            {cartItems.length > 0 
               ? (
                 <View>
                   <Text className='font-semibold text-base text-gray-main'>Preço</Text>
 
-                  <Text className='text-lg font-bold'>{formatCurrency(cart.reduce((acc, { product, quantity }) => acc + product.price * quantity, 0))}</Text>
+                  <Text className='text-lg font-bold'>{formatCurrency(cartItems.reduce((acc, { product, quantity }) => acc + product.price * quantity, 0))}</Text>
                 </View>
               ) : (
                 <Text className='text-base font-semibold text-gray-main w-32 text-center'>Seu carrinho está vazio</Text>
               )}
             
 
-            <Button disabled={cart.length < 1} onPress={() => {}}>Confirmar Pedido</Button>
+            <Button isLoading disabled={cartItems.length < 1} onPress={() => {}}>Confirmar Pedido</Button>
           </View>
         </View>
       )}

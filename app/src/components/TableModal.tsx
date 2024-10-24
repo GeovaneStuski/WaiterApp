@@ -1,30 +1,22 @@
 import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { CloseIcon } from './icons/CloseIcon';
 import { Button } from './Button';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { OrderContext } from '../contexts/OrderContext';
 
-type TableModalProps = {
-  isVisible: boolean;
-  onClose: () => void;
-  onSave: (table: string) => void;
-}
-
-export function TableModal({ isVisible, onClose, onSave }: TableModalProps) {
+export function TableModal() {
   const [table, setTable] = useState('');
-
-  function handleSave() {
-    onSave(table);
-    onClose();
-  }
+  
+  const { onCloseTableModal, onChangeTable, isTableModalVisible } = useContext(OrderContext);
 
   return (
-    <Modal animationType='fade' visible={isVisible} transparent >
+    <Modal animationType='fade' visible={isTableModalVisible} transparent >
       <View className='bg-black/60 w-screen h-screen items-center justify-center px-6'>
         <View className='w-full bg-gray-50 rounded-lg p-6'>
           <View className='justify-between flex-row items-center mb-8'>
             <Text className='text-base text-black-main font-bold'>Informar a mesa</Text>
 
-            <TouchableOpacity onPress={onClose}>
+            <TouchableOpacity onPress={onCloseTableModal}>
               <CloseIcon size={24} color='#666666'/>
             </TouchableOpacity>
           </View>
@@ -37,7 +29,7 @@ export function TableModal({ isVisible, onClose, onSave }: TableModalProps) {
               keyboardType='number-pad'
             />
 
-            <Button disabled={!table} onPress={handleSave}>Salvar</Button>
+            <Button disabled={!table} onPress={() => onChangeTable(table)}>Salvar</Button>
           </View>
         </View>
       </View>

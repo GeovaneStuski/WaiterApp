@@ -1,13 +1,11 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { BellIcon } from './icons/BellIcon';
+import { useContext } from 'react';
+import { OrderContext } from '../contexts/OrderContext';
 
-type HeaderProps = {
-  table: string | null;
-  onCancel: () => void;
-  onChange: () => void;
-}
+export function Header() {
+  const { table, onCancelOrder, onOpenTableModal } = useContext(OrderContext);
 
-export function Header({ table, onCancel, onChange }: HeaderProps) {
   return (
     <View className='mt-6 px-6'>
       {!table && (
@@ -33,12 +31,12 @@ export function Header({ table, onCancel, onChange }: HeaderProps) {
           <View className='justify-between items-center flex-row'>
             <Text className='text-2xl font-bold'>Pedidos</Text>
 
-            <TouchableOpacity onPress={onCancel}>
+            <TouchableOpacity onPress={onCancelOrder}>
               <Text className='text-sm text-red-main font-bold'>Cancelar Pedido</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity onPress={onChange} className='w-full p-4 bg-white border border-gray-light/30 mt-4 rounded-lg'>
+          <TouchableOpacity onPress={onOpenTableModal} className='w-full p-4 bg-white border border-gray-light/30 mt-4 rounded-lg'>
             <Text>Mesa {table}</Text>
           </TouchableOpacity>
         </>

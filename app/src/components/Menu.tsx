@@ -6,15 +6,14 @@ import { AddIcon } from './icons/AddIcon';
 import { formatCurrency } from '../utils/formatCurrency';
 import { Product } from '../types/Product';
 import { ProductModal } from './ProductModal';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { OrderContext } from '../contexts/OrderContext';
 
-type ProductProps = {
-  onAddItemInCart: (product: Product) => void;
-}
-
-export function Menu({ onAddItemInCart }: ProductProps) {
+export function Menu() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const { onAddProductToCart } = useContext(OrderContext);
 
   function handleOpenModal(product: Product) {
     setSelectedProduct(product);
@@ -31,7 +30,7 @@ export function Menu({ onAddItemInCart }: ProductProps) {
         isVisible={isModalVisible}
         product={selectedProduct}
         onClose={handleCloseModal} 
-        onAddItemInCart={onAddItemInCart}
+        onAddItemInCart={onAddProductToCart}
       />
 
       <FlatList
@@ -52,7 +51,7 @@ export function Menu({ onAddItemInCart }: ProductProps) {
               <Text className='text-base font-bold text-black-main'>{formatCurrency(product.price)}</Text>
             </View>
 
-            <TouchableOpacity onPress={() => onAddItemInCart(product)} className='absolute bottom-0 right-0'>
+            <TouchableOpacity onPress={() => onAddProductToCart(product)} className='absolute bottom-0 right-0'>
               <AddIcon color='#D73035' size={24}/>
             </TouchableOpacity>
           </TouchableOpacity>
