@@ -1,12 +1,12 @@
 import { FlatList, View, Image, Text, TouchableOpacity } from 'react-native';
 
-import { getImageByPath } from '../utils/getImageByPath';
-import { AddIcon } from './icons/AddIcon';
-import { formatCurrency } from '../utils/formatCurrency';
-import { Product } from '../types/Product';
+import { getImageByPath } from '../../../utils/getImageByPath';
+import { AddIcon } from '../../../components/icons/AddIcon';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import { Product } from '../../../types/Product';
 import { ProductModal } from './ProductModal';
 import { useContext, useState } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
+import { OrderContext } from '../../../contexts/OrderContext';
 
 type MenuProps = {
   products: Product[];
@@ -28,7 +28,7 @@ export function Menu({ products }: MenuProps) {
   }
 
   return (
-    <>
+    <View className=''>
       <ProductModal
         isVisible={isModalVisible}
         product={selectedProduct}
@@ -40,7 +40,7 @@ export function Menu({ products }: MenuProps) {
         data={products}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <View className='w-full h-[1px] bg-gray-light/40 my-6'/>}
-        style={{marginTop: 32, paddingHorizontal: 24}}
+        style={{marginTop: 32}}
         keyExtractor={product => product._id}
         renderItem={({ item: product }) => (
           <TouchableOpacity onPress={() => handleOpenModal(product)} className='flex-row w-full items-center'>
@@ -60,6 +60,6 @@ export function Menu({ products }: MenuProps) {
           </TouchableOpacity>
         )}
       />
-    </>
+    </View>
   );
 }

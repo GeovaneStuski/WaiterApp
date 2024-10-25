@@ -1,11 +1,11 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from './Button';
-import { formatCurrency } from '../utils/formatCurrency';
-import { getImageByPath } from '../utils/getImageByPath';
-import { AddIcon } from './icons/AddIcon';
-import { LessIcon } from './icons/LessIcon';
+import { Button } from '../../../components/Button';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import { getImageByPath } from '../../../utils/getImageByPath';
+import { AddIcon } from '../../../components/icons/AddIcon';
+import { LessIcon } from '../../../components/icons/LessIcon';
 import { useContext } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
+import { OrderContext } from '../../../contexts/OrderContext';
 import { ConfirmOrderModal } from './ConfirmOrderModal';
 
 export function Footer() {

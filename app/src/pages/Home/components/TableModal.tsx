@@ -1,8 +1,8 @@
 import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { CloseIcon } from './icons/CloseIcon';
-import { Button } from './Button';
+import { CloseIcon } from '../../../components/icons/CloseIcon';
+import { Button } from '../../../components/Button';
 import { useContext, useState } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
+import { OrderContext } from '../../../contexts/OrderContext';
 
 export function TableModal() {
   const [table, setTable] = useState('');

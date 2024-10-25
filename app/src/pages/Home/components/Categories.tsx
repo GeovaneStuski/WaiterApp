@@ -1,8 +1,8 @@
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
 import { useState } from 'react';
-import { cn } from '../utils/cn';
-import { Category } from '../types/Category';
+import { cn } from '../../../utils/cn';
+import { Category } from '../../../types/Category';
 
 type CategoriesProps = {
   categories: Category[];
@@ -19,18 +19,18 @@ export function Categories({ categories, onChangeCategory }: CategoriesProps) {
   }
   
   return (
-    <View className='h-20 mt-8'>
+    <View className='h-fit mt-8'>
       <FlatList
         horizontal
         data={categories}
-        contentContainerStyle={{paddingRight: 24}}
         showsHorizontalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View className='w-6'/>}
         keyExtractor={category => category._id}
         renderItem={({ item: category }) => {
           const isSeleted = category._id === selectedCategory;
 
           return (
-            <TouchableOpacity onPress={() => handleChangeSelectedCategory(category._id)} className='items-center ml-6'>
+            <TouchableOpacity onPress={() => handleChangeSelectedCategory(category._id)} className='items-center'>
               <View className={cn('h-11 w-11 bg-white shadow-md shadow-black/60 items-center justify-center rounded-full', {
                 'opacity-50': !isSeleted && selectedCategory,
                 'h-14 w-14':isSeleted

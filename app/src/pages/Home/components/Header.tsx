@@ -1,13 +1,13 @@
 import { Text, TouchableOpacity, View } from 'react-native';
-import { BellIcon } from './icons/BellIcon';
+import { BellIcon } from '../../../components/icons/BellIcon';
 import { useContext } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
+import { OrderContext } from '../../../contexts/OrderContext';
 
 export function Header() {
   const { table, onCancelOrder, onOpenTableModal } = useContext(OrderContext);
 
   return (
-    <View className='mt-6 px-6'>
+    <View>
       {!table && (
         <View className='flex-row items-center justify-between'>
           <View>

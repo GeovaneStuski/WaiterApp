@@ -1,9 +1,9 @@
 import { FlatList, ImageBackground, Modal, Text, TouchableOpacity, View } from 'react-native';
-import { getImageByPath } from '../utils/getImageByPath';
-import { CloseIcon } from './icons/CloseIcon';
-import { Product } from '../types/Product';
-import { formatCurrency } from '../utils/formatCurrency';
-import { Button } from './Button';
+import { getImageByPath } from '../../../utils/getImageByPath';
+import { CloseIcon } from '../../../components/icons/CloseIcon';
+import { Product } from '../../../types/Product';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import { Button } from '../../../components/Button';
 
 type ProductModalProps = {
   isVisible: boolean;

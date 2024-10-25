@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Modal, Text, View } from 'react-native';
-import { CheckIcon } from './icons/CheckIcon';
+import { CheckIcon } from '../../../components/icons/CheckIcon';
 
 type ConfirmOrderModalProps = {
   isVisible: boolean;

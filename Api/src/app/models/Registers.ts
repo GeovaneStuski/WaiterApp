@@ -14,7 +14,7 @@ export const Registers = model('Registers', new Schema({
 
   createdAt: {
     type: Date,
-    default: Date.now,
+    required: true,
   },
 
   products: {
@@ -31,5 +31,10 @@ export const Registers = model('Registers', new Schema({
         default: 1,
       },
     }],
+  },
+
+  finishedAt: {
+    type: Date,
+    default: Date.now,
   },
 }));

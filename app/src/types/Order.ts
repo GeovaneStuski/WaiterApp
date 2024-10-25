@@ -2,7 +2,7 @@ import { Product } from './Product';
 
 export type Order = {
   _id: string;
-  createAt: string;
+  createAt: number;
   products: {
     product: Product;
     quantity: string;
