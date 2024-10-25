@@ -104,6 +104,8 @@ export function OrderProvider({children}: CartProviderProps) {
       });
 
       handleOpenConfirmModal();
+      setTable(null);
+      setCartItems([]);
     } catch(error) {
       console.log(error);
     }

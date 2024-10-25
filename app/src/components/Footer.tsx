@@ -1,5 +1,4 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import { BottomBar } from './BottomBar';
 import { Button } from './Button';
 import { formatCurrency } from '../utils/formatCurrency';
 import { getImageByPath } from '../utils/getImageByPath';
@@ -22,12 +21,11 @@ export function Footer() {
     <>
       <ConfirmOrderModal isVisible={isConfirmModalVisible}/>
 
-      {!table && <BottomBar/>}
-
       {table && (
-        <View className='absolute bottom-0'>
+        <View>
           <FlatList
             data={cartItems}
+            style={{ maxHeight: 96 }}
             keyExtractor={({product}) => product._id}
             renderItem={({item}) => {
               const product = item.product;
