@@ -8,7 +8,6 @@ import { OrderProvider } from '../../contexts/OrderContext';
 import { Empty } from '../../components/Empty';
 import { useHome } from './useHome';
 
-
 export function Home() {
   const {
     ListProductsByCategory,

@@ -14,14 +14,14 @@ export function Button({ children, onPress, disabled = false, isLoading = false 
     <TouchableOpacity
       disabled={disabled || isLoading}
       onPress={onPress}
-      className={cn('py-3 px-7 bg-red-500 items-center rounded-full', {
+      className={cn('py-3 px-7 w-full bg-red-500 items-center rounded-full', {
         'bg-gray-light': disabled || isLoading,
       })}
     >
       {!isLoading ? (
         <Text className='text-white text-base font-bold'>{children}</Text>
       ) : (
-        <ActivityIndicator color="#fff" size="small" />
+        <ActivityIndicator color="#D73035" size="small" />
       )}
     </TouchableOpacity>
   );

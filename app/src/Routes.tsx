@@ -6,10 +6,21 @@ import { OrderIcon } from './components/icons/OrderIcon';
 import { Orders } from './pages/Orders';
 import { Profile } from './pages/Profile';
 import { ProfileIcon } from './components/icons/ProfileIcon';
+import { ScreenProps } from './types/ScreenProps';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from './contexts/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
-export function Routes() {
+export function Routes({ navigation }: ScreenProps) {
+  const { authenticated, loading } = useContext(AuthContext);
+
+  useEffect(() => {
+    if(!loading && !authenticated) {
+      navigation.navigate('Login');
+    }
+  }, [authenticated, loading]);
+  
   return (
     <Tab.Navigator>
       <Tab.Screen
