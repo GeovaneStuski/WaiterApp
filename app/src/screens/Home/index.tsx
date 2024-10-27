@@ -7,6 +7,7 @@ import { TableModal } from './components/TableModal';
 import { OrderProvider } from '../../contexts/OrderContext';
 import { Empty } from '../../components/Empty';
 import { useHome } from './useHome';
+import { NotificationsModal } from './components/NotificationsModal';
 
 export function Home() {
   const {
@@ -14,15 +15,20 @@ export function Home() {
     categories,
     loading,
     loadingProducts,
-    products
+    products,
+    isNotificationsModalVisible,
+    onOpenNotificationsModal,
+    onCloseNotificationsModal,
   } = useHome();
 
   return (
     <OrderProvider>
+      <NotificationsModal onClose={onCloseNotificationsModal} isVisible={isNotificationsModalVisible} />
+
       <TableModal />
 
       <View className='px-6 flex-1 mt-6'>
-        <Header />
+        <Header onOpenNotificationModal={onOpenNotificationsModal} />
 
         {loading && (
           <View className='flex-1 items-center justify-center'>

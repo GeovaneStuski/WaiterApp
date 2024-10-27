@@ -3,7 +3,11 @@ import { BellIcon } from '../../../components/icons/BellIcon';
 import { useContext } from 'react';
 import { OrderContext } from '../../../contexts/OrderContext';
 
-export function Header() {
+type HeaderProps = {
+  onOpenNotificationModal: () => void;
+}
+
+export function Header({ onOpenNotificationModal }: HeaderProps) {
   const { table, onCancelOrder, onOpenTableModal } = useContext(OrderContext);
 
   return (
@@ -20,7 +24,10 @@ export function Header() {
             </Text>
           </View>
   
-          <TouchableOpacity className='w-11 h-11 justify-center items-center bg-white rounded-full shadow-md shadow-black/60'>
+          <TouchableOpacity
+            className='w-11 h-11 justify-center items-center bg-white rounded-full shadow-md shadow-black/60'
+            onPress={onOpenNotificationModal}
+          >
             <BellIcon color='#333333' size={24}/>
           </TouchableOpacity>
         </View>

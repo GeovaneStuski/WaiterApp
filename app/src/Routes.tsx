@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Home } from './pages/Home';
+import { Home } from './screens/Home';
 import { HomeIcon } from './components/icons/HomeIcon';
 import { OrderIcon } from './components/icons/OrderIcon';
-import { Orders } from './pages/Orders';
-import { Profile } from './pages/Profile';
+import { Orders } from './screens/Orders';
+import { Profile } from './screens/Profile';
 import { ProfileIcon } from './components/icons/ProfileIcon';
 import { ScreenProps } from './types/ScreenProps';
 import { useContext, useEffect } from 'react';

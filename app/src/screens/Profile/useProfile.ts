@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { User } from '../../types/User';
 import { AuthContext } from '../../contexts/AuthContext';
 import { ApiRequest } from '../../utils/ApiRequest';
+import { ApiError } from '../../errors/ApiError';
 
 export function useProfile() {
   const [user, setUser] = useState<null | User>(null);
@@ -31,24 +32,32 @@ export function useProfile() {
   }
 
   async function handleUpdateUser() {
-    const body = {
-      name,
-      email,
-      password,
-      position: authUser?.position,
-    };
+    try {
+      const body = {
+        name,
+        email,
+        password,
+        position: authUser?.position,
+      };
+  
+      setLoading(true);
+  
+      const route = `/users/${authUser?._id}`;
+  
+      await ApiRequest({
+        method: 'put',
+        endPoint: route,
+        body,
+      });
+  
+      onReloadUser();
+    } catch(responseError) {
+      const error = responseError as ApiError;
 
-    setLoading(true);
-
-    const route = `/users/${authUser?._id}`;
-
-    await ApiRequest({
-      method: 'put',
-      endPoint: route,
-      body,
-    });
-
-    onReloadUser();
+      if(error.status === 401) {
+        onLogout();
+      }
+    }
   }
 
   return {

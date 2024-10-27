@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { Routes } from './Routes';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
-import { Login } from './pages/Login';
+import { Login } from './screens/Login';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthProvider } from './contexts/AuthContext';
 import { SplashModal } from './components/SplashModal';

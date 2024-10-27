@@ -10,6 +10,7 @@ export function useHome() {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isNotificationsModalVisible, setIsNotificationsModalVisible] = useState(false);
 
   const { onLogout } = useContext(AuthContext);
 
@@ -64,11 +65,22 @@ export function useHome() {
     }
   }
 
+  function handleOpenNotificationsModal() {
+    setIsNotificationsModalVisible(true);
+  }
+
+  function handleCloseNotificationsModal() {
+    setIsNotificationsModalVisible(false);
+  }
+
   return {
     loading,
     products,
     categories,
     loadingProducts,
     ListProductsByCategory,
+    onOpenNotificationsModal: handleOpenNotificationsModal,
+    onCloseNotificationsModal: handleCloseNotificationsModal,
+    isNotificationsModalVisible,
   };
 }
