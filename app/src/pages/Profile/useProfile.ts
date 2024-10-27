@@ -1,18 +1,21 @@
 import { useContext, useEffect, useState } from 'react';
 import { User } from '../../types/User';
 import { AuthContext } from '../../contexts/AuthContext';
+import { ApiRequest } from '../../utils/ApiRequest';
 
 export function useProfile() {
   const [user, setUser] = useState<null | User>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const isFormValid = !!(user?.name !== name || user?.email !== email || user.password !== password);
 
-  const { onLogout, user: authUser } = useContext(AuthContext);
+  const { onLogout, user: authUser, onReloadUser } = useContext(AuthContext);
 
   useEffect(() => {
+    setLoading(true);
     if(authUser) {
       populateInputs(authUser!);
     }
@@ -23,6 +26,29 @@ export function useProfile() {
     setEmail(user.email);
     setPassword(user.password);
     setUser(user);
+
+    setTimeout(() => setLoading(false), 200);
+  }
+
+  async function handleUpdateUser() {
+    const body = {
+      name,
+      email,
+      password,
+      position: authUser?.position,
+    };
+
+    setLoading(true);
+
+    const route = `/users/${authUser?._id}`;
+
+    await ApiRequest({
+      method: 'put',
+      endPoint: route,
+      body,
+    });
+
+    onReloadUser();
   }
 
   return {
@@ -33,6 +59,8 @@ export function useProfile() {
     setName,
     setEmail,
     setPassword,
-    onLogout
+    onLogout,
+    loading,
+    onSubmit: handleUpdateUser,
   };
 }

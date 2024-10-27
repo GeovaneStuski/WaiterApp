@@ -9,12 +9,17 @@ type ButtonProps = {
   isLoading?: boolean;
 }
 
-export function Button({ children, onPress, disabled = false, isLoading = false }: ButtonProps) {
+export function Button({
+  children,
+  onPress,
+  disabled = false,
+  isLoading = false,  
+}: ButtonProps) {
   return (
     <TouchableOpacity
       disabled={disabled || isLoading}
       onPress={onPress}
-      className={cn('py-3 px-7 w-full bg-red-500 items-center rounded-full', {
+      className={cn('py-3 px-7 bg-red-500 items-center rounded-full', {
         'bg-gray-light': disabled || isLoading,
       })}
     >

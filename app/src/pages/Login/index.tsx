@@ -1,34 +1,20 @@
 import { View } from 'react-native';
 import { Header } from './components/Header';
 import { TextField } from '../../components/TextField';
-import { useContext, useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
-import { AuthContext } from '../../contexts/AuthContext';
 import { ScreenProps } from '../../types/ScreenProps';
+import { useLogin } from './useLogin';
 
 export function Login({navigation}: ScreenProps) {
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const isFormValid = !!(email && password);
-
-
-  const { onUserAuthencation, loading: authLoading, authenticated } = useContext(AuthContext);
-
-  async function handleSubmit() {
-    onUserAuthencation({ email, password });
-    setLoading(true);
-  }
-
-  useEffect(() => {
-    if(!authLoading && authenticated) {
-      navigation.navigate('Main');
-      setEmail('');
-      setPassword('');
-      setLoading(false);
-    }
-  }, [authLoading, authenticated]);
+  const {
+    handleSubmit,
+    isFormValid,
+    loading,
+    email,
+    password,
+    setEmail,
+    setPassword,
+  } = useLogin({ navigation });
 
   return (
     <View className="flex-1 px-8 items-center justify-center">

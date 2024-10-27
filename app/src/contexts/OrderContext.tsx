@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from 'react';
 import { CartItem } from '../types/CartItem';
 import { Product } from '../types/Product';
-import { api } from '../utils/api';
+import { ApiRequest } from '../utils/ApiRequest';
 
 type CartProviderProps = {
   children: ReactNode;
@@ -98,9 +98,10 @@ export function OrderProvider({children}: CartProviderProps) {
 
   async function handleCreateOrder() {
     try {
-      await api.post('/orders', {
-        table,
-        products: cartItems.map(({product, quantity}) => ({product: product._id, quantity})),
+      await ApiRequest({
+        method: 'post',
+        endPoint: '/orders',
+        body: cartItems.map(({product, quantity}) => ({ product: product._id, quantity }))
       });
 
       handleOpenConfirmModal();

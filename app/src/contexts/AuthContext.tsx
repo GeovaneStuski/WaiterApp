@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
-import { api } from '../utils/api';
+import { ApiRequest } from '../utils/ApiRequest';
 import { User } from '../types/User';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,6 +18,7 @@ type AuthContextProps = {
   authenticated: boolean;
   user: null | User;
   loading: boolean;
+  onReloadUser: () => void;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -34,9 +35,7 @@ export function AuthProvider({ children}: AuthProviderProps) {
       if(!token) {
         setAuthenticated(false);
       } else {
-        const { data } = await api.get('/me');
-        setUser(data);
-        setAuthenticated(true);
+        handleGetUser();
       }
 
       setLoading(false);
@@ -45,19 +44,35 @@ export function AuthProvider({ children}: AuthProviderProps) {
     getToken();
   }, []);
 
-  async function handleUserAuthencation({email, password}: LoginBody) {
+  async function handleGetUser() {
+    const user = await ApiRequest({
+      method: 'get',
+      endPoint: '/me',
+    });
+
+    setUser(user);
+    setAuthenticated(true);
+  }
+
+  async function handleUserAuthencation(body: LoginBody) {
+    setLoading(true);
+
     try {
-      const { data } = await api.post('/authentication', {
-        email,
-        password
+      const { user, token } = await ApiRequest({
+        method: 'post',
+        endPoint: '/authentication',
+        body,
       });
 
-      setUser(data.user);
+      setUser(user);
       setAuthenticated(true);
       
-      await AsyncStorage.setItem('token', data.token);
+      await AsyncStorage.setItem('token', token);
     } catch {
+      setAuthenticated(false);
       alert('Erro');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -74,6 +89,7 @@ export function AuthProvider({ children}: AuthProviderProps) {
       authenticated,
       user,
       loading,
+      onReloadUser: handleGetUser,
     }}
     >
       {children}

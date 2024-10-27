@@ -15,7 +15,9 @@ export function Main() {
   const [isSplashVisible, setIsSplashVisible] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setIsSplashVisible(false), 1500);
+    const timer = setTimeout(() => setIsSplashVisible(false), 1500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (

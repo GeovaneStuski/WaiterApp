@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
-import { api } from '../../utils/api';
+import { useContext, useEffect, useState } from 'react';
 import { Category } from '../../types/Category';
 import { Product } from '../../types/Product';
+import { ApiRequest } from '../../utils/ApiRequest';
+import { AuthContext } from '../../contexts/AuthContext';
+import { ApiError } from '../../errors/ApiError';
 
 export function useHome() {
   const [loading, setLoading] = useState(true);
@@ -9,17 +11,35 @@ export function useHome() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
+  const { onLogout } = useContext(AuthContext);
+
   useEffect(() => {
-    Promise.all([
-      api.get('/categories'),
-      api.get('/products')
-    ])
-      .then(([categoriesResponse, productsResponse]) => {
-        setCategories(categoriesResponse.data);
-        setProducts(productsResponse.data);
-      })
-      .catch(error => console.log('error ' + error))
-      .finally(() => setLoading(false));
+    (async function getData() {
+      try {
+        const [categories, products] = await Promise.all([
+          ApiRequest({
+            method: 'get',
+            endPoint: '/categories',
+          }),
+      
+          ApiRequest({
+            method: 'get',
+            endPoint: '/products',
+          })
+        ]);
+
+        setCategories(categories);
+        setProducts(products);
+      } catch(errorResponse) {
+        const error = errorResponse as ApiError;
+
+        if (error.status === 401) {
+          onLogout();
+        }
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   async function ListProductsByCategory(categoryId: string | null) {
@@ -27,11 +47,18 @@ export function useHome() {
 
     const route = categoryId ? `/categories/${categoryId}/products` : '/products';
     try {
-      const { data } = await api.get(route);
+      const products = await ApiRequest({
+        method: 'get',
+        endPoint: route,
+      });
 
-      setProducts(data);
-    } catch {
-      console.log('list product error');
+      setProducts(products);
+    } catch(errorResponse) {
+      const error = errorResponse as ApiError;
+
+      if (error.status === 401) {
+        onLogout();
+      }
     } finally {
       setLoadingProducts(false);
     }

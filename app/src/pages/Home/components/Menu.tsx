@@ -28,7 +28,7 @@ export function Menu({ products }: MenuProps) {
   }
 
   return (
-    <View className=''>
+    <>
       <ProductModal
         isVisible={isModalVisible}
         product={selectedProduct}
@@ -60,6 +60,6 @@ export function Menu({ products }: MenuProps) {
           </TouchableOpacity>
         )}
       />
-    </View>
+    </>
   );
 }

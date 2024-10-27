@@ -1,89 +1,60 @@
-import { FlatList, Text, View } from 'react-native';
-import { Status } from './components/Status';
-import { formatData } from '../../utils/formatData';
+import { ActivityIndicator, FlatList, Text, View } from 'react-native';
+import { formatDate } from '../../utils/formatData';
 import { useOrders } from './useOrders';
+import { OrderCard } from './components/OrderCard';
 
 export function Orders() {
-  const { orders, registers } = useOrders();
+  const { orders, registers, loading } = useOrders();
 
   return (
-    <FlatList
-      style={{paddingHorizontal: 24, marginTop: 24}}
-      ListHeaderComponent={
+    <View className='flex-1 px-6'>
+      {!loading && (
         <>
-          <Text className='text-2xl font-bold text-black-main'>Pedidos</Text>
-
-          <View className='mt-10'>
-            <Text className='text-lg text-gray-main font-bold'>Em Andamento</Text>
-          </View>
-        </>
-      }
-      data={orders.filter(({ status }) => status !== 'WAITING')}
-      showsVerticalScrollIndicator={false}
-      keyExtractor={(order) => order._id}
-      renderItem={({ item: order }) => (
-        <View className='w-full bg-white rounded-lg p-6 mb-2'>
-          <View className='flex-row justify-between items-center'>
-            <Text className='font-semibold text-base'>Mesa {order.table}</Text>
-            <Status status={order.status} />
-          </View>
-
-          <View className='mt-4'>
-            <FlatList
-              data={order.products}
-              keyExtractor={({ product }) => product._id}
-              ItemSeparatorComponent={() => <View className='h-2' />}
-              renderItem={({ item }) => {
-                const quantity = item.quantity;
-                const product = item.product;
-                return (
-                  <View className='flex-row items-center'>
-                    <Text className='text-sm text-gray-main/60'>{quantity}x</Text>
-                    <Text className='ml-2 text-sm text-black-main'>{product.name}</Text>
-                  </View>
-                );
-              }}
-            />
-          </View>
-        </View>
-      )}
-      ListFooterComponent={
-        <View className='mt-10'>
-          <Text className='text-lg text-gray-main font-bold'>Anteriores</Text>
+          <Text className='text-black-main mt-6 font-bold text-2xl'>Pedidos</Text>
 
           <FlatList
-            data={registers}
+            data={orders}
+            style={{ marginTop: 32}}
             showsVerticalScrollIndicator={false}
-            keyExtractor={(register) => register._id}
-            renderItem={({ item: register }) => (
-              <View className='w-full bg-white rounded-lg p-6 mb-2'>
-                <View className='flex-row justify-between items-center'>
-                  <Text className='font-semibold text-base'>Mesa {register.table}</Text>
-                  <Status date={formatData(register.finishedAt)} status='FINISHED' />
-                </View>
+            keyExtractor={order => order._id}
+            ListHeaderComponent={() => (
+              <Text className='font-bold text-lg text-gray-main mb-6'>Em Andamento</Text>
+            )}
+            renderItem={({ item: order }) => (
+              <OrderCard
+                products={order.products}
+                status={order.status}
+                table={order.table}
+              />
+            )}
+            ListFooterComponent={() => (
+              <>
+                <Text className='font-bold text-lg text-gray-main mt-8'>Finalizados</Text>
 
-                <View className='mt-4'>
-                  <FlatList
-                    data={register.products}
-                    keyExtractor={({ product }) => product._id}
-                    ItemSeparatorComponent={() => <View className='h-2' />}
-                    renderItem={({ item }) => {
-                      const quantity = item.quantity;
-                      const product = item.product;
-                      return (
-                        <View className='flex-row items-center'>
-                          <Text className='text-sm text-gray-main/60'>{quantity}x</Text>
-                          <Text className='ml-2 text-sm text-black-main'>{product.name}</Text>
-                        </View>
-                      );
-                    }}
-                  />
-                </View>
-              </View>
+                <FlatList
+                  data={registers}
+                  style={{ marginTop: 24 }}
+                  keyExtractor={register => register._id}
+                  renderItem={({ item: register }) => (
+                    <OrderCard
+                      products={register.products}
+                      status="FINISHED"
+                      table={register.table}
+                      date={formatDate(register.finishedAt)}
+                    />
+                  )}
+                />
+              </>
             )}
           />
+        </>
+      )}
+
+      {loading && (
+        <View className='flex-1 justify-center items-center'>
+          <ActivityIndicator color="#D73035" size="large"/>
         </View>
-      }
-    />
+      )}
+    </View>
   );
 }

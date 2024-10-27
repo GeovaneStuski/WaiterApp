@@ -1,12 +1,9 @@
-import { Product } from './Product';
+import { CartItem } from './CartItem';
 
 export type Order = {
   _id: string;
   createAt: number;
-  products: {
-    product: Product;
-    quantity: string;
-  }[];
+  products: CartItem[];
   status: 'DONE' | 'WAITING' | 'IN_PRODUCTION';
   table: string;
 }
