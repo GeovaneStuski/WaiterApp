@@ -5,16 +5,18 @@ import { Order } from '../../../types/Order';
 import { getImageByPath } from '../../../utils/getImageByPath';
 import { priceFormater } from '../../../utils/priceFormater';
 import { CancelOrderModal } from './CancelOrderModal';
+import { toast } from 'react-toastify';
 
 type OrderModalProps = {
   order: Order | null;
   isVisible: boolean;
   status: string;
   onClose: () => void;
-  onReload: () => void;
+  onCancel: (orderId: string) => void;
+  onChangeStatus: (orderId: string, status: Order['status']) => void;
 }
 
-export function OrderModal({ order, isVisible, status, onClose, onReload }: OrderModalProps) {
+export function OrderModal({ order, isVisible, status, onClose, onCancel, onChangeStatus }: OrderModalProps) {
   if(!order) return;
   const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,42 +24,27 @@ export function OrderModal({ order, isVisible, status, onClose, onReload }: Orde
 
   const totalPrice = order?.products.reduce((acc, product) => acc + product.product.price * product.quantity,0);
 
-  const StatusVariables = {
-    WAITING: {
-      cancel: handleOpenCancelModal,
-      confirm: handleChangeOrderStatus,
-      cancelLabel: 'Cancelar Pedido',
-      confirmLabel: 'Preparar Pedido',
-    },
-    IN_PRODUCTION: {
-      cancel: handleOpenCancelModal,
-      confirm: handleChangeOrderStatus,
-      cancelLabel: 'Cancelar Pedido',
-      confirmLabel: 'Concluir Pedido',
-    },
-    DONE: {
-      cancel: undefined,
-      confirm: undefined,
-      cancelLabel: undefined,
-      confirmLabel: undefined,
-    },
-  } as const;
-
-  type StatusType = keyof typeof StatusVariables;
-
-  const statusKey = order.status as StatusType;
-
   async function handleChangeOrderStatus() {
-    if(!order) return;
     setLoading(true);
 
-    const status = order.status === 'WAITING' ? 'IN_PRODUCTION' : 'DONE';
+    const statusOptions = {
+      WAITING: 'IN_PRODUCTION',
+      'IN_PRODUCTION': 'DONE',
+      DONE: 'FINISHED'
+    };
 
-    await OrdersList.update(order._id, { status });
+    const status = statusOptions[order!.status];
 
-    onReload();
+
+    await OrdersList.update(order!._id, { status });
+
+    onChangeStatus(order!._id, status);
     onClose();
     setLoading(false);
+    toast.success(order!.status === 'WAITING'
+      ? `Preparo do pedido da mesa ${order!.table} inciado`
+      : `Preparo do pedido da mesa ${order!.table} concluido`
+    );
   }
 
   function handleOpenCancelModal() {
@@ -69,13 +56,13 @@ export function OrderModal({ order, isVisible, status, onClose, onReload }: Orde
   }
 
   async function handleCancelOrder() {
-    if(!order) return;
     setDeleteLoading(true);
 
-    await OrdersList.delete(order?._id);
+    await OrdersList.delete(order!._id);
 
+    toast.success(`Pedido da mesa ${order!.table} cancelado`);
+    onCancel(order!._id);
     setIsCancelModalVisible(false);
-    onReload();
     onClose();
     setDeleteLoading(false);
   }
@@ -83,12 +70,12 @@ export function OrderModal({ order, isVisible, status, onClose, onReload }: Orde
   return (
     <Modal
       isVisible={isVisible}
-      confirmLabel={StatusVariables[statusKey].confirmLabel}
-      cancelLabel={StatusVariables[statusKey].cancelLabel}
+      confirmLabel={order.status === 'WAITING' ? 'Preparar Pedido' : 'Concluir Preparo'}
+      cancelLabel='Cancelar Pedido'
       title={`Mesa ${order.table}`}
       onClose={onClose}
-      onConfirm={StatusVariables[statusKey].confirm}
-      onCancel={StatusVariables[statusKey].cancel}
+      onConfirm={handleChangeOrderStatus}
+      onCancel={handleOpenCancelModal}
       isLoading={loading}
     >
       <CancelOrderModal

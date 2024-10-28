@@ -98,17 +98,21 @@ export function OrderProvider({children}: CartProviderProps) {
 
   async function handleCreateOrder() {
     try {
+      const products = cartItems.map(({product, quantity}) => ({ product: product._id, quantity }));
       await ApiRequest({
         method: 'post',
         endPoint: '/orders',
-        body: cartItems.map(({product, quantity}) => ({ product: product._id, quantity }))
+        body: {
+          table,
+          products,
+        }
       });
 
       handleOpenConfirmModal();
       setTable(null);
       setCartItems([]);
-    } catch(error) {
-      console.log(error);
+    } catch {
+      //
     }
   }
 

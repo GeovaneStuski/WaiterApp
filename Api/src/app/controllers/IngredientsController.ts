@@ -28,7 +28,7 @@ class IngredientsController implements ControllersInterface {
       res.status(201).json(ingredient);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to create Ingredient');
       }
 
       res.sendStatus(500);
@@ -50,7 +50,7 @@ class IngredientsController implements ControllersInterface {
       res.status(200).json(ingredient);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to update Ingredient');
       }
 
       res.status(500);
@@ -70,7 +70,7 @@ class IngredientsController implements ControllersInterface {
       res.sendStatus(204);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to delete User');
       }
 
       res.sendStatus(500);

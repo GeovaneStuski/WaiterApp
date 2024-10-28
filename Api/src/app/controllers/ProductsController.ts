@@ -29,7 +29,7 @@ class ProductsController implements ControllersInterface {
       res.status(200).json(products);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to list products by category');
       }
 
       res.sendStatus(500);
@@ -56,10 +56,8 @@ class ProductsController implements ControllersInterface {
       res.status(201).json(product);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to create Product');
       }
-
-      console.error(error);
 
       res.sendStatus(500);
     }
@@ -94,7 +92,7 @@ class ProductsController implements ControllersInterface {
       res.status(201).json(product);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to update Product');
       }
 
       res.sendStatus(500);
@@ -114,7 +112,7 @@ class ProductsController implements ControllersInterface {
       res.sendStatus(204);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to delete Product');
       }
 
       res.sendStatus(500);

@@ -23,38 +23,40 @@ export function SideBar() {
   function handleCloseLogoutModal() {
     setIsLogoutModalVisible(false);
   }
-  
+
   return (
-    <div className="flex h-screen w-28 flex-col items-center justify-between bg-white py-10 text-gray-main shadow-side-bar">
-      <LogoutModal
-        isVisible={isLogoutModalVisible}
-        onClose={handleCloseLogoutModal}
-      />
-      <SideBarLogo className="w-12" />
+    <div className='w-28 relative'>
+      <div className="flex h-screen w-28 flex-col items-center justify-between bg-white py-10 text-gray-main shadow-side-bar fixed left-0 top-0">
+        <LogoutModal
+          isVisible={isLogoutModalVisible}
+          onClose={handleCloseLogoutModal}
+        />
+        <SideBarLogo className="w-12" />
 
-      <div className="space-y-10">
-        <ItemContainer title="Home" icon={HomeIcon} path="/" />
+        <div className="space-y-10">
+          <ItemContainer title="Home" icon={HomeIcon} path="/" />
 
-        <ItemContainer title="Historico" icon={HistoryIcon} path="/history" />
+          <ItemContainer title="Historico" icon={HistoryIcon} path="/history" />
 
-        <ItemContainer title="Cardapio" icon={MenuIcon} path="/menu/products" />
+          <ItemContainer title="Cardapio" icon={MenuIcon} path="/menu/products" />
 
-        {user?.position === 'admin' && <ItemContainer title="Usuarios" icon={UserIcon} path="/users" />}
-      </div>
+          {user?.position === 'admin' && <ItemContainer title="Usuarios" icon={UserIcon} path="/users" />}
+        </div>
 
-      <div className="space-y-10 flex flex-col items-center">
-        <ItemContainer title="Perfil" icon={ProfileIcon} path="/profile" />
+        <div className="space-y-10 flex flex-col items-center">
+          <ItemContainer title="Perfil" icon={ProfileIcon} path="/profile" />
 
-        <button
-          onClick={handleOpenLogoutModal}
-          className={cn('flex flex-col items-center gap-2 font-semibold', {
-            'text-red-main': isLogoutModalVisible
-          })}
-        >
-          <LogoutIcon className="w-7" />
+          <button
+            onClick={handleOpenLogoutModal}
+            className={cn('flex flex-col items-center gap-2 font-semibold', {
+              'text-red-main': isLogoutModalVisible
+            })}
+          >
+            <LogoutIcon className="w-7" />
 
           Sair
-        </button>
+          </button>
+        </div>
       </div>
     </div>
   );

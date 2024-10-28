@@ -10,7 +10,7 @@ import zod from 'zod';
 import { CancelOrder } from '../useCases/orders/CancelOrder';
 
 const OrderStatusSchema = zod.object({
-  status: zod.enum(['WAITING', 'IN_PRODUCTION', 'DONE'], { message: 'invalid status' })
+  status: zod.enum(['WAITING', 'IN_PRODUCTION', 'DONE', 'FINISHED'], { message: 'invalid status' })
 });
 
 class OrdersController implements ControllersInterface {
@@ -19,8 +19,7 @@ class OrdersController implements ControllersInterface {
       const orders = await ListOrders();
 
       res.status(200).json(orders);
-    } catch(err) {
-      console.log(err);
+    } catch {
       res.sendStatus(500);
     }
   }
@@ -34,7 +33,7 @@ class OrdersController implements ControllersInterface {
       res.status(201).json(order);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to create Order');
       }
 
       res.sendStatus(500);
@@ -45,20 +44,18 @@ class OrdersController implements ControllersInterface {
     try {
       const { status } = OrderStatusSchema.parse(req.body);
 
-      console.log(status);
-
       const id = IDSchema.parse(req.params.id);
 
       const order = await UpdateOrderStatus({id, status});
 
       if(!order) {
-        return res.status(404).json('Ingredient not found');
+        return res.status(404).json('Order not found');
       }
 
       res.status(200).json(order);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to update Order');
       }
 
       res.status(500);
@@ -79,7 +76,7 @@ class OrdersController implements ControllersInterface {
     } catch(error) {
       console.log(error);
       if(error instanceof ZodError) {
-        return res.status(400).json(error.errors.map((err) => err.message));
+        return res.status(400).json('Error to delete Order');
       }
 
       res.sendStatus(500);

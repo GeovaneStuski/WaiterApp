@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import ApiError from '../../Errors/ApiError';
 import ConflictData from '../../Errors/ConflictData';
 import NotAuthorizedError from '../../Errors/NotAuthorizedError';
@@ -131,8 +132,14 @@ export class HttpClient {
     }
 
     if (response.status === 401) {
+      localStorage.removeItem('token');
 
-      throw new NotAuthorizedError(response, body);
+      const event = new Event('storage');
+
+      toast.error('Token de acesso expirado');
+      window.dispatchEvent(event);
+
+      return;
     }
 
     if(response.status === 409) {

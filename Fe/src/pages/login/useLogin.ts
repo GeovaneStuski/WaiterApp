@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import isEmailValid from '../../utils/isEmailValid';
 import { useErrors } from '../../hooks/useErrors';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
@@ -10,13 +12,18 @@ export function useLogin() {
 
   const isFormValid = isEmailValid(email) && email && password.length > 4;
 
+  const navigate = useNavigate();
+
   const { handleLogin, authenticated } = useContext(AuthenticationContext);
 
   const { getErrorMessageByFieldName, setError, removeError } = useErrors();
 
   useEffect(() => {
     if(authenticated) {
-      history.back();
+      const route = localStorage.getItem('route') as string;
+
+      navigate(route || '/');
+      toast.success('Autenticado com sucesso!');
     }
   }, [authenticated]);
 

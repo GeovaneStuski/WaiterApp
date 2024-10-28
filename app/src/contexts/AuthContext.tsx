@@ -68,9 +68,8 @@ export function AuthProvider({ children}: AuthProviderProps) {
       setAuthenticated(true);
       
       await AsyncStorage.setItem('token', token);
-    } catch(error) {
+    } catch {
       setAuthenticated(false);
-      alert(error.message);
     } finally {
       setLoading(false);
     }

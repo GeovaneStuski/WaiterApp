@@ -1,71 +1,58 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Order } from '../../types/Order';
 import OrdersList from '../../services/OrdersList';
-import NotAuthorizedError from '../../Errors/NotAuthorizedError';
-import { AuthenticationContext } from '../../contexts/AuthenticationContext';
-import RegistersList from '../../services/RegistersList';
+import socketIo from 'socket.io-client';
 
 export function useHome() {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [isRefreshModalVisible, setIsRefreshModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isRequestInProgress, setIsRequestInProgress] = useState(false);
-
-  const { handleLogout } = useContext(AuthenticationContext);
-
 
   useEffect(() => {
-    loadOrders();
+    (async function loadOrders() {
+      try {
+        setLoading(true);
+
+        const orders = await OrdersList.index();
+
+        setOrders(orders);
+      } catch {
+
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
-  async function loadOrders() {
-    setIsRequestInProgress(true);
-    try {
-      const orders = await OrdersList.index();
+  useEffect(() => {
+    const socket = socketIo('http://localhost:3001', {
+      transports: ['websocket'],
+    });
 
-      setOrders(orders);
-    } catch(error) {
-      if(error instanceof NotAuthorizedError) {
-        handleLogout();
-      }
-    } finally {
-      setIsRequestInProgress(false);
-    }
+    socket.on('new@Order', (order: Order) => {
+      setOrders(PrevState => (
+        PrevState.find((item) => item._id === order._id)
+          ? PrevState
+          : PrevState.concat(order)
+      ));
+    });
+  }, []);
+
+  function handleCancelOrder(orderId: string) {
+    setOrders(PrevState => PrevState.filter(({ _id }) => _id !== orderId));
   }
 
-  function handleOpenRefreshModal() {
-    setIsRefreshModalVisible(true);
-  }
-
-  function handleCloseRefreshModal() {
-    setIsRefreshModalVisible(false);
-  }
-
-  async function handleOrdersToHistory() {
-    setLoading(true);
-
-    try {
-      await RegistersList.create(orders.map(({_id, table, products, createdAt}) => ({
-        _id, table, products: products.map(({product, quantity}) => ({ product: product._id, quantity })), createdAt })));
-
-      setLoading(false);
-      setIsRefreshModalVisible(false);
-      loadOrders();
-    } catch(error) {
-      if(error instanceof NotAuthorizedError) {
-        handleLogout();
-      }
-    }
+  function handleChangeOrderStatus(orderId: string, status: Order['status']) {
+    setOrders(PrevState => PrevState.map((order) => (
+      order._id === orderId ? {
+        ...order, status
+      } : order
+    )));
   }
 
   return {
     orders,
-    isRefreshModalVisible,
-    handleOpenRefreshModal,
-    handleCloseRefreshModal,
-    loadOrders,
-    handleOrdersToHistory,
     loading,
-    isRequestInProgress,
+    onCancelOrder: handleCancelOrder,
+    onChangeOrderStatus: handleChangeOrderStatus,
   };
 }

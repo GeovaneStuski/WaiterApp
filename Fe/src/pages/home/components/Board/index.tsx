@@ -6,10 +6,11 @@ type BoardProps = {
   icon: string;
   title: string;
   orders: Order[];
-  onReload: () => void;
+  onCancel: (orderId: string) => void;
+  onChangeStatus: (orderId: string, status: Order['status']) => void;
 }
 
-export function Board({icon, title, orders, onReload}: BoardProps) {
+export function Board({icon, title, orders, onCancel, onChangeStatus}: BoardProps) {
   const {
     handleCloseOrderModal,
     handleOpenOrderModal,
@@ -23,7 +24,8 @@ export function Board({icon, title, orders, onReload}: BoardProps) {
         order={order}
         status={`${icon} ${title}`}
         onClose={handleCloseOrderModal}
-        onReload={onReload}
+        onCancel={onCancel}
+        onChangeStatus={onChangeStatus}
       />
       <div className="flex gap-2 items-center">
         <span className="text-xl">{icon}</span>

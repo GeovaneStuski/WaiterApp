@@ -10,6 +10,7 @@ import { Loader } from '../../../components/Loader';
 import { priceFormater } from '../../../utils/priceFormater';
 import { ProductModal } from './components/ProductModal';
 import { DeleteProductModal } from './components/DeleteProductModal';
+import { toast } from 'react-toastify';
 
 export function Products() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,6 +31,7 @@ export function Products() {
     } catch(error) {
       if(error instanceof NotAuthorizedError) {
         handleLogout();
+        toast.error('Token expirado');
       }
     } finally {
       setLoading(false);

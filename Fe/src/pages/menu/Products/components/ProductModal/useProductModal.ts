@@ -48,10 +48,6 @@ export function useProductModal({ onClose, onReload, product }: useProductModalP
   }, []);
 
   useEffect(() => {
-    handlePopulateInputs();
-  }, [product]);
-
-  function handlePopulateInputs() {
     if(product) {
       setImage(product.imagePath);
       setName(product.name);
@@ -67,7 +63,7 @@ export function useProductModal({ onClose, onReload, product }: useProductModalP
       setIngredientsList([]);
       setPrice('');
     }
-  }
+  }, [product]);
 
   function handleChangeName(event: React.ChangeEvent<HTMLInputElement>) {
     setName(event.target.value);

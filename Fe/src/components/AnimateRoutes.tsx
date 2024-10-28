@@ -20,11 +20,18 @@ export function AnimateRoutes() {
 
   const { authenticated, loading } = useContext(AuthenticationContext);
 
+
   useEffect(() => {
     if (!authenticated && !loading) {
       navigate('/login');
     }
   }, [loading, authenticated]);
+
+  useEffect(() => {
+    if(location.pathname !== '/login') {
+      localStorage.setItem('route', location.pathname);
+    }
+  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait">

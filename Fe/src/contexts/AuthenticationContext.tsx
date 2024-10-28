@@ -46,6 +46,18 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
     setLoading(false);
   }, [authenticated]);
 
+  useEffect(() => {
+    function handleAccessToken() {
+      if(!localStorage.getItem('token')) {
+        setAuthenticated(false);
+      }
+    }
+
+    window.addEventListener('storage', handleAccessToken);
+
+    return () => window.removeEventListener('storage', handleAccessToken);
+  }, []);
+
   async function handleLogin({ email, password }: LoginBody) {
     try {
       const { token } = await UsersList.authenticate({ email, password });

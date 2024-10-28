@@ -14,6 +14,7 @@ import { EyeIcon } from '../../components/Icons/EyeIcon';
 import NotAuthorizedError from '../../Errors/NotAuthorizedError';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { Loader } from '../../components/Loader';
+import { toast } from 'react-toastify';
 
 export function History() {
   const [registers, setRegisters] = useState<Register[]>([]);
@@ -34,6 +35,7 @@ export function History() {
     } catch(error) {
       if(error instanceof NotAuthorizedError) {
         handleLogout();
+        toast.error('Token expirado');
       }
     } finally {
       setLoading(false);

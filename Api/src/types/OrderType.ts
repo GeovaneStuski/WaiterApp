@@ -9,4 +9,5 @@ export type OrderType = {
     product: Types.ObjectId;
     quantity: number;
   }[];
+  finishedAt: Date | null;
 }

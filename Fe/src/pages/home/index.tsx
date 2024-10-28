@@ -11,13 +11,9 @@ import { Loader } from '../../components/Loader';
 export function Home() {
   const {
     orders,
-    isRefreshModalVisible,
-    handleCloseRefreshModal,
-    handleOpenRefreshModal,
-    loadOrders,
-    handleOrdersToHistory,
     loading,
-    isRequestInProgress,
+    onCancelOrder,
+    onChangeOrderStatus,
   } = useHome();
   return (
     <motion.div
@@ -26,49 +22,37 @@ export function Home() {
       animate={{opacity: 1}}
       exit={{opacity: 0}}
     >
-      <Loader isVisible={isRequestInProgress}/>
+      <Loader isVisible={loading}/>
 
-      <header className='flex justify-between items-center'>
-        <RefreshModal
-          isVisible={isRefreshModalVisible}
-          onClose={handleCloseRefreshModal}
-          onConfirm={handleOrdersToHistory}
-          isLoading={loading}
-        />
-
-        <PagesHeader
-          page='Home'
-          description='Acompanhe os pedidos dos clientes'
-          icon={HomeIcon}
-        />
-
-        <Button onClick={handleOpenRefreshModal} style="cancel">
-          <RefreshIcon className='w-6'/>
-
-          Resetar o dia
-        </Button>
-      </header>
+      <PagesHeader
+        page='Home'
+        description='Acompanhe os pedidos dos clientes'
+        icon={HomeIcon}
+      />
 
       <div className='flex justify-evenly'>
         <Board
           icon="🕑"
           title='Fila de espera'
           orders={orders.filter((order) => order.status === 'WAITING')}
-          onReload={loadOrders}
+          onCancel={onCancelOrder}
+          onChangeStatus={onChangeOrderStatus}
         />
 
         <Board
           icon="👩‍🍳"
           title='Em produção'
           orders={orders.filter((order) => order.status === 'IN_PRODUCTION')}
-          onReload={loadOrders}
+          onCancel={onCancelOrder}
+          onChangeStatus={onChangeOrderStatus}
         />
 
         <Board
           icon="✅"
           title='Pronto'
           orders={orders.filter((order) => order.status === 'DONE')}
-          onReload={loadOrders}
+          onCancel={onCancelOrder}
+          onChangeStatus={onChangeOrderStatus}
         />
       </div>
     </motion.div>
