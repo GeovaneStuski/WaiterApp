@@ -1,10 +1,7 @@
 import { PagesHeader } from '../../components/PagesHeader';
 import { HomeIcon } from '../../components/Icons/HomeIcon';
-import { Button } from '../../components/Button';
-import { RefreshIcon } from '../../components/Icons/RefreshIcon';
 import { Board } from './components/Board';
 import { useHome } from './useHome';
-import { RefreshModal } from './components/RefreshModal';
 import { motion } from 'framer-motion';
 import { Loader } from '../../components/Loader';
 

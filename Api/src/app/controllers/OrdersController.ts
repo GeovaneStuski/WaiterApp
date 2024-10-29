@@ -8,6 +8,7 @@ import { OrderSchema } from '../../zodSchemas/OrderSchema';
 import { UpdateOrderStatus } from '../useCases/orders/UpdateOrderStatus';
 import zod from 'zod';
 import { CancelOrder } from '../useCases/orders/CancelOrder';
+import { ListFinishedOrders } from '../useCases/orders/ListFinishedOrders';
 
 const OrderStatusSchema = zod.object({
   status: zod.enum(['WAITING', 'IN_PRODUCTION', 'DONE', 'FINISHED'], { message: 'invalid status' })
@@ -17,6 +18,16 @@ class OrdersController implements ControllersInterface {
   async index(req: Request, res: Response) {
     try {
       const orders = await ListOrders();
+
+      res.status(200).json(orders);
+    } catch {
+      res.sendStatus(500);
+    }
+  }
+
+  async finishedOrders(req: Request, res: Response) {
+    try {
+      const orders = await ListFinishedOrders();
 
       res.status(200).json(orders);
     } catch {

@@ -3,9 +3,14 @@ import { Modal } from '../../../components/Modal';
 import OrdersList from '../../../services/OrdersList';
 import { Order } from '../../../types/Order';
 import { getImageByPath } from '../../../utils/getImageByPath';
-import { priceFormater } from '../../../utils/priceFormater';
 import { CancelOrderModal } from './CancelOrderModal';
 import { toast } from 'react-toastify';
+import { formatCurrency } from '../../../utils/formatCurrency';
+
+type StatusVariables = {
+  message: string;
+  status: Order['status'];
+}
 
 type OrderModalProps = {
   order: Order | null;
@@ -22,29 +27,37 @@ export function OrderModal({ order, isVisible, status, onClose, onCancel, onChan
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const totalPrice = order?.products.reduce((acc, product) => acc + product.product.price * product.quantity,0);
+  const total = order?.products.reduce((acc, product) => acc + product.product.price * product.quantity,0);
 
   async function handleChangeOrderStatus() {
+    if(order!.status === 'FINISHED') return;
+
     setLoading(true);
 
-    const statusOptions = {
-      WAITING: 'IN_PRODUCTION',
-      'IN_PRODUCTION': 'DONE',
-      DONE: 'FINISHED'
+    const statusVariables = {
+      WAITING: {
+        status: 'IN_PRODUCTION',
+        message: `Preparo do pedido da mesa ${order!.table} inciado`
+      },
+      'IN_PRODUCTION': {
+        status: 'DONE',
+        message: `Preparo do pedido da mesa ${order!.table} concluido`
+      },
+      DONE: {
+        status: 'FINISHED',
+        message: 'Pedido finalizado'
+      },
     };
 
-    const status = statusOptions[order!.status];
+    const { message, status } = statusVariables[order!.status] as StatusVariables;
 
 
-    await OrdersList.update(order!._id, { status });
+    await OrdersList.update(order!._id, { status: status });
 
     onChangeStatus(order!._id, status);
     onClose();
     setLoading(false);
-    toast.success(order!.status === 'WAITING'
-      ? `Preparo do pedido da mesa ${order!.table} inciado`
-      : `Preparo do pedido da mesa ${order!.table} concluido`
-    );
+    toast.success(message);
   }
 
   function handleOpenCancelModal() {
@@ -106,7 +119,7 @@ export function OrderModal({ order, isVisible, status, onClose, onCancel, onChan
                   <div className='flex flex-col'>
                     <strong>{product.name}</strong>
 
-                    <span className='text-sm text-gray-main'>{priceFormater(product.price)}</span>
+                    <span className='text-sm text-gray-main'>{formatCurrency(product.price)}</span>
                   </div>
                 </div>
               </div>
@@ -116,7 +129,7 @@ export function OrderModal({ order, isVisible, status, onClose, onCancel, onChan
           <div className='flex justify-between items-center'>
             <span className='font-semibold text-sm text-gray-main'>Total</span>
 
-            <span className='font-bold text-md'>{priceFormater(totalPrice)}</span>
+            <span className='font-bold text-md'>{formatCurrency(total)}</span>
           </div>
         </div>
       </div>

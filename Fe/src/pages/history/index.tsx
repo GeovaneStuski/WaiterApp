@@ -1,88 +1,30 @@
-import { useContext, useEffect, useState } from 'react';
 import { HistoryIcon } from '../../components/Icons/HistoryIcon';
 import { PagesHeader } from '../../components/PagesHeader';
-import RegistersList from '../../services/RegistersList';
-import { Register } from '../../types/Register';
-import { RegisterModal } from './components/RegisterModal';
-import { DeleteRegisterModal } from './components/DeleteRegisterModal';
+import { OrderModal } from './components/OrderModal';
+import { DeleteOrderModal } from './components/DeleteOrderModal';
 import { motion } from 'framer-motion';
 import { Table } from '../../components/Table';
-import { formatData } from '../../utils/formatData';
+import { formatDate } from '../../utils/formatDate';
 import { formatList } from '../../utils/formatList';
-import { priceFormater } from '../../utils/priceFormater';
 import { EyeIcon } from '../../components/Icons/EyeIcon';
-import NotAuthorizedError from '../../Errors/NotAuthorizedError';
-import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { Loader } from '../../components/Loader';
-import { toast } from 'react-toastify';
+import { formatCurrency } from '../../utils/formatCurrency';
+import { useHistory } from './useHistory';
 
 export function History() {
-  const [registers, setRegisters] = useState<Register[]>([]);
-  const [isRegisterModalVisible, setIsRegisterModalVisible] = useState(false);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [registerIsBeingDeleted, setRegisterIsBeingDeleted] = useState<null | string>(null);
-  const [register, setRegister] = useState<null | Register>(null);
-  const [loading, setLoading] = useState(false);
-
-  const { handleLogout } = useContext(AuthenticationContext);
-
-  async function loadRegisters() {
-    setLoading(true);
-    try {
-      const registers = await RegistersList.index();
-
-      setRegisters(registers);
-    } catch(error) {
-      if(error instanceof NotAuthorizedError) {
-        handleLogout();
-        toast.error('Token expirado');
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    loadRegisters();
-  }, []);
-
-  function handleOpenRegisterModal(register: Register) {
-    setRegister(register);
-    setIsRegisterModalVisible(true);
-  }
-
-  function handleCloseRegisterModal() {
-    setIsRegisterModalVisible(false);
-  }
-
-  function handleOpenDeleteModal(register: Register) {
-    setRegisterIsBeingDeleted(register._id);
-    setIsDeleteModalVisible(true);
-  }
-
-  function handleCloseDeleteModal() {
-    setIsDeleteModalVisible(false);
-  }
-
-  async function handleDeleteRegister() {
-    if(!registerIsBeingDeleted) return;
-    setLoading(true);
-
-    try {
-      await RegistersList.delete(registerIsBeingDeleted);
-
-      loadRegisters();
-      setIsDeleteModalVisible(false);
-      setIsRegisterModalVisible(false);
-    }
-    catch(error) {
-      if(error instanceof NotAuthorizedError) {
-        handleLogout();
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
+  const {
+    orders,
+    isOrderModalVisible,
+    isDeleteModalVisible,
+    order,
+    loading,
+    deletionLoading,
+    onDeleteOrder,
+    onCloseDeleteModal,
+    onOpenDeleteModal,
+    onOpenOrderModal,
+    onCloseOrderModal,
+  } = useHistory();
 
   return (
     <motion.div
@@ -93,17 +35,18 @@ export function History() {
     >
       <Loader isVisible={loading}/>
 
-      <RegisterModal
-        isVisible={isRegisterModalVisible}
-        onClose={handleCloseRegisterModal}
-        register={register}
-        onCancel={handleOpenDeleteModal}
+      <OrderModal
+        isVisible={isOrderModalVisible}
+        onClose={onCloseOrderModal}
+        order={order}
+        onCancel={onOpenDeleteModal}
       />
 
-      <DeleteRegisterModal
+      <DeleteOrderModal
         isVisible={isDeleteModalVisible}
-        onClose={handleCloseDeleteModal}
-        onConfirm={handleDeleteRegister}
+        onClose={onCloseDeleteModal}
+        onConfirm={onDeleteOrder}
+        isLoading={deletionLoading}
       />
 
       <PagesHeader
@@ -114,8 +57,8 @@ export function History() {
 
       <Table
         actionIcon={EyeIcon}
-        onAction={handleOpenRegisterModal}
-        onDelete={handleOpenDeleteModal}
+        onAction={onOpenOrderModal}
+        onDelete={onOpenDeleteModal}
         head={[
           { name: 'Mesa', style: 'text-center w-20' },
           { name: 'Data', style: 'text-start w-32' },
@@ -123,17 +66,25 @@ export function History() {
           { name: 'Categoria', style: 'text-start' },
           { name: 'Total', style: 'text-start' },
         ]}
-        body={registers.map((register) => ({
-          id: register._id,
-          item: register,
-          items: [
-            { item: register.table },
-            { item: formatData(register.createdAt) },
-            { item: formatList(register.products.map(({ product }) => product.name)) },
-            { item: `${register.products[0].product.category.icon} ${register.products[0].product.category.name}` },
-            { item: priceFormater(register.products.reduce((acc, {product, quantity}) => acc + product.price * quantity, 0)) },
-          ]
-        }))}
+        body={orders.map((order) => {
+          const date = formatDate(order.createdAt);
+          const formatedNames = formatList(order.products.map(({ product }) => product.name));
+          const category = order.products[0].product.category;
+          const formatedTotal = formatCurrency(order.products.reduce(
+            (acc, {product, quantity}) => acc + product.price * quantity, 0));
+
+          return {
+            id: order._id,
+            item: order,
+            items: [
+              { item: order.table },
+              { item: date },
+              { item:  formatedNames},
+              { item: `${category.icon} ${category.name}` },
+              { item: formatedTotal },
+            ]
+          };
+        })}
       />
     </motion.div>
   );

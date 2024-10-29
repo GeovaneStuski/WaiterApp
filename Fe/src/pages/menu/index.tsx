@@ -1,11 +1,10 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { PagesHeader } from '../../components/PagesHeader';
 import { MenuIcon } from '../../components/Icons/MenuIcon';
 import { motion } from 'framer-motion';
-import { cn } from '../../utils/cn';
+import { PageLink } from './components/PageLink';
 
 export function Menu() {
-  const { pathname } = useLocation();
   return (
     <motion.div
       className='w-full px-20 mt-10'
@@ -21,23 +20,11 @@ export function Menu() {
 
       <div className='mt-6 mb-8 text-sm'>
         <div className='flex'>
-          <Link to='/menu/products' className={cn('py-4 px-10', {
-            'font-bold text-red-main bg-white': pathname.includes('products')
-          })}>
-          Produtos
-          </Link>
+          <PageLink label='Produtos' to='products'/>
 
-          <Link to='/menu/categories' className={cn('py-4 px-10', {
-            'font-bold text-red-main bg-white': pathname.includes('categories')
-          })}>
-          Categories
-          </Link>
+          <PageLink label='Categorias' to='categories'/>
 
-          <Link to='/menu/ingredients' className={cn('py-4 px-10', {
-            'font-bold text-red-main bg-white': pathname.includes('ingredients')
-          })}>
-          Ingredients
-          </Link>
+          <PageLink label='Ingredientes' to='ingredients'/>
         </div>
 
         <hr className='border-gray-light/40'/>

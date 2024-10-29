@@ -6,7 +6,6 @@ type CategoryContainerProps = {
   category: Category | null;
   categories: Category[];
   onChange: (category: Category | null) => void;
-
 }
 
 export function CategoryContainer({ categories, category, onChange }:CategoryContainerProps) {

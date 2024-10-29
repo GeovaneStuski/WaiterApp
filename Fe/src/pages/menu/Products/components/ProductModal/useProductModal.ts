@@ -7,14 +7,16 @@ import CategoriesList from '../../../../../services/CategoriesList';
 import NotAuthorizedError from '../../../../../Errors/NotAuthorizedError';
 import ProductsList from '../../../../../services/ProductsList';
 import { Product } from '../../../../../types/Product';
+import { toast } from 'react-toastify';
 
 type useProductModalProps = {
-  onReload: () => void;
+  onUpdate: (product: Product) => void;
+  onCreate: (product: Product) => void;
   onClose: () => void;
   product: Product | null;
 }
 
-export function useProductModal({ onClose, onReload, product }: useProductModalProps) {
+export function useProductModal({ onClose, onCreate, onUpdate, product }: useProductModalProps) {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [image, setImage] = useState<null | File | string>(null);
@@ -28,41 +30,25 @@ export function useProductModal({ onClose, onReload, product }: useProductModalP
 
   const isFormValid = !!(image && name && description && category && price);
 
-  const { handleLogout } = useContext(AuthenticationContext);
-
-  async function loadIngredients() {
-    const ingredients = await IngredientsList.index();
-
-    setIngredients(ingredients);
-  }
-
-  async function loadCategories() {
-    const categories = await CategoriesList.index();
-
-    setCategories(categories);
-  }
-
   useEffect(() => {
-    loadIngredients();
-    loadCategories();
+    (async function getData() {
+      const [ingredients, categories] = await Promise.all([
+        IngredientsList.index(),
+        CategoriesList.index(),
+      ]);
+
+      setIngredients(ingredients);
+      setCategories(categories);
+    })();
   }, []);
 
   useEffect(() => {
-    if(product) {
-      setImage(product.imagePath);
-      setName(product.name);
-      setDescription(product.description);
-      setCategory(product.category);
-      setIngredientsList(product.ingredients.map(ingredient => ingredient._id));
-      setPrice(product.price.toString());
-    } else {
-      setImage(null);
-      setName('');
-      setDescription('');
-      setCategory(null);
-      setIngredientsList([]);
-      setPrice('');
-    }
+    setImage(product?.imagePath || '');
+    setName(product?.name || '');
+    setDescription(product?.description || '');
+    setCategory(product?.category || null);
+    setIngredientsList(product?.ingredients.map(ingredient => ingredient._id) || []);
+    setPrice(product?.price.toString() || '');
   }, [product]);
 
   function handleChangeName(event: React.ChangeEvent<HTMLInputElement>) {
@@ -105,56 +91,63 @@ export function useProductModal({ onClose, onReload, product }: useProductModalP
     setIsIngredientModalVisible(false);
   }
 
+  function handleCreateIngredient(ingredient: Ingredient) {
+    setIngredients(PrevState => PrevState.concat(ingredient));
+  }
+
   async function handleSubmit() {
-    setLoading(true);
-
-    const body = {
-      image,
-      name,
-      description,
-      price: price,
-      category: category?._id,
-      ingredients: JSON.stringify(ingredientsList)
-    };
-
     try {
+      setLoading(true);
+
+      const body = {
+        image,
+        name,
+        description,
+        price: price,
+        category: category?._id,
+        ingredients: JSON.stringify(ingredientsList)
+      };
+
       if(product) {
-        await ProductsList.update(product._id, body);
+        const updatedProduct = await ProductsList.update(product!._id, body);
+
+        onUpdate(updatedProduct);
+        toast.success('Produto editado');
       } else {
-        await ProductsList.create(body);
+        const product = await ProductsList.create(body);
+
+        onCreate(product);
+        toast.success('Produto cadastrado');
       }
-    } catch(error) {
-      if(error instanceof NotAuthorizedError) {
-        handleLogout();
-      }
+    } catch {
+
     } finally {
       setLoading(false);
-      onReload();
       onClose();
     }
   }
 
   return {
-    loadIngredients,
     image,
-    handleChangeImage,
+    onChangeImage: handleChangeImage,
     name,
-    handleChangeName,
+    onChangeName: handleChangeName,
     description,
-    handleChangeDescription,
+    onChangeDescription: handleChangeDescription,
     categories,
     category,
-    handleChangeCategory,
+    onChangeCategory: handleChangeCategory,
     ingredients,
     ingredientsList,
-    handleChangeIngredientsList,
+    onChangeIngredientsList: handleChangeIngredientsList,
     price,
-    handleChangePrice,
+    onChangePrice: handleChangePrice,
     isIngredientModalVisible,
-    handleOpenIngredientModal,
-    handleCloseIngredientModal,
+    onOpenIngredientModal: handleOpenIngredientModal,
+    onCloseIngredientModal: handleCloseIngredientModal,
     isFormValid,
-    handleSubmit,
+    onSubmit: handleSubmit,
     loading,
+    onCreateIngredient: handleCreateIngredient
   };
 }

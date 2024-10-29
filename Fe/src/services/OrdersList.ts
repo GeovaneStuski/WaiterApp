@@ -14,6 +14,12 @@ class OrdersList implements ServicesInterface {
     return orders;
   }
 
+  listFinishedOrder() {
+    const orders = this.HttpClient.get('/registers');
+
+    return orders;
+  }
+
   create(body: object) {
     const order = this.HttpClient.post('/orders', { body });
 

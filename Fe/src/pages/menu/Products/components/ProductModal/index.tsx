@@ -1,7 +1,7 @@
 import { Button } from '../../../../../components/Button';
 import { Modal } from '../../../../../components/Modal';
 import { Input } from '../../../../../components/Input';
-import { CreateCategoryOrIngredientModal as IngredientsModal } from '../../../components/CreateCategoryOrIngredientModalProps';
+import { CategoryOrIngredientModal as IngredientsModal } from '../../../components/CategoryOrIngredientModal';
 import { useProductModal } from './useProductModal';
 import { ImageContainer } from './components/ImageContainer';
 import { CategoryContainer } from './components/CategoryContainer';
@@ -10,42 +10,42 @@ import { Product } from '../../../../../types/Product';
 
 type ProductModalProps = {
   onClose: () => void;
-  onReload: () => void;
+  onUpdate: (product: Product) => void;
+  onCreate: (product: Product) => void;
   isVisible: boolean;
   product: Product | null;
 }
 
-export function ProductModal({ onClose, isVisible, onReload, product }: ProductModalProps) {
+export function ProductModal({ onClose, isVisible, onCreate, onUpdate, product }: ProductModalProps) {
   const {
     ingredients,
-    loadIngredients,
     image,
-    handleChangeImage,
+    onChangeImage,
     name,
-    handleChangeName,
+    onChangeName,
     description,
-    handleChangeDescription,
+    onChangeDescription,
     categories,
     category,
-    handleChangeCategory,
+    onChangeCategory,
     ingredientsList,
-    handleChangeIngredientsList,
+    onChangeIngredientsList,
     price,
-    handleChangePrice,
+    onChangePrice,
     isIngredientModalVisible,
-    handleOpenIngredientModal,
-    handleCloseIngredientModal,
+    onOpenIngredientModal,
+    onCloseIngredientModal,
     isFormValid,
-    handleSubmit,
+    onSubmit,
     loading,
-  } = useProductModal({onClose, onReload, product});
+  } = useProductModal({onClose, onUpdate, onCreate, product});
 
   return (
     <Modal
       isVisible={isVisible}
       title={`${product ? 'Editar Produto' : 'Novo Produto'}`}
       onClose={onClose}
-      onConfirm={handleSubmit}
+      onConfirm={onSubmit}
       confirmLabel={`${product ? 'Salvar Alterações' : 'Cadastrar Produto'}`}
       isLoading={loading}
       isFormValid={isFormValid}
@@ -53,9 +53,8 @@ export function ProductModal({ onClose, isVisible, onReload, product }: ProductM
     >
       <div className='flex gap-8 h-[600px] text-sm'>
         <IngredientsModal
-          onClose={handleCloseIngredientModal}
+          onClose={onCloseIngredientModal}
           isVisible={isIngredientModalVisible}
-          onReload={loadIngredients}
           type='Ingrediente'
         />
 
@@ -64,19 +63,19 @@ export function ProductModal({ onClose, isVisible, onReload, product }: ProductM
 
           <ImageContainer
             image={image}
-            onChange={handleChangeImage}
+            onChange={onChangeImage}
           />
 
           <Input
             value={name}
-            onChange={handleChangeName}
+            onChange={onChangeName}
             placeholder='Digite o nome do Produto'
             label='Nome do Produto'
           />
 
           <Input
             value={description}
-            onChange={handleChangeDescription}
+            onChange={onChangeDescription}
             placeholder='Digite a descrição do Produto'
             label='Descrição'
           />
@@ -84,7 +83,7 @@ export function ProductModal({ onClose, isVisible, onReload, product }: ProductM
           <CategoryContainer
             categories={categories}
             category={category}
-            onChange={handleChangeCategory}
+            onChange={onChangeCategory}
           />
         </div>
 
@@ -92,12 +91,12 @@ export function ProductModal({ onClose, isVisible, onReload, product }: ProductM
           <header className='flex items-center justify-between' >
             <h1 className='font-bold text-lg text-gray-main'>Ingredinets</h1>
 
-            <Button style='cancel' onClick={handleOpenIngredientModal}>Novo Ingrediente</Button>
+            <Button style='cancel' onClick={onOpenIngredientModal}>Novo Ingrediente</Button>
           </header>
 
           <IngredientsContainer
             ingredients={ingredients}
-            onChange={handleChangeIngredientsList}
+            onChange={onChangeIngredientsList}
             ingredientsList={ingredientsList}
           />
 
@@ -106,7 +105,7 @@ export function ProductModal({ onClose, isVisible, onReload, product }: ProductM
             placeholder='Digite o preço do Produto'
             type='number'
             value={price}
-            onChange={handleChangePrice}
+            onChange={onChangePrice}
           />
         </div>
       </div>

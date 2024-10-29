@@ -52,6 +52,7 @@ router.get('/orders', OrdersController.index);
 router.post('/orders', OrdersController.store);
 router.patch('/orders/:id', OrdersController.update);
 router.delete('/orders/:id', OrdersController.delete);
+router.get('/registers', OrdersController.finishedOrders);
 
 
 

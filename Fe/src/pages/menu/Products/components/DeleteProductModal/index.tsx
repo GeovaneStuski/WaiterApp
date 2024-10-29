@@ -1,41 +1,24 @@
-import { useContext, useState } from 'react';
 import { Modal } from '../../../../../components/Modal';
 import { Product } from '../../../../../types/Product';
 import { getImageByPath } from '../../../../../utils/getImageByPath';
-import { priceFormater } from '../../../../../utils/priceFormater';
-import NotAuthorizedError from '../../../../../Errors/NotAuthorizedError';
-import { AuthenticationContext } from '../../../../../contexts/AuthenticationContext';
-import ProductsList from '../../../../../services/ProductsList';
+import { formatCurrency } from '../../../../../utils/formatCurrency';
+import { useDeleteProductModal } from './useDeleteProductModal';
 
 type DeleteProductModalProps = {
   isVisible: boolean;
   onClose: () => void;
-  onReload: () => void;
+  onDelete: (productId: string) => void;
   product: Product | null;
 }
 
-export function DeleteProductModal({ isVisible, onClose, product, onReload }: DeleteProductModalProps) {
+export function DeleteProductModal({ isVisible, onClose, product, onDelete }: DeleteProductModalProps) {
   if(!product) return;
-  const [loading, setLoading] = useState(false);
 
-  const { handleLogout } = useContext(AuthenticationContext);
+  const {
+    onSubmit,
+    loading
+  } = useDeleteProductModal({ onClose, onDelete, product });
 
-  async function handleSumit() {
-    if(!product) return;
-    setLoading(true);
-
-    try {
-      await ProductsList.delete(product?._id);
-    } catch(error) {
-      if(error instanceof NotAuthorizedError) {
-        handleLogout();
-      }
-    } finally {
-      setLoading(false);
-      onClose();
-      onReload();
-    }
-  }
   return (
     <Modal
       isVisible={isVisible}
@@ -43,7 +26,7 @@ export function DeleteProductModal({ isVisible, onClose, product, onReload }: De
       title='Excluir Produto'
       onClose={onClose}
       onCancel={onClose}
-      onConfirm={handleSumit}
+      onConfirm={onSubmit}
       confirmLabel='Excluir Produto'
       cancelLabel='Manter Produto'
     >
@@ -58,7 +41,7 @@ export function DeleteProductModal({ isVisible, onClose, product, onReload }: De
           <div className='flex flex-col text-base'>
             <span className='font-semibold'>{`${product.category.icon} ${product.category.name}`}</span>
             <span className='font-bold'>{product.name}</span>
-            <span className='font-semibold'>{priceFormater(product.price)}</span>
+            <span className='font-semibold'>{formatCurrency(product.price)}</span>
           </div>
         </div>
       </div>

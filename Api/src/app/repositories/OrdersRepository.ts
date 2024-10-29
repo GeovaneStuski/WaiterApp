@@ -22,8 +22,20 @@ class OrdersRepository implements RepositoriesInterface {
     return orders;
   }
 
+  async ListOnlyFinishedOrders(): Promise<OrderType[]> {
+    const orders = await Order.find({status: 'FINISHED'}).populate({
+      path: 'products.product',
+      populate: [
+        { path: 'category' },
+        { path: 'ingredients' },
+      ],
+    });
+
+    return orders;
+  }
+
   async updateStatus({ id, status }: updateStatus): Promise<OrderType | null> {
-    const order = await Order.findByIdAndUpdate(id, { status });
+    const order = await Order.findByIdAndUpdate(id, { status, finishedAt: Date.now() });
 
     const populateOrder = await order!.populate({
       path: 'products.product',
