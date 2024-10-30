@@ -60,17 +60,17 @@ export function useCategoryOrIngredientModal({ item, onClose, type, onCreateItem
 
   async function handleUpdateItem() {
     try {
-      let item;
+      let itemToUpdate;
 
       setLoading(true);
 
       if(type === 'Ingrediente') {
-        item = await IngredientsList.update(item!._id, { icon, name });
+        itemToUpdate = await IngredientsList.update(item!._id, { icon, name });
       }else {
-        item = await CategoriesList.update(item!._id, { icon, name });
+        itemToUpdate = await CategoriesList.update(item!._id, { icon, name });
       }
 
-      onUpdateItem && onUpdateItem(item);
+      onUpdateItem && onUpdateItem(itemToUpdate);
     } catch{
 
     } finally {
@@ -89,7 +89,7 @@ export function useCategoryOrIngredientModal({ item, onClose, type, onCreateItem
 
   return {
     loading,
-    handleSubmit,
+    onSubmit: handleSubmit,
     isFormValid,
     onChangeName: handleChangeName,
     onChangeIcon: handleChangeIcon,

@@ -87,7 +87,7 @@ class UsersController implements ControllersInterface {
       res.status(201).json(user);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json('Error to create User');
+        return res.status(400).json(error.message);
       }
 
       res.sendStatus(500);
@@ -108,7 +108,9 @@ class UsersController implements ControllersInterface {
 
       const userExists = await UserAlreadyExist(body.email);
 
-      if(userExists && userExists.email !== body.email) {
+      const idComparation = userExists?._id.toString() != id.toString();
+
+      if(userExists && idComparation && body.email === userExists.email) {
         res.status(409).json({ error: 'E-mail already in use'});
 
         return;

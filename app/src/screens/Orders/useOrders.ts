@@ -4,6 +4,8 @@ import { Order } from '../../types/Order';
 import { ApiRequest } from '../../utils/ApiRequest';
 import { ApiError } from '../../errors/ApiError';
 import { AuthContext } from '../../contexts/AuthContext';
+import socketIo from 'socket.io-client';
+import { APIURL } from '@env';
 
 export function useOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -38,6 +40,28 @@ export function useOrders() {
         setLoading(false);
       }
     })();
+  }, []);
+
+  useEffect(() => console.log(orders), [orders]);
+
+  useEffect(() => {
+    const socket = socketIo(APIURL, {
+      transports: ['websocket'],
+    });
+
+    socket.on('new@Order', (order: Order) => {
+      if(!orders.find((order) => order._id)) {
+        setOrders(PrevState => PrevState.concat(order));
+      }
+    });
+
+    socket.on('update@Order', (order: Order) => {
+      setOrders(PrevState => PrevState.map(prevOrder => prevOrder._id === order._id ? order : prevOrder));
+    });
+
+    socket.on('delete@Order', (orderId: string) => {
+      setOrders(PrevState => PrevState.filter((order) => order._id !== orderId));
+    });
   }, []);
   
   return {

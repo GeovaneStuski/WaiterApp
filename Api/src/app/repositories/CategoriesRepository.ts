@@ -18,7 +18,7 @@ class CategoriesRepository implements RepositoriesInterface {
   }
 
   async update({id, body}: UpdateType): Promise<CategoryType | null> {
-    const category = await Category.findByIdAndUpdate(id, body);
+    const category = await Category.findByIdAndUpdate(id, body, { new: true });
 
     return category;
   }

@@ -1,4 +1,3 @@
-import { Button } from '../../../components/Button';
 import { Table } from '../../../components/Table';
 import { DeleteCategoryOrIngredientModal as CategoryDeleteModal } from '../components/DeleteCategoryOrIngredientModal';
 import { CategoryOrIngredientModal as CategoryModal } from '../components/CategoryOrIngredientModal';

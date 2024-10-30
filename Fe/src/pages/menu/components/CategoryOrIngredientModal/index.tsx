@@ -24,18 +24,18 @@ export function CategoryOrIngredientModal({
 }: CategoryOrIngredientModalProps) {
   const {
     loading,
-    handleSubmit,
+    onSubmit,
     isFormValid,
-    onChangeName: handleChangeName,
-    onChangeIcon: handleChangeIcon,
+    onChangeName,
+    onChangeIcon,
     icon,
-    name
+    name,
   } = useCategoryOrIngredientModal({ item, onClose, onCreateItem, onUpdateItem, type });
 
   return (
     <Modal
       isVisible={isVisible}
-      onConfirm={handleSubmit}
+      onConfirm={onSubmit}
       confirmLabel={`${item ? 'Salvar Alterações' : `Criar ${type}`}`}
       onClose={onClose}
       isFormValid={isFormValid}
@@ -45,7 +45,7 @@ export function CategoryOrIngredientModal({
       <FormGroup>
         <Input
           value={icon}
-          onChange={handleChangeIcon}
+          onChange={onChangeIcon}
           label='Emoji'
           placeholder="Digite um Emoji"
         />
@@ -54,7 +54,7 @@ export function CategoryOrIngredientModal({
       <FormGroup>
         <Input
           value={name}
-          onChange={handleChangeName}
+          onChange={onChangeName}
           label='Nome'
           placeholder="Digite o nome do Ingrediente"
         />

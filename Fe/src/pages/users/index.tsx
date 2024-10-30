@@ -1,75 +1,31 @@
-import { useContext, useEffect, useState } from 'react';
 import { PagesHeader } from '../../components/PagesHeader';
 import { motion } from 'framer-motion';
 import { Table } from '../../components/Table';
-import NotAuthorizedError from '../../Errors/NotAuthorizedError';
-import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { Loader } from '../../components/Loader';
-import { User } from '../../types/User';
-import UsersList from '../../services/UsersList';
 import { UserIcon } from '../../components/Icons/UserIcon';
-import { Button } from '../../components/Button';
 import { UserModal } from './components/UserModal';
 import { DeleteUserModal } from './components/DeleteUserModal';
-import { useNavigate } from 'react-router-dom';
+import { useUsers } from './useUsers';
+import { Header } from './components/Header';
 
 export function Users() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [isUserModalVisible, setIsUserModalVisible] = useState(false);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [userToBeDeleted, setUserToBeDeleted] = useState<null | User>(null);
-  const [userToBeUpdate, setUserToBeUpdate] = useState<null | User>(null);
-  const [loading, setLoading] = useState(false);
-
-  const { handleLogout, loading: authLoading, user: userData } = useContext(AuthenticationContext);
-
-  const navigate = useNavigate();
-
-  async function loadUsers() {
-    setLoading(true);
-    try {
-      const users = await UsersList.index();
-
-      setUsers(users || []);
-    } catch (error) {
-      if (error instanceof NotAuthorizedError) {
-        handleLogout();
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if(!authLoading && userData && userData?.position === 'admin') {
-      loadUsers();
-    } else {
-      navigate('/');
-    }
-  }, [authLoading, userData]);
-
-  function handleOpenCreateUserModal() {
-    setUserToBeUpdate(null);
-    setIsUserModalVisible(true);
-  }
-
-  function handleOpenUpdateUserModal(user: User) {
-    setUserToBeUpdate(user);
-    setIsUserModalVisible(true);
-  }
-
-  function handleCloseUserModal() {
-    setIsUserModalVisible(false);
-  }
-
-  function handleOpenDeleteModal(user: User) {
-    setUserToBeDeleted(user);
-    setIsDeleteModalVisible(true);
-  }
-
-  function handleCloseDeleteModal() {
-    setIsDeleteModalVisible(false);
-  }
+  const {
+    onCloseDeleteModal,
+    onOpenDeleteModal,
+    onCloseModal,
+    onOpenUpdateModal,
+    onOpenCreateModal,
+    isUserModalVisible,
+    isDeleteModalVisible,
+    userToBeDeleted,
+    userToBeUpdate,
+    loading,
+    users,
+    onUpdateUser,
+    onCreateUser,
+    onDeleteUser,
+    userData,
+  } = useUsers();
 
   return (
     <motion.div
@@ -81,17 +37,18 @@ export function Users() {
       <Loader isVisible={loading} />
 
       <UserModal
-        onClose={handleCloseUserModal}
+        onClose={onCloseModal}
         isVisible={isUserModalVisible}
-        onReload={loadUsers}
+        onUpdateUser={onUpdateUser}
+        onCreateUser={onCreateUser}
         user={userToBeUpdate}
       />
 
       <DeleteUserModal
         isVisible={isDeleteModalVisible}
-        onClose={handleCloseDeleteModal}
+        onClose={onCloseDeleteModal}
         user={userToBeDeleted}
-        onReload={loadUsers}
+        onDeleteUser={onDeleteUser}
       />
 
       <PagesHeader
@@ -100,23 +57,14 @@ export function Users() {
         description="Cadastre e gerencie seus usuários"
       />
 
-      <header className="flex items-center justify-between text-sm">
-        <div className="flex items-center gap-2">
-          <h1 className="text-lg font-bold">Usuários</h1>
-
-          <span className="mt-0.5 rounded-md bg-gray-light/20 px-2 text-base font-semibold">
-            {users.length}
-          </span>
-        </div>
-
-        <Button style="cancel" onClick={handleOpenCreateUserModal}>
-          Novo Usuário
-        </Button>
-      </header>
+      <Header
+        length={users.length}
+        onOpenModal={onOpenCreateModal}
+      />
 
       <Table
-        onAction={handleOpenUpdateUserModal}
-        onDelete={handleOpenDeleteModal}
+        onAction={onOpenUpdateModal}
+        onDelete={onOpenDeleteModal}
         head={[
           { name: 'Nome', style: 'text-start' },
           { name: 'E-mail', style: 'text-start' },

@@ -10,7 +10,7 @@ type InputProps = {
   onBlur?: (param: React.FocusEvent<HTMLInputElement>) => void;
   type?: 'text' | 'email' | 'password' | 'number';
   placeholder?: string;
-  error?: boolean;
+  error?: string;
   disabled?: boolean;
 }
 
@@ -21,7 +21,7 @@ export function Input({
   onBlur,
   type = 'text',
   placeholder = '',
-  error = false,
+  error = '',
   disabled = false,
 }: InputProps) {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
@@ -70,6 +70,8 @@ export function Input({
           )}
         </div>
       )}
+
+      {error && <span className='text-sm text-red-main'>{error}</span>}
     </div>
   );
 }

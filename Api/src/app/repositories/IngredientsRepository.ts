@@ -18,7 +18,7 @@ class IngredientsRepository implements RepositoriesInterface {
   }
 
   async update({id, body}: UpdateType): Promise<IngredientType | null> {
-    const ingredient = await Ingredient.findByIdAndUpdate(id, body);
+    const ingredient = await Ingredient.findByIdAndUpdate(id, body , { new: true });
 
     return ingredient;
   }

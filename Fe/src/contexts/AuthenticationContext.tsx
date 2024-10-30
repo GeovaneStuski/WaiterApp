@@ -19,7 +19,7 @@ type AuthContextProps = {
   authenticated: boolean;
   loading: boolean;
   user: User | null;
-  reloadUser: () => void;
+  setUser: (user: User) => void;
 };
 
 export const AuthenticationContext = createContext({} as AuthContextProps);
@@ -29,16 +29,17 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function getUser() {
-    const user = await UsersList.getUser();
 
-    setUser(user);
-  }
 
   useEffect(() => {
     if(localStorage.getItem('token')) {
       setAuthenticated(true);
-      getUser();
+
+      (async function getUser() {
+        const user = await UsersList.getUser();
+
+        setUser(user);
+      })();
     } else {
       setAuthenticated(false);
     }
@@ -81,7 +82,7 @@ export function AuthenticationProvider({ children }: AuthenticationProviderProps
 
   return (
     <AuthenticationContext.Provider
-      value={{ handleLogin, authenticated, handleLogout, loading, user, reloadUser: getUser }}
+      value={{ handleLogin, authenticated, handleLogout, loading, user, setUser }}
     >
       {children}
     </AuthenticationContext.Provider>

@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify';
 import ApiError from '../../Errors/ApiError';
 import ConflictData from '../../Errors/ConflictData';
-import NotAuthorizedError from '../../Errors/NotAuthorizedError';
 import WrongDataError from '../../Errors/WrongDataError';
 import { delay } from '../../utils/delay';
 

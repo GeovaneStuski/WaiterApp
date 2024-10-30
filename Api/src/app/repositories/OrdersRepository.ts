@@ -2,7 +2,6 @@ import { Types } from 'mongoose';
 import { RepositoriesInterface } from '../../interfaces/RepositorysInterface';
 import { Order } from '../models/Order';
 import { OrderType } from '../../types/OrderType';
-import { io } from '../..';
 
 type updateStatus = {
   id: Types.ObjectId;
@@ -35,7 +34,7 @@ class OrdersRepository implements RepositoriesInterface {
   }
 
   async updateStatus({ id, status }: updateStatus): Promise<OrderType | null> {
-    const order = await Order.findByIdAndUpdate(id, { status, finishedAt: Date.now() });
+    const order = await Order.findByIdAndUpdate(id, { status, finishedAt: Date.now() }, { new: true });
 
     const populateOrder = await order!.populate({
       path: 'products.product',
@@ -45,9 +44,7 @@ class OrdersRepository implements RepositoriesInterface {
       ],
     });
 
-    io.emit('mew@Notification', populateOrder);
-
-    return order;
+    return populateOrder;
   }
 
   async create(body: object): Promise<OrderType> {
@@ -61,9 +58,7 @@ class OrdersRepository implements RepositoriesInterface {
       ],
     });
 
-    io.emit('new@Order', populateOrder);
-
-    return order;
+    return populateOrder;
   }
 
   async delete(id: Types.ObjectId): Promise<OrderType | null> {

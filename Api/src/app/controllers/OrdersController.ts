@@ -9,6 +9,8 @@ import { UpdateOrderStatus } from '../useCases/orders/UpdateOrderStatus';
 import zod from 'zod';
 import { CancelOrder } from '../useCases/orders/CancelOrder';
 import { ListFinishedOrders } from '../useCases/orders/ListFinishedOrders';
+import { io } from '../..';
+import { randomUUID } from 'crypto';
 
 const OrderStatusSchema = zod.object({
   status: zod.enum(['WAITING', 'IN_PRODUCTION', 'DONE', 'FINISHED'], { message: 'invalid status' })
@@ -41,6 +43,8 @@ class OrdersController implements ControllersInterface {
 
       const order = await CreateOrder({ products, table });
 
+      io.emit('new@Order', order);
+
       res.status(201).json(order);
     } catch(error) {
       if(error instanceof ZodError) {
@@ -63,10 +67,22 @@ class OrdersController implements ControllersInterface {
         return res.status(404).json('Order not found');
       }
 
+      if(order.status === 'IN_PRODUCTION' || order.status === 'DONE') {
+        io.emit('new@Notification', {
+          id: randomUUID(),
+          status: order.status,
+          table: order.table,
+          sentAt: Date.now(),
+          seen: false,
+        });
+      }
+
+      io.emit('update@Order', order);
+
       res.status(200).json(order);
     } catch(error) {
       if(error instanceof ZodError) {
-        return res.status(400).json('Error to update Order');
+        return res.status(400).json('Error to update Order status');
       }
 
       res.status(500);
@@ -82,6 +98,8 @@ class OrdersController implements ControllersInterface {
       if(!order) {
         return res.status(404).json('Order not found');
       }
+
+      io.emit('delete@Order', order._id);
 
       res.sendStatus(204);
     } catch(error) {

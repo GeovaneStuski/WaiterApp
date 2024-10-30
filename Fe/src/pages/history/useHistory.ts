@@ -9,7 +9,7 @@ export function useHistory() {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [orderIsBeingDeleted, setOrderIsBeingDeleted] = useState<null | string>(null);
   const [order, setOrder] = useState<null | Order>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [deletionLoading, setDeletionLoading] = useState(false);
 
   useEffect(() => {

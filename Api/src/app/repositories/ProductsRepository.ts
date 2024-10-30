@@ -23,13 +23,23 @@ class ProductsRepository implements RepositoriesInterface {
   async create(body: object): Promise<ProductType> {
     const ingredient = await Product.create(body);
 
-    return ingredient;
+    const populateIngredients = await ingredient.populate([
+      'category',
+      'ingredients'
+    ]);
+
+    return populateIngredients;
   }
 
   async update({id, body}: UpdateType): Promise<ProductType | null> {
-    const ingredient = await Product.findByIdAndUpdate(id, body);
+    const ingredient = await Product.findByIdAndUpdate(id, body, { new: true });
 
-    return ingredient;
+    const populateIngredients = await ingredient!.populate([
+      'category',
+      'ingredients'
+    ]);
+
+    return populateIngredients;
   }
 
   async delete(id: Types.ObjectId): Promise<ProductType | null> {

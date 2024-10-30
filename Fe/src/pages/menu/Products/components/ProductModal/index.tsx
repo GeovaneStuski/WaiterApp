@@ -38,7 +38,8 @@ export function ProductModal({ onClose, isVisible, onCreate, onUpdate, product }
     isFormValid,
     onSubmit,
     loading,
-  } = useProductModal({onClose, onUpdate, onCreate, product});
+    isIngredientAndCategoryLoading,
+  } = useProductModal({ onClose, onUpdate, onCreate, product, isVisible });
 
   return (
     <Modal
@@ -84,6 +85,7 @@ export function ProductModal({ onClose, isVisible, onCreate, onUpdate, product }
             categories={categories}
             category={category}
             onChange={onChangeCategory}
+            isLoading={isIngredientAndCategoryLoading}
           />
         </div>
 
@@ -98,6 +100,7 @@ export function ProductModal({ onClose, isVisible, onCreate, onUpdate, product }
             ingredients={ingredients}
             onChange={onChangeIngredientsList}
             ingredientsList={ingredientsList}
+            isLoading={isIngredientAndCategoryLoading}
           />
 
           <Input

@@ -31,7 +31,7 @@ class UsersRepository implements RepositoriesInterface {
   }
 
   async update({id, body}: UpdateType): Promise<UserType | null> {
-    const user = await User.findByIdAndUpdate(id, body);
+    const user = await User.findByIdAndUpdate(id, body, { new: true });
 
     return user;
   }

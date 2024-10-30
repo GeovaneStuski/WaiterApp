@@ -5,7 +5,7 @@ import ProductsList from '../../../services/ProductsList';
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isProductModalVisible, setIsProductModalVisible] = useState(false);
   const [productToBeUpdate, setProductToBeUpdate] = useState<null | Product>(null);
   const [productToBeDeleted, setProductToBeDeleted] = useState<null | Product>(null);

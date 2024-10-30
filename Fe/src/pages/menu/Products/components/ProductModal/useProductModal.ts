@@ -1,10 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Ingredient } from '../../../../../types/Ingredient';
 import { Category } from '../../../../../types/Category';
-import { AuthenticationContext } from '../../../../../contexts/AuthenticationContext';
 import IngredientsList from '../../../../../services/IngredientsList';
 import CategoriesList from '../../../../../services/CategoriesList';
-import NotAuthorizedError from '../../../../../Errors/NotAuthorizedError';
 import ProductsList from '../../../../../services/ProductsList';
 import { Product } from '../../../../../types/Product';
 import { toast } from 'react-toastify';
@@ -14,9 +12,10 @@ type useProductModalProps = {
   onCreate: (product: Product) => void;
   onClose: () => void;
   product: Product | null;
+  isVisible: boolean;
 }
 
-export function useProductModal({ onClose, onCreate, onUpdate, product }: useProductModalProps) {
+export function useProductModal({ onClose, onCreate, onUpdate, product, isVisible }: useProductModalProps) {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [image, setImage] = useState<null | File | string>(null);
@@ -27,20 +26,26 @@ export function useProductModal({ onClose, onCreate, onUpdate, product }: usePro
   const [ingredientsList, setIngredientsList] = useState<string[]>([]);
   const [isIngredientModalVisible, setIsIngredientModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isIngredientAndCategoryLoading, setIsIngredientAndCategoryLoading] = useState(true);
 
   const isFormValid = !!(image && name && description && category && price);
 
   useEffect(() => {
-    (async function getData() {
-      const [ingredients, categories] = await Promise.all([
-        IngredientsList.index(),
-        CategoriesList.index(),
-      ]);
+    if(!isVisible) return;
 
-      setIngredients(ingredients);
-      setCategories(categories);
-    })();
-  }, []);
+    if(isVisible && ingredients.length < 1 || categories.length < 1) {
+      (async function getData() {
+        const [ingredients, categories] = await Promise.all([
+          IngredientsList.index(),
+          CategoriesList.index(),
+        ]);
+
+        setIngredients(ingredients);
+        setCategories(categories);
+        setIsIngredientAndCategoryLoading(false);
+      })();
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     setImage(product?.imagePath || '');
@@ -148,6 +153,7 @@ export function useProductModal({ onClose, onCreate, onUpdate, product }: usePro
     isFormValid,
     onSubmit: handleSubmit,
     loading,
-    onCreateIngredient: handleCreateIngredient
+    onCreateIngredient: handleCreateIngredient,
+    isIngredientAndCategoryLoading,
   };
 }
