@@ -4,7 +4,7 @@ import { useOrders } from './useOrders';
 import { OrderCard } from './components/OrderCard';
 
 export function Orders() {
-  const { orders, registers, loading } = useOrders();
+  const { orders, loading } = useOrders();
 
   return (
     <View className='flex-1 px-6'>
@@ -13,7 +13,7 @@ export function Orders() {
           <Text className='text-black-main mt-6 font-bold text-2xl'>Pedidos</Text>
 
           <FlatList
-            data={orders}
+            data={orders.filter(order => order.status !== 'FINISHED')}
             style={{ marginTop: 32}}
             showsVerticalScrollIndicator={false}
             keyExtractor={order => order._id}
@@ -32,7 +32,7 @@ export function Orders() {
                 <Text className='font-bold text-lg text-gray-main mt-8'>Finalizados</Text>
 
                 <FlatList
-                  data={registers}
+                  data={orders.filter(order => order.status === 'FINISHED')}
                   style={{ marginTop: 24 }}
                   keyExtractor={register => register._id}
                   renderItem={({ item: register }) => (
@@ -40,7 +40,7 @@ export function Orders() {
                       products={register.products}
                       status="FINISHED"
                       table={register.table}
-                      date={formatDate(register.finishedAt)}
+                      date={formatDate(register.finishedAt!)}
                     />
                   )}
                 />

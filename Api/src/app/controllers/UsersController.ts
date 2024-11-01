@@ -10,11 +10,10 @@ import { DeleteUser } from '../useCases/users/DeleteUser';
 import { LoginUser } from '../useCases/users/LoginUser';
 import { AuthenticateBodySchema } from '../../zodSchemas/AuthenticateBodySchema';
 import { ZodError } from 'zod';
-import { AuthRequest } from '../../@types/AuthRequest';
 import { FindUserById } from '../useCases/users/FindUserById';
 
 class UsersController implements ControllersInterface {
-  async index(req: AuthRequest, res: Response) {
+  async index(req: Request, res: Response) {
     if(!req.user) return;
 
     if(req.user.position !== 'admin') {
@@ -29,7 +28,7 @@ class UsersController implements ControllersInterface {
     }
   }
 
-  async getUserById(req: AuthRequest, res: Response) {
+  async getUserById(req: Request, res: Response) {
     if(!req.user) return;
 
     try {
@@ -65,7 +64,7 @@ class UsersController implements ControllersInterface {
     }
   }
 
-  async store(req: AuthRequest, res: Response) {
+  async store(req: Request, res: Response) {
     if(!req.user) return;
 
     if(req.user.position !== 'admin') {
@@ -94,7 +93,7 @@ class UsersController implements ControllersInterface {
     }
   }
 
-  async update(req: AuthRequest, res: Response) {
+  async update(req: Request, res: Response) {
     if(!req.user) return;
 
     try {
@@ -132,7 +131,7 @@ class UsersController implements ControllersInterface {
     }
   }
 
-  async delete(req: AuthRequest, res: Response) {
+  async delete(req: Request, res: Response) {
     if(!req.user) return;
 
     if(req.user.position !== 'admin') {

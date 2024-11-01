@@ -1,44 +1,29 @@
 import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { ArrowIcon } from '../../../components/icons/ArrowIcon';
-import { useEffect, useState } from 'react';
 import { Empty } from '../../../components/Empty';
 import { cn } from '../../../utils/cn';
-import socketIo from 'socket.io-client';
-import { APIURL } from '@env';
+import { compareDates } from '../../../utils/compareDates';
+import { Notification } from '../../../types/Notification';
+import { ApiRequest } from '../../../utils/ApiRequest';
+import { TrashIcon } from '../../../components/icons/TrashIcon';
 
 type NotificationsModalProps = {
   isVisible: boolean;
   onClose: () => void;
+  notifications: Notification[];
+  onReadNotification: (notificationId: string) => void;
+  onDeleteNotification: (notificationId: string) => void;
+  onClearNotifications: () => void;
 }
 
-type Notification = {
-  id: string;
-  status: 'IN_PRODUCTION' | 'DONE';
-  table: string;
-  sentAt: number;
-  seen: boolean;
-};
-
-export function NotificationsModal({ isVisible, onClose }: NotificationsModalProps) {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-
-  useEffect(() => {
-    const socket = socketIo(APIURL, {
-      transports: ['websocket'],
-    });
-
-    socket.on('new@Notification', (notification: Notification) => {
-      setNotifications(PrevState => PrevState.concat(notification));
-    });
-  }, []);
-
-  function handleReadNotification(notificationId: string) {
-    setNotifications(PrevState => PrevState.map(
-      (notification) => notification.id === notificationId 
-        ? {...notification, seen: true} 
-        : notification)
-    );
-  }
+export function NotificationsModal({
+  isVisible,
+  onClose,
+  notifications,
+  onReadNotification,
+  onDeleteNotification,
+  onClearNotifications
+}: NotificationsModalProps) {
 
   const statusVariables = {
     'IN_PRODUCTION': {
@@ -51,41 +36,105 @@ export function NotificationsModal({ isVisible, onClose }: NotificationsModalPro
     },
   };
 
+  async function handleReadNotification(id: string) {
+    if(notifications.find(notification => notification._id === id)?.seen) {
+      return;
+    }
+    
+    try {
+      await ApiRequest({
+        endPoint: `/notifications/${id}`,
+        method: 'patch',
+      });
+    } catch {
+      //
+    }
+
+    onReadNotification(id);
+  }
+
+  async function handleDeleteNotification(id: string) {
+    try {
+      await ApiRequest({
+        endPoint: `/notifications/${id}`,
+        method: 'delete',
+      });
+    } catch {
+      //
+    }
+
+    onDeleteNotification(id);
+  }
+
+  async function handleClearNotfications() {
+    try {
+      await ApiRequest({
+        endPoint: '/notifications/all',
+        method: 'delete',
+      });
+    } catch {
+      //
+    }
+
+    onClearNotifications();
+  }
+
   return (
     <Modal visible={isVisible} animationType='slide'>
       <View className="flex-1 bg-[#fafafa] rounded-lg px-6 mt-6">
-        <View className='flex-row items-center'>
-          <TouchableOpacity onPress={onClose}>
-            <ArrowIcon size={32} color='#333333'/>
-          </TouchableOpacity>
+        <View className='flex-row items-center justify-between'>
+          <View className='flex-row items-center'>
+            <TouchableOpacity onPress={onClose}>
+              <ArrowIcon size={32} color='#333333'/>
+            </TouchableOpacity>
 
-          <Text className='text-2xl font-bold ml-4'>Notifications</Text>
+            <Text className='text-2xl font-bold ml-4'>Notifications</Text>
+          </View>
+
+          {notifications.length > 0 && (
+            <TouchableOpacity onPress={handleClearNotfications}>
+              <Text className='text-red-main font-semibold'>Excluir Notificações</Text>
+            </TouchableOpacity>
+          )} 
         </View>
 
         {notifications.length > 0 && (
           <FlatList
             data={notifications}
             style={{marginTop: 40,}}
-            keyExtractor={notification => notification.id}
-            renderItem={({ item: notification }) => (
-              <TouchableOpacity onPress={() => handleReadNotification(notification.id)} className={cn('bg-white rounded-lg items-center justify-between p-4 flex-row', {
-                'opacity-40': notification.seen
-              })}>
-                <View className='flex-row items-center'>
-                  <View className='bg-[#fafafa] w-8 h-8 rounded-full items-center justify-center'>
-                    <Text className='text-base'>{statusVariables[notification.status].icon}</Text>
+            keyExtractor={notification => notification._id}
+            renderItem={({ item: notification }) => {
+              const {status, table} = notification.order;
+              return (
+                <TouchableOpacity onPress={() => handleReadNotification(notification._id)} className={cn('bg-white rounded-lg items-center justify-between p-4 flex-row')}>
+                  <View className={cn('flex-row items-center', {
+                    'opacity-50': notification.seen
+                  })}>
+                    <View className='bg-[#fafafa] w-8 h-8 rounded-full items-center justify-center'>
+                      <Text className='text-base'>{statusVariables[notification.order.status].icon}</Text>
+                    </View>
+  
+                    <View className='ml-4'>
+                      <Text className='text-sm text-black-main font-semibold'>Mesa {table}</Text>
+  
+                      <Text className='text-xs text-gray-main mt-1.5'>{statusVariables[status].message}</Text>
+                    </View>
                   </View>
+  
+                  {notification.seen ? (
+                    <TouchableOpacity onPress={() => handleDeleteNotification(notification._id)}>
+                      <TrashIcon size={20} color='#D73035' />
+                    </TouchableOpacity>
+                  ) : (
+                    <View className='p-1 bg-red-main rounded-full'/>
+                  )}
 
-                  <View className='ml-4'>
-                    <Text className='text-sm text-black-main font-semibold'>Mesa {notification.table}</Text>
-
-                    <Text className='text-xs text-gray-main mt-0.5'>{statusVariables[notification.status].message}</Text>
-                  </View>
-                </View>
-
-                {notification.seen ? null : <View className='p-1 bg-red-main rounded-full'/>}
-              </TouchableOpacity>
-            )}
+                  <Text className={cn('text-xs text-gray-main absolute right-10 bottom-4', {
+                    'opacity-50 right-16': notification.seen,
+                  })}>{compareDates(notification.sentAt)}</Text>
+                </TouchableOpacity>
+              );
+            }}
           />
         )}
 

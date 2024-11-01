@@ -10,7 +10,7 @@ import zod from 'zod';
 import { CancelOrder } from '../useCases/orders/CancelOrder';
 import { ListFinishedOrders } from '../useCases/orders/ListFinishedOrders';
 import { io } from '../..';
-import { randomUUID } from 'crypto';
+import { CreateNotification } from '../useCases/notifications/CreateNotification';
 
 const OrderStatusSchema = zod.object({
   status: zod.enum(['WAITING', 'IN_PRODUCTION', 'DONE', 'FINISHED'], { message: 'invalid status' })
@@ -39,9 +39,11 @@ class OrdersController implements ControllersInterface {
 
   async store(req: Request, res: Response) {
     try {
+      const user = req.user;
+
       const { products, table } = OrderSchema.parse(req.body);
 
-      const order = await CreateOrder({ products, table });
+      const order = await CreateOrder({ products, table, user: user!._id});
 
       io.emit('new@Order', order);
 
@@ -68,16 +70,20 @@ class OrdersController implements ControllersInterface {
       }
 
       if(order.status === 'IN_PRODUCTION' || order.status === 'DONE') {
-        io.emit('new@Notification', {
-          id: randomUUID(),
-          status: order.status,
-          table: order.table,
-          sentAt: Date.now(),
-          seen: false,
+        const notifcation = await CreateNotification({
+          order: {
+            table: order.table,
+            status: order.status,
+          },
+          user: order.user,
         });
+
+        io.emit('new@Notification', notifcation);
       }
 
-      io.emit('update@Order', order);
+      if (order.status !== 'WAITING') {
+        io.emit('update@Order', order);
+      }
 
       res.status(200).json(order);
     } catch(error) {

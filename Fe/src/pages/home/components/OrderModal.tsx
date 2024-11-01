@@ -29,6 +29,13 @@ export function OrderModal({ order, isVisible, status, onClose, onCancel, onChan
 
   const total = order?.products.reduce((acc, product) => acc + product.product.price * product.quantity,0);
 
+  const confirmLabel = {
+    WAITING: 'Preparar Pedido',
+    'IN_PRODUCTION': 'Concluir Pedido',
+    DONE: 'Finalizar Pedido',
+    FINISHED: '',
+  };
+
   async function handleChangeOrderStatus() {
     if(order!.status === 'FINISHED') return;
 
@@ -83,7 +90,7 @@ export function OrderModal({ order, isVisible, status, onClose, onCancel, onChan
   return (
     <Modal
       isVisible={isVisible}
-      confirmLabel={order.status === 'WAITING' ? 'Preparar Pedido' : 'Concluir Preparo'}
+      confirmLabel={confirmLabel[order.status]}
       cancelLabel='Cancelar Pedido'
       title={`Mesa ${order.table}`}
       onClose={onClose}

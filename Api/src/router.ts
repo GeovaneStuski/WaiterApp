@@ -8,6 +8,7 @@ import CategoriesController from './app/controllers/CategoriesController';
 import IngredientsController from './app/controllers/IngredientsController';
 import ProductsController from './app/controllers/ProductsController';
 import OrdersController from './app/controllers/OrdersController';
+import NotificationsController from './app/controllers/NotificationsController';
 
 export const router = Router();
 
@@ -31,6 +32,11 @@ router.get('/me', UsersController.getUserById);
 router.post('/users', UsersController.store);
 router.put('/users/:id', UsersController.update);
 router.delete('/users/:id', UsersController.delete);
+
+router.get('/notifications', NotificationsController.index);
+router.patch('/notifications/:id', NotificationsController.changeReadStatus);
+router.delete('/notifications/all', NotificationsController.deleteAll);
+router.delete('/notifications/:id', NotificationsController.delete);
 
 router.get('/categories', CategoriesController.index);
 router.post('/categories', CategoriesController.store);

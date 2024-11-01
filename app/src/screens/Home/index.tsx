@@ -16,19 +16,35 @@ export function Home() {
     loading,
     loadingProducts,
     products,
+    notifications,
     isNotificationsModalVisible,
     onOpenNotificationsModal,
+    onReadNotification,
     onCloseNotificationsModal,
+    onDeleteNotification,
+    onClearNotifications
   } = useHome();
+
+  const haveANewNotification = !!notifications.find((notification) => !notification.seen);
 
   return (
     <OrderProvider>
-      <NotificationsModal onClose={onCloseNotificationsModal} isVisible={isNotificationsModalVisible} />
+      <NotificationsModal
+        onClose={onCloseNotificationsModal}
+        isVisible={isNotificationsModalVisible}
+        notifications={notifications}
+        onReadNotification={onReadNotification}
+        onDeleteNotification={onDeleteNotification}
+        onClearNotifications={onClearNotifications}
+      />
 
       <TableModal />
 
       <View className='px-6 flex-1 mt-6'>
-        <Header onOpenNotificationModal={onOpenNotificationsModal} />
+        <Header
+          onOpenNotificationModal={onOpenNotificationsModal}
+          haveANewNotification={haveANewNotification}
+        />
 
         {loading && (
           <View className='flex-1 items-center justify-center'>

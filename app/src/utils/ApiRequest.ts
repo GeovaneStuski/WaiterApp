@@ -3,7 +3,7 @@ import { APIURL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type ApiRequestProps = {
-  method: 'get' | 'post' | 'put';
+  method: 'get' | 'post' | 'put' | 'patch' | 'delete';
   endPoint: string;
   body?: object;
 }

@@ -10,4 +10,5 @@ export type OrderType = {
     quantity: number;
   }[];
   finishedAt: Date | null;
+  user: Types.ObjectId;
 }

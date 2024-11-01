@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { Register } from '../../types/Register';
 import { Order } from '../../types/Order';
 import { ApiRequest } from '../../utils/ApiRequest';
 import { ApiError } from '../../errors/ApiError';
@@ -9,7 +8,6 @@ import { APIURL } from '@env';
 
 export function useOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [registers, setRegisters] = useState<Register[]>([]);
   const [loading, setLoading] = useState(true);
 
   const { onLogout } = useContext(AuthContext);
@@ -17,19 +15,12 @@ export function useOrders() {
   useEffect(() => {
     (async function getData() {
       try {
-        const [orders, registers] = await Promise.all([
-          ApiRequest({
-            method: 'get',
-            endPoint: '/orders'
-          }),
-          ApiRequest({
-            method: 'get',
-            endPoint: '/registers'
-          }),
-        ]);
-  
-        setOrders(orders.filter((order: Order) => order.status !== 'WAITING'));
-        setRegisters(registers);
+        const orders = await ApiRequest({
+          method: 'get',
+          endPoint: '/orders'
+        }) as Order[];
+        
+        setOrders(orders.filter((order) => order.status !== 'WAITING'));
       } catch(errorResponse) {
         const error = errorResponse as ApiError;
 
@@ -42,21 +33,33 @@ export function useOrders() {
     })();
   }, []);
 
-  useEffect(() => console.log(orders), [orders]);
-
   useEffect(() => {
     const socket = socketIo(APIURL, {
       transports: ['websocket'],
     });
 
-    socket.on('new@Order', (order: Order) => {
-      if(!orders.find((order) => order._id)) {
-        setOrders(PrevState => PrevState.concat(order));
-      }
-    });
-
     socket.on('update@Order', (order: Order) => {
-      setOrders(PrevState => PrevState.map(prevOrder => prevOrder._id === order._id ? order : prevOrder));
+      setOrders(PrevState => {
+        const itemIndex = PrevState.findIndex(prevOrder => prevOrder._id === order._id);
+  
+        if (itemIndex < 0) {
+          return PrevState.concat(order);
+        } else {
+          if(order.status !== PrevState[itemIndex].status) {
+            const newOrders = [...PrevState];
+            const item = PrevState[itemIndex];
+
+            newOrders[itemIndex] = {
+              ...item,
+              status: order.status,
+            };
+
+            return newOrders;
+          } else {
+            return PrevState;
+          }
+        }
+      });
     });
 
     socket.on('delete@Order', (orderId: string) => {
@@ -66,7 +69,6 @@ export function useOrders() {
   
   return {
     orders,
-    registers,
     loading
   };
 }
