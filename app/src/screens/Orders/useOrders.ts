@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { Order } from '../../types/Order';
-import { ApiRequest } from '../../utils/ApiRequest';
-import { ApiError } from '../../errors/ApiError';
+
 import { AuthContext } from '../../contexts/AuthContext';
 import socketIo from 'socket.io-client';
 import { APIURL } from '@env';
+import { ApiError } from '../../errors/ApiError';
+
+import { ApiRequest } from '../../utils/ApiRequest';
+import { Order } from '../../types/Order';
 
 export function useOrders() {
   const [orders, setOrders] = useState<Order[]>([]);

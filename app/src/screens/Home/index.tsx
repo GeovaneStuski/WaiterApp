@@ -1,12 +1,14 @@
 import { View } from 'react-native';
+
+import { OrderProvider } from '../../contexts/OrderContext';
+import { useHome } from './useHome';
+
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Categories } from './components/Categories';
 import { Menu } from './components/Menu';
 import { TableModal } from './components/TableModal';
-import { OrderProvider } from '../../contexts/OrderContext';
 import { Empty } from '../../components/Empty';
-import { useHome } from './useHome';
 import { NotificationsModal } from './components/NotificationsModal';
 import { Loader } from '../../components/Loader';
 

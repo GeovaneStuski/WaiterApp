@@ -1,8 +1,12 @@
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
-import { formatDate } from '../../utils/formatData';
+import { FlatList, Text, View } from 'react-native';
+
 import { useOrders } from './useOrders';
+
 import { OrderCard } from './components/OrderCard';
 import { Empty } from '../../components/Empty';
+import { Loader } from '../../components/Loader';
+
+import { formatDate } from '../../utils/formatData';
 
 export function Orders() {
   const { orders, loading } = useOrders();
@@ -13,7 +17,7 @@ export function Orders() {
         <>
           <Text className='text-black-main mt-6 font-bold text-2xl'>Pedidos</Text>
 
-          {orders.length > 0 ? (
+          {orders.length > 0 && (
             <FlatList
               data={orders.filter(order => order.status !== 'FINISHED')}
               style={{ marginTop: 32}}
@@ -30,40 +34,32 @@ export function Orders() {
                 />
               )}
               ListFooterComponent={() => (
-                <>
-                  <Text className='font-bold text-lg text-gray-main mt-8'>Finalizados</Text>
-
-                  <FlatList
-                    data={orders.filter(order => order.status === 'FINISHED')}
-                    style={{ marginTop: 24 }}
-                    keyExtractor={register => register._id}
-                    renderItem={({ item: register }) => (
-                      <OrderCard
-                        products={register.products}
-                        status="FINISHED"
-                        table={register.table}
-                        date={formatDate(register.finishedAt!)}
-                      />
-                    )}
-                  />
-                </>
+                <FlatList
+                  data={orders.filter(order => order.status === 'FINISHED')}
+                  style={{ marginTop: 24 }}
+                  ListHeaderComponent={() => <Text className='font-bold text-lg text-gray-main mt-8'>Finalizados</Text>}
+                  keyExtractor={register => register._id}
+                  renderItem={({ item: register }) => (
+                    <OrderCard
+                      products={register.products}
+                      status="FINISHED"
+                      table={register.table}
+                      date={formatDate(register.finishedAt!)}
+                    />
+                  )}
+                />
               )}
             />
-          ) : (
-            <View className='flex-1 justify-center items-center'>
-              <Empty/>
+          )}
 
-              <Text className='mt-2 text-base font-semibold text-gray-main/80'>Nem um pedido em andamento</Text>
-            </View>
+          {orders.length < 1 && (
+            <Empty label='Nenhum Pedido em andamento!'/>
           )}
         </>
       )}
 
-      {loading && (
-        <View className='flex-1 justify-center items-center'>
-          <ActivityIndicator color="#D73035" size="large"/>
-        </View>
-      )}
+      {loading && <Loader/>}
+
     </View>
   );
 }

@@ -1,8 +1,10 @@
+import { useContext, useState } from 'react';
 import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
+import { OrderContext } from '../../../contexts/OrderContext';
+
 import { CloseIcon } from '../../../components/icons/CloseIcon';
 import { Button } from '../../../components/Button';
-import { useContext, useState } from 'react';
-import { OrderContext } from '../../../contexts/OrderContext';
 
 export function TableModal() {
   const [table, setTable] = useState('');
@@ -14,7 +16,7 @@ export function TableModal() {
       <View className='bg-black/60 w-screen h-screen items-center justify-center px-6'>
         <View className='w-full bg-gray-50 rounded-lg p-6'>
           <View className='justify-between flex-row items-center mb-8'>
-            <Text className='text-base text-black-main font-bold'>Informar a mesa</Text>
+            <Text className='text-base text-black-main font-bold'>Informe a mesa</Text>
 
             <TouchableOpacity onPress={onCloseTableModal}>
               <CloseIcon size={24} color='#666666'/>

@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { Category } from '../../types/Category';
-import { Product } from '../../types/Product';
-import { ApiRequest } from '../../utils/ApiRequest';
+
 import { AuthContext } from '../../contexts/AuthContext';
-import { ApiError } from '../../errors/ApiError';
-import { Notification } from '../../types/Notification';
 import socketIo from 'socket.io-client';
 import { APIURL } from '@env';
+import { ApiError } from '../../errors/ApiError';
+
+import { ApiRequest } from '../../utils/ApiRequest';
+import { Notification } from '../../types/Notification';
+import { Category } from '../../types/Category';
+import { Product } from '../../types/Product';
 
 export function useHome() {
   const [loading, setLoading] = useState(true);

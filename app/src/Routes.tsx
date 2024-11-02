@@ -1,65 +1,46 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import { Home } from './screens/Home';
-import { HomeIcon } from './components/icons/HomeIcon';
-import { OrderIcon } from './components/icons/OrderIcon';
-import { Orders } from './screens/Orders';
-import { Profile } from './screens/Profile';
-import { ProfileIcon } from './components/icons/ProfileIcon';
-import { ScreenProps } from './types/ScreenProps';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { SplashModal } from './components/SplashModal';
+import { Login } from './screens/Login';
+import { MainStack } from './components/MainStack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthContext } from './contexts/AuthContext';
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-export function Routes({ navigation }: ScreenProps) {
-  const { authenticated, loading } = useContext(AuthContext);
+export function Routes() {
+  const [isSplashVisible, setIsSplashVisible] = useState(true);
+
+  const { loading } = useContext(AuthContext);
 
   useEffect(() => {
-    if(!loading && !authenticated) {
-      navigation.navigate('Login');
-    }
-  }, [authenticated, loading]);
-  
+    const timer = setTimeout(() => setIsSplashVisible(false), 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarInactiveTintColor: '#333',
-        tabBarActiveTintColor: '#D73035',
-        tabBarLabelStyle: {
-          fontWeight: '600',
-          fontSize: 14,
-          marginBottom: 8,
-        },
-        tabBarStyle: {
-          height: 64,
-        },
-        headerShown: false
-      }}
-    >
-      <Tab.Screen
-        name='Home'
-        component={Home}
-        options={{
-          tabBarIcon: ({size, color}) => <HomeIcon size={size} color={color}/>,
-        }}
-      />
+    <>
+      <SplashModal isVisible={isSplashVisible} />
 
-      <Tab.Screen
-        name='Pedidos'
-        component={Orders}
-        options={{
-          tabBarIcon: ({size, color}) => <OrderIcon size={size} color={color}/>,
-        }}
-      />
+      <Stack.Navigator>
+        <Stack.Screen
+          name='MainStack'
+          component={MainStack}
+          options={{
+            headerShown: false,
+          }}
+        />
+        
+        <Stack.Screen
+          name='LoginStack' 
+          component={Login}
+          options={{
+            headerShown: false,
+          }}
+        />
 
-      <Tab.Screen
-        name='Meu Perfil'
-        component={Profile}
-        options={{
-          tabBarIcon: ({size, color}) => <ProfileIcon size={size} color={color}/>,  
-        }}
-      />
-    </Tab.Navigator>
+      </Stack.Navigator>
+    </>
   );
 }
+
