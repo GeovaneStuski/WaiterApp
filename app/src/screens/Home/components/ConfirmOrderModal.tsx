@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import { Modal, Text, View } from 'react-native';
+
 import { CheckIcon } from '../../../components/icons/CheckIcon';
 
 type ConfirmOrderModalProps = {
@@ -16,8 +16,6 @@ export function ConfirmOrderModal({ isVisible }: ConfirmOrderModalProps) {
         
         <Text className='text-white text-base mt-2'>Acompanhe na home o status de produção</Text>
       </View>
-
-      <StatusBar backgroundColor='#D73035' translucent/>
     </Modal>
   );
 }

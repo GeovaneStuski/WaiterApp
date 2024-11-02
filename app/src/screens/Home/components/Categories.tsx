@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
-import { useState } from 'react';
 import { cn } from '../../../utils/cn';
 import { Category } from '../../../types/Category';
 
@@ -30,7 +30,10 @@ export function Categories({ categories, onChangeCategory }: CategoriesProps) {
           const isSeleted = category._id === selectedCategory;
 
           return (
-            <TouchableOpacity onPress={() => handleChangeSelectedCategory(category._id)} className='items-center'>
+            <TouchableOpacity 
+              onPress={() => handleChangeSelectedCategory(category._id)} 
+              className='items-center'
+            >
               <View className={cn('h-11 w-11 bg-white shadow-md shadow-black/60 items-center justify-center rounded-full', {
                 'opacity-50': !isSeleted && selectedCategory,
                 'h-14 w-14':isSeleted

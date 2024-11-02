@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Categories } from './components/Categories';
@@ -8,6 +8,7 @@ import { OrderProvider } from '../../contexts/OrderContext';
 import { Empty } from '../../components/Empty';
 import { useHome } from './useHome';
 import { NotificationsModal } from './components/NotificationsModal';
+import { Loader } from '../../components/Loader';
 
 export function Home() {
   const {
@@ -47,9 +48,7 @@ export function Home() {
         />
 
         {loading && (
-          <View className='flex-1 items-center justify-center'>
-            <ActivityIndicator size="large" color="#D73035"/>
-          </View>
+          <Loader />
         )}
 
         {!loading && (
@@ -59,23 +58,15 @@ export function Home() {
               onChangeCategory={ListProductsByCategory}
             />
 
-            {!loadingProducts ? (
+            {!loadingProducts && (
               <>
-                {products.length > 0 ? (
-                  <Menu products={products} />
-                ) : (
-                  <View className='flex-1 items-center justify-center'>
-                    <Empty />
+                {products.length > 0 && <Menu products={products} /> }
 
-                    <Text className='mt-4 text-base text-gray-main'>Nem um Produto encontrado!</Text>
-                  </View>
-                )}
+                {products.length < 1 && <Empty label='Nem um Produto encontrado!'/> }
               </>
-            ) : (
-              <View className='flex-1 items-center justify-center'>
-                <ActivityIndicator size="large" color="#D73035"/>
-              </View>
-            ) }
+            )}
+
+            {loadingProducts && <Loader />}
           </>
         )}
       </View>
