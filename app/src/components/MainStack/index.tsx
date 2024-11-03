@@ -16,9 +16,10 @@ export function MainStack({navigation}: ScreenProps) {
 
   useEffect(() => {
     if (!loading && !authenticated) {
-      navigation.navigate('LoginStack');
+      navigation.navigate('Login');
     }
   }, [loading, authenticated]);
+  
   return (
     <Tab.Navigator
       screenOptions={{

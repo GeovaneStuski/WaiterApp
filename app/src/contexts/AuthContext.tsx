@@ -24,7 +24,7 @@ type AuthContextProps = {
 export const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthProvider({ children}: AuthProviderProps) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<null | User>(null);
   const [authenticated, setAuthenticated] = useState(false);
 

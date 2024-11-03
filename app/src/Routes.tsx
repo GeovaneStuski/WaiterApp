@@ -13,10 +13,12 @@ export function Routes() {
   const { loading } = useContext(AuthContext);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsSplashVisible(false), 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
+    if(!loading) {
+      setTimeout(() => {
+        setIsSplashVisible(false);
+      }, 1000);
+    }
+  }, [loading]);
 
   return (
     <>
@@ -24,7 +26,7 @@ export function Routes() {
 
       <Stack.Navigator>
         <Stack.Screen
-          name='MainStack'
+          name='Main'
           component={MainStack}
           options={{
             headerShown: false,
@@ -32,7 +34,7 @@ export function Routes() {
         />
         
         <Stack.Screen
-          name='LoginStack' 
+          name='Login' 
           component={Login}
           options={{
             headerShown: false,

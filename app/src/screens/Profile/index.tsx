@@ -53,6 +53,7 @@ export function Profile() {
                 placeHolder="Digite a senha"
                 value={password}
                 onChange={setPassword}
+                type='password'
               />
             </View>
 

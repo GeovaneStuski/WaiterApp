@@ -33,6 +33,7 @@ export function Login({navigation}: ScreenProps) {
           value={password}
           onChange={setPassword}
           placeHolder='Digite sua senha'
+          type='password'
         />
       </View>
 
