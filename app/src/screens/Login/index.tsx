@@ -5,7 +5,7 @@ import { Button } from '../../components/Button';
 import { ScreenProps } from '../../types/ScreenProps';
 import { useLogin } from './useLogin';
 
-export function Login({navigation}: ScreenProps) {
+export function Login({ navigation }: ScreenProps) {
   const {
     handleSubmit,
     isFormValid,
@@ -17,10 +17,10 @@ export function Login({navigation}: ScreenProps) {
   } = useLogin({ navigation });
 
   return (
-    <View className="flex-1 px-8 items-center justify-center">
+    <View className="flex-1 px-8 items-center justify-between pb-4 pt-16">
       <Header/>
 
-      <View className='w-full mt-24' style={{gap: 24}}>
+      <View className='w-full' style={{gap: 24}}>
         <TextField
           label='E-mail'
           value={email}
@@ -37,7 +37,7 @@ export function Login({navigation}: ScreenProps) {
         />
       </View>
 
-      <View className='w-full absolute bottom-4'>
+      <View className='w-full'>
         <Button isLoading={loading} disabled={!isFormValid} onPress={handleSubmit}>Fazer Login</Button>
       </View>
     </View>

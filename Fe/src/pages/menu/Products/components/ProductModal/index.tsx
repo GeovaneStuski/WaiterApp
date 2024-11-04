@@ -39,6 +39,7 @@ export function ProductModal({ onClose, isVisible, onCreate, onUpdate, product }
     onSubmit,
     loading,
     isIngredientAndCategoryLoading,
+    onCreateIngredient,
   } = useProductModal({ onClose, onUpdate, onCreate, product, isVisible });
 
   return (
@@ -56,6 +57,7 @@ export function ProductModal({ onClose, isVisible, onCreate, onUpdate, product }
         <IngredientsModal
           onClose={onCloseIngredientModal}
           isVisible={isIngredientModalVisible}
+          onCreateItem={onCreateIngredient}
           type='Ingrediente'
         />
 

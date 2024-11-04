@@ -48,12 +48,21 @@ export function useProductModal({ onClose, onCreate, onUpdate, product, isVisibl
   }, [isVisible]);
 
   useEffect(() => {
-    setImage(product?.imagePath || '');
-    setName(product?.name || '');
-    setDescription(product?.description || '');
-    setCategory(product?.category || null);
-    setIngredientsList(product?.ingredients.map(ingredient => ingredient._id) || []);
-    setPrice(product?.price.toString() || '');
+    if(product) {
+      setImage(product?.imagePath || '');
+      setName(product?.name || '');
+      setDescription(product?.description || '');
+      setCategory(product?.category || null);
+      setIngredientsList(product?.ingredients.map(ingredient => ingredient._id) || []);
+      setPrice(product?.price.toString() || '');
+    } else {
+      setImage('');
+      setName('');
+      setDescription('');
+      setCategory(null);
+      setIngredientsList([]);
+      setPrice('');
+    }
   }, [product]);
 
   function handleChangeName(event: React.ChangeEvent<HTMLInputElement>) {

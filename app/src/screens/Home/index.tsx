@@ -25,7 +25,7 @@ export function Home() {
     onReadNotification,
     onCloseNotificationsModal,
     onDeleteNotification,
-    onClearNotifications
+    onClearNotifications,
   } = useHome();
 
   const haveANewNotification = !!notifications.find((notification) => !notification.seen);

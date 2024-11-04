@@ -45,7 +45,7 @@ export function Categories() {
       />
 
       <Header
-        length={categories.length}
+        length={categories?.length}
         onOpenModal={onOpenCreateModal}
       />
 

@@ -45,7 +45,7 @@ export function Products() {
       />
 
       <Header
-        length={products.length}
+        length={products?.length}
         onOpenModal={onOpenCreateModal}
       />
 

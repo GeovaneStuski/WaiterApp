@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import socketIo from 'socket.io-client';
@@ -9,6 +9,7 @@ import { ApiRequest } from '../../utils/ApiRequest';
 import { Notification } from '../../types/Notification';
 import { Category } from '../../types/Category';
 import { Product } from '../../types/Product';
+import { useFocusEffect } from '@react-navigation/native';
 
 export function useHome() {
   const [loading, setLoading] = useState(true);
@@ -20,40 +21,44 @@ export function useHome() {
 
   const { onLogout } = useContext(AuthContext);
 
-  useEffect(() => {
-    (async function getData() {
-      try {
-        const [categories, products, notifications] = await Promise.all([
-          ApiRequest({
-            method: 'get',
-            endPoint: '/categories',
-          }),
-      
-          ApiRequest({
-            method: 'get',
-            endPoint: '/products',
-          }),
+  async function getData() {
+    try {
+      const [categories, products, notifications] = await Promise.all([
+        ApiRequest({
+          method: 'get',
+          endPoint: '/categories',
+        }),
+    
+        ApiRequest({
+          method: 'get',
+          endPoint: '/products',
+        }),
 
-          ApiRequest({
-            method: 'get',
-            endPoint: '/notifications',
-          })
-        ]);
+        ApiRequest({
+          method: 'get',
+          endPoint: '/notifications',
+        })
+      ]);
 
-        setCategories(categories);
-        setProducts(products);
-        setNotifications(notifications);
-      } catch(errorResponse) {
-        const error = errorResponse as ApiError;
+      setCategories(categories);
+      setProducts(products);
+      setNotifications(notifications);
+    } catch(errorResponse) {
+      const error = errorResponse as ApiError;
 
-        if (error.status === 401) {
-          onLogout();
-        }
-      } finally {
-        setLoading(false);
+      if (error.status === 401) {
+        onLogout();
       }
-    })();
-  }, []);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [])
+  );
 
   useEffect(() => {
     const socket = socketIo(APIURL, {
@@ -126,5 +131,6 @@ export function useHome() {
     onReadNotification,
     onDeleteNotification: handleDeleteNotification,
     onClearNotifications: handleClearNotifications,
+
   };
 }

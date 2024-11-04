@@ -1,4 +1,3 @@
-import { Button } from '../../../components/Button';
 import { Table } from '../../../components/Table';
 import { DeleteCategoryOrIngredientModal as DeleteIngredientModal } from '../components/DeleteCategoryOrIngredientModal';
 import { CategoryOrIngredientModal as IngredientModal } from '../components/CategoryOrIngredientModal';
@@ -46,7 +45,7 @@ export function Ingredients() {
 
       <Header
         onOpenModal={onOpenCreateModal}
-        length={ingredients.length}
+        length={ingredients?.length}
       />
 
       <Table

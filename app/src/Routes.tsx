@@ -26,16 +26,16 @@ export function Routes() {
 
       <Stack.Navigator>
         <Stack.Screen
-          name='Main'
-          component={MainStack}
+          name='Login' 
+          component={Login}
           options={{
             headerShown: false,
           }}
         />
-        
+
         <Stack.Screen
-          name='Login' 
-          component={Login}
+          name='Main'
+          component={MainStack}
           options={{
             headerShown: false,
           }}

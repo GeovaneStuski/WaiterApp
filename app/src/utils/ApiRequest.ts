@@ -10,7 +10,7 @@ type ApiRequestProps = {
 
 export async function ApiRequest({ endPoint, method, body }: ApiRequestProps) {
   const token = await AsyncStorage.getItem('token');
-  
+
   const request = axios.create({
     baseURL: APIURL,
     headers: {

@@ -42,7 +42,7 @@ mongoose.connect(mongoConnectionUrl)
 
       if(response.length < 1) {
         User.create({
-          email: 'admin@admin',
+          email: 'admin@admin.com',
           name: 'AdminUser',
           password: 'admin',
           position: 'admin',

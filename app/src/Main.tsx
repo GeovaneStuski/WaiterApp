@@ -3,10 +3,7 @@ import { Routes } from './Routes';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import { AuthProvider } from './contexts/AuthContext';
 
-
 const isAndroid = Platform.OS === 'android';
-
-
 
 export function Main() {
   return (
