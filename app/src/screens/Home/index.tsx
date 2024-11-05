@@ -31,49 +31,51 @@ export function Home() {
   const haveANewNotification = !!notifications.find((notification) => !notification.seen);
 
   return (
-    <OrderProvider>
-      <NotificationsModal
-        onClose={onCloseNotificationsModal}
-        isVisible={isNotificationsModalVisible}
-        notifications={notifications}
-        onReadNotification={onReadNotification}
-        onDeleteNotification={onDeleteNotification}
-        onClearNotifications={onClearNotifications}
-      />
-
-      <TableModal />
-
-      <View className='px-6 flex-1 mt-6'>
-        <Header
-          onOpenNotificationModal={onOpenNotificationsModal}
-          haveANewNotification={haveANewNotification}
+    <View className='flex-1 bg-[#fafafa]'>
+      <OrderProvider>
+        <NotificationsModal
+          onClose={onCloseNotificationsModal}
+          isVisible={isNotificationsModalVisible}
+          notifications={notifications}
+          onReadNotification={onReadNotification}
+          onDeleteNotification={onDeleteNotification}
+          onClearNotifications={onClearNotifications}
         />
 
-        {loading && (
-          <Loader />
-        )}
+        <TableModal />
 
-        {!loading && (
-          <>
-            <Categories 
-              categories={categories}
-              onChangeCategory={ListProductsByCategory}
-            />
+        <View className='px-6 flex-1 mt-6'>
+          <Header
+            onOpenNotificationModal={onOpenNotificationsModal}
+            haveANewNotification={haveANewNotification}
+          />
 
-            {!loadingProducts && (
-              <>
-                {products.length > 0 && <Menu products={products} /> }
+          {loading && (
+            <Loader />
+          )}
 
-                {products.length < 1 && <Empty label='Nem um Produto encontrado!'/> }
-              </>
-            )}
+          {!loading && (
+            <>
+              <Categories 
+                categories={categories}
+                onChangeCategory={ListProductsByCategory}
+              />
 
-            {loadingProducts && <Loader />}
-          </>
-        )}
-      </View>
+              {!loadingProducts && (
+                <>
+                  {products.length > 0 && <Menu products={products} /> }
 
-      <Footer />
-    </OrderProvider>
+                  {products.length < 1 && <Empty label='Nem um Produto encontrado!'/> }
+                </>
+              )}
+
+              {loadingProducts && <Loader />}
+            </>
+          )}
+        </View>
+
+        <Footer />
+      </OrderProvider>
+    </View>
   );
 }

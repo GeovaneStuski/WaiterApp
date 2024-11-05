@@ -1,7 +1,9 @@
 import { APIURL } from '@env';
 
 export function getImageByPath(path: string): string{
-  const route = `${APIURL}/uploads/${path}`;
+  const APIurl = APIURL;
+  
+  const route = `${APIurl}/uploads/${path}`;
   
   return route;
 }

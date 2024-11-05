@@ -41,7 +41,6 @@ export function useOrders() {
     });
 
     socket.on('update@Order', (order: Order) => {
-      console.log(order);
       setOrders(PrevState => {
         const itemIndex = PrevState.findIndex(prevOrder => prevOrder._id === order._id);
   

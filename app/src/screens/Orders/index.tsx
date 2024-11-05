@@ -37,7 +37,7 @@ export function Orders() {
                 <FlatList
                   data={orders.filter(order => order.status === 'FINISHED')}
                   style={{ marginTop: 24 }}
-                  ListHeaderComponent={() => <Text className='font-bold text-lg text-gray-main mt-8'>Finalizados</Text>}
+                  ListHeaderComponent={() => <Text className='font-bold text-lg text-gray-main mt-8 mb-6'>Finalizados</Text>}
                   keyExtractor={register => register._id}
                   renderItem={({ item: register }) => (
                     <OrderCard

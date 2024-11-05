@@ -12,7 +12,7 @@ type HeaderProps = {
 
 export function Header({ notifications, onClearNotifications, onCloseModal }: HeaderProps) {
   return (
-    <View className='flex-row items-center justify-between'>
+    <View className='flex-row items-center justify-between mt-6'>
       <View className='flex-row items-center'>
         <TouchableOpacity onPress={onCloseModal}>
           <ArrowIcon size={32} color='#333333'/>

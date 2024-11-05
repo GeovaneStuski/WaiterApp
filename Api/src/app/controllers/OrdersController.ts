@@ -81,7 +81,7 @@ class OrdersController implements ControllersInterface {
         io.emit('new@Notification', notifcation);
       }
 
-      if (order.status !== 'WAITING') {
+      if (order.status === 'IN_PRODUCTION' || order.status === 'DONE' || order.status === 'FINISHED') {
         io.emit('update@Order', order);
       }
 
@@ -109,7 +109,6 @@ class OrdersController implements ControllersInterface {
 
       res.sendStatus(204);
     } catch(error) {
-      console.log(error);
       if(error instanceof ZodError) {
         return res.status(400).json('Error to delete Order');
       }

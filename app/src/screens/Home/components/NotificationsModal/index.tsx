@@ -37,7 +37,7 @@ export function NotificationsModal({
 
   return (
     <Modal visible={isVisible} animationType='slide'>
-      <View className="flex-1 bg-[#fafafa] rounded-lg px-6 mt-6">
+      <View className="flex-1 bg-[#fafafa] rounded-lg px-6">
         <Header
           notifications={notifications}
           onClearNotifications={onClear}
